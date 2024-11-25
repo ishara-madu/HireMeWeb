@@ -1,11 +1,11 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import './HomeSlider.css'
 import Slider from "react-slick";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 function HomeSlider() {
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
@@ -13,7 +13,6 @@ function HomeSlider() {
         autoplay: true,
         autoplaySpeed: 3000,
         arrows: true,
-        customPaging: (i) => <div className="custom-dot">{i + 1}</div>, // Custom dots
         nextArrow: <SampleNextArrow />, // Custom Next Arrow
         prevArrow: <SamplePrevArrow />, // Custom Prev Arrow
         responsive: [
@@ -38,18 +37,20 @@ function HomeSlider() {
         ],
     };
 
+    const images = [
+        'https://img-c.udemycdn.com/notices/web_carousel_slide/image/333e2f2f-fd01-4e76-aae4-5b04bb5d546d.png',
+        'https://img-c.udemycdn.com/notices/web_carousel_slide/image/9fa1fa32-1920-45d1-8be1-e4653bbd7726.png',
+        'https://img-c.udemycdn.com/notices/web_carousel_slide/image/333e2f2f-fd01-4e76-aae4-5b04bb5d546d.png'
+    ]
+
     return (
-        <div className="carousel-container">
+        <div className="h-auto w-[95%] z-0 my-0 mx-auto overflow-hidden relative">
             <Slider {...settings}>
-                <div>
-                    <img src="image1.jpg" alt="Slide 1" />
-                </div>
-                <div>
-                    <img src="image2.jpg" alt="Slide 2" />
-                </div>
-                <div>
-                    <img src="image3.jpg" alt="Slide 3" />
-                </div>
+                {
+                    images.map((image, index) => (
+                        <img key={index} src={image} alt="Slide" />
+                    ))
+                }
             </Slider>
         </div>
     );
@@ -58,36 +59,26 @@ function HomeSlider() {
 // Custom Next Arrow
 const SampleNextArrow = (props) => {
     // eslint-disable-next-line react/prop-types
-    const { className, style, onClick } = props;
+    const { onClick } = props;
     return (
-        <div
-            className={className}
-            style={{
-                ...style,
-                display: "block",
-                background: "blue",
-                borderRadius: "50%",
-            }}
-            onClick={onClick}
-        />
+        <div className="flex absolute h-full items-center bottom-0 z-20 right-3">
+            <div onClick={onClick} className="flex p-1.5 justify-center items-center rounded-full hover:bg-[#444444] bg-[#373737] border border-[#8f8e8e] bottom-0">
+                <IoIosArrowForward color="white" size={28}/>
+            </div>
+        </div>
     );
 };
 
 // Custom Prev Arrow
 const SamplePrevArrow = (props) => {
     // eslint-disable-next-line react/prop-types
-    const { className, style, onClick } = props;
+    const { onClick } = props;
     return (
-        <div
-            className={className}
-            style={{
-                ...style,
-                display: "block",
-                background: "red",
-                borderRadius: "50%",
-            }}
-            onClick={onClick}
-        />
+        <div className="flex absolute h-full items-center z-20 left-3">
+            <div onClick={onClick} className="flex p-1.5 justify-center items-center rounded-full hover:bg-[#444444] bg-[#373737] border border-[#8f8e8e] bottom-0">
+                <IoIosArrowBack color="white" size={28}/>
+            </div>
+        </div>
     );
 };
 
