@@ -2,8 +2,19 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { homeSlideData } from "../features/homeSlide/homeSlideThunk";
+import { useEffect } from "react";
 
 function HomeSlider() {
+    const dispatch = useDispatch();
+
+    const images = useSelector((state) => state.homeSlider.images);
+
+    useEffect(() => {
+        dispatch(homeSlideData());
+    }, [dispatch]);
+    
     const settings = {
         dots: false,
         infinite: true,
@@ -37,18 +48,13 @@ function HomeSlider() {
         ],
     };
 
-    const images = [
-        'https://img-c.udemycdn.com/notices/web_carousel_slide/image/333e2f2f-fd01-4e76-aae4-5b04bb5d546d.png',
-        'https://img-c.udemycdn.com/notices/web_carousel_slide/image/9fa1fa32-1920-45d1-8be1-e4653bbd7726.png',
-        'https://img-c.udemycdn.com/notices/web_carousel_slide/image/333e2f2f-fd01-4e76-aae4-5b04bb5d546d.png'
-    ]
 
     return (
-        <div className="h-auto w-[95%] z-0 my-0 mx-auto overflow-hidden relative">
+        <div className="h-full w-[95%] rounded-md z-0 my-0 mx-auto overflow-hidden relative">
             <Slider {...settings}>
                 {
                     images.map((image, index) => (
-                        <img key={index} src={image} alt="Slide" />
+                        <img key={index} src={image.image} alt="Slide" className="w-full h-auto object-cover" />
                     ))
                 }
             </Slider>
