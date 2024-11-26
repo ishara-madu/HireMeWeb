@@ -4,7 +4,7 @@ import { supabase } from "../../config/supabaseClient";
 const history = JSON.parse(sessionStorage.getItem('history')) || [""];
 
 export const fetchBasedOnRating = createAsyncThunk(
-    'users/basedOnRating', 
+    'users/basedOnRating',
     async (_, thunkAPI) => {
         try {
             const { data: matchedUsers, error: matchedError } = await supabase
@@ -21,10 +21,10 @@ export const fetchBasedOnRating = createAsyncThunk(
             const { data: unmatchedUsers, error: unmatchedError } = await supabase
                 .from('users')
                 .select('*')
-                .not('listings->>title', 'ilike', history.join('|')) 
-                .not('listings->>images', 'ilike', history.join('|')) 
-                .not('listings->>description', 'ilike', history.join('|')) 
-                .order('rating->>perc', { ascending: false });  
+                .not('listings->>title', 'ilike', history.join('|'))
+                .not('listings->>images', 'ilike', history.join('|'))
+                .not('listings->>description', 'ilike', history.join('|'))
+                .order('rating->>perc', { ascending: false });
             if (unmatchedError) throw unmatchedError;
             const uniqueUnmatchedUsers = unmatchedUsers.filter(user => !matchedUserIds.includes(user.id));
             const allUsers = [...matchedUsers, ...uniqueUnmatchedUsers];
@@ -34,3 +34,18 @@ export const fetchBasedOnRating = createAsyncThunk(
         }
     }
 );
+export const setupRealtimeSubscription = (dispatch) => {
+
+    const channels = supabase.channel('custom-all-channel')
+        .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'users' },
+            (payload) => {
+                console.log('Change received!', payload)
+                dispatch(fetchBasedOnRating());
+            }
+        )
+        .subscribe()
+
+    return channels;
+};

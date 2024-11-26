@@ -1,8 +1,14 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react"
 import { CiSearch } from "react-icons/ci"
 import { IoCartOutline, IoHeartOutline, IoNotificationsOutline } from "react-icons/io5"
+import LazyLoad from "react-lazyload";
+import Profile from "./popups/profile";
+import Notifications from "./popups/Notifications";
 
-function TopNav({profile}) {
+function TopNav({ profile }) {
+    const [showProfile, setShowProfile] = useState(false);
+    const [showNotifications,setShowNotifications] = useState(false);
     return (
         <div className="flex w-full h-20 border-b border-[#c5c5c5] justify-center items-center bg-[#ebebeb]">
             <div className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
@@ -16,8 +22,30 @@ function TopNav({profile}) {
                         <div key={profile} className="flex flex-row gap-x-5 justify-between items-center">
                             <div className="p-2 cursor-pointer"><IoHeartOutline size={24} /></div>
                             {/* <div className="p-2 cursor-pointer"><IoCartOutline size={24} /></div> */}
-                            <div className="p-2 cursor-pointer"><IoNotificationsOutline size={24} /></div>
-                            <div className="flex w-10 h-10 justify-center items-center rounded-full overflow-hidden cursor-pointer"><img src={profile.image} alt="profile image" className="h-full w-full object-cover" /></div>
+                            <div onMouseOver={() => { setShowNotifications(true) }} onMouseLeave={() => { setShowNotifications(false) }} className="flex justify-center items-center p-2 cursor-pointer"><IoNotificationsOutline size={24} />
+                            {
+                                showNotifications &&(
+                                    <>
+                                        <div className="absolute w-20 h-32"></div>
+                                        <Notifications />
+                                    </>
+ 
+                                )
+                            }
+                            </div>
+                            <div onMouseOver={() => { setShowProfile(true) }} onMouseLeave={() => { setShowProfile(false) }} className="flex w-10 h-10 justify-center items-center rounded-full overflow-hidden cursor-pointer">
+                                <LazyLoad height={40} once>
+                                    <img src={profile.image} alt="profile image" className="h-full w-full object-cover" />
+                                </LazyLoad>
+                                {
+                                    showProfile && (
+                                        <>
+                                            <div className="absolute w-20 h-32"></div>
+                                            <Profile profile={profile}/>
+                                        </>
+                                    )
+                                }
+                            </div>
                         </div>
                     ))
                 }

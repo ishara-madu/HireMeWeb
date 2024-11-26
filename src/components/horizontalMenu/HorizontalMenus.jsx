@@ -4,9 +4,9 @@ function HorizontalMenus() {
 
 
     return (
-        <>
+        <div className="mb-5">
         <BasedOnRatings />
-        </>
+        </div>
     )
 }
 

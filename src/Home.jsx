@@ -31,7 +31,7 @@ function Home() {
 
     return (
         <div className="flex w-full flex-col bg-[#ebebeb]">
-            <TopNav profile={profile} />
+            <TopNav profile={profile}/>
             <TopCategory />
             {
                 profile.map(profile => (
