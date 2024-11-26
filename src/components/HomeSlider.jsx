@@ -5,6 +5,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { homeSlideData } from "../features/homeSlide/homeSlideThunk";
 import { useEffect } from "react";
+import LazyLoad from "react-lazyload";
 
 function HomeSlider() {
     const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function HomeSlider() {
     useEffect(() => {
         dispatch(homeSlideData());
     }, [dispatch]);
-    
+
     const settings = {
         dots: false,
         infinite: true,
@@ -52,11 +53,17 @@ function HomeSlider() {
     return (
         <div className="h-full w-[95%] rounded-md z-0 my-0 mx-auto overflow-hidden relative">
             <Slider {...settings}>
-                {
-                    images.map((image, index) => (
-                        <img key={index} src={image.image} alt="Slide" className="w-full h-auto object-cover" />
-                    ))
-                }
+                {images.map((image, index) => (
+                    <LazyLoad key={index} once placeholder={<div>Loading...</div>}>
+                        <img
+                            src={image.image}
+                            srcSet={`${image.image}?w=400 400w, ${image.image}?w=800 800w`}
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            alt="Slide"
+                            className="w-full h-full object-cover"
+                        />
+                    </LazyLoad>
+                ))}
             </Slider>
         </div>
     );
@@ -69,7 +76,7 @@ const SampleNextArrow = (props) => {
     return (
         <div className="flex absolute h-full items-center bottom-0 z-20 right-3">
             <div onClick={onClick} className="flex p-1.5 justify-center items-center rounded-full hover:bg-[#444444] bg-[#373737] border border-[#8f8e8e] bottom-0">
-                <IoIosArrowForward color="white" size={28}/>
+                <IoIosArrowForward color="white" size={28} />
             </div>
         </div>
     );
@@ -82,7 +89,7 @@ const SamplePrevArrow = (props) => {
     return (
         <div className="flex absolute h-full items-center z-20 left-3">
             <div onClick={onClick} className="flex p-1.5 justify-center items-center rounded-full hover:bg-[#444444] bg-[#373737] border border-[#8f8e8e] bottom-0">
-                <IoIosArrowBack color="white" size={28}/>
+                <IoIosArrowBack color="white" size={28} />
             </div>
         </div>
     );

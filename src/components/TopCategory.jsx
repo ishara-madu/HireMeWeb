@@ -38,9 +38,9 @@ function TopCategory() {
                 <div className="flex h-full w-11/12 flex-row justify-center items-center">
                     {
                         lastTenCategory.map(
-                            (item) => (
+                            (item,id) => (
                                 <>
-                                    <p key={item} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative" onMouseOver={() => handleMouseOver(item.name)} onMouseLeave={handleMouseOut}>{item.name}
+                                    <p key={id} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative" onMouseOver={() => handleMouseOver(item.name)} onMouseLeave={handleMouseOut}>{item.name}
                                         {(subCategory && (activeCategory == item.name)) &&
                                             <div className="absolute bottom-0" style={{ width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '8px solid #373737' }}></div>
                                         }</p>
