@@ -1050,6 +1050,12 @@ video {
   cursor: pointer;
 }
 
+.appearance-none {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -1396,6 +1402,10 @@ video {
 .bg-blue-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+}
+
+.bg-transparent {
+  background-color: transparent;
 }
 
 .object-contain {
