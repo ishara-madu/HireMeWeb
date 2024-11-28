@@ -1,20 +1,21 @@
-import { useRef, useState } from "react";
-import { FaAngleDown } from "react-icons/fa6"
 import { MdFilterList } from "react-icons/md"
+import Filter from "../popups/Filter"
+import SearchResult from "./SearchResult"
+import { FaAngleDown } from "react-icons/fa"
+import { useState } from "react"
 
-function SearchHeader() {
-    const [selectedSort, setSelectedSort] = useState("");
-
-
-    return (
-        <div className="flex w-full justify-center">
+function SearchContent() {
+    const [showFilter,setShowFilter] = useState(true);
+  return (
+    <div className="flex-1 flex-col flex items-center mt-10">
+         <div className="flex w-full justify-center">
             <div className="flex w-11/12 flex-col">
-                <div className="w-full text-3xl font-bold mt-10">
+                <div className="w-full text-3xl font-bold">
                     10,000 results for “react native”
                 </div>
                 <div className="flex w-full justify-between items-center">
                     <div className="flex gap-x-2 mt-5">
-                        <div className="flex w-20 h-12 border border-black justify-center text-sm items-center font-semibold">
+                        <div onClick={()=>setShowFilter(prev=>!prev)} className="flex w-20 h-12 border border-black justify-center text-sm items-center font-semibold">
                             <MdFilterList size={20} />&nbsp;Filter
                         </div>
                         <div className="flex w-52 h-12 border border-black items-center justify-center">
@@ -33,7 +34,12 @@ function SearchHeader() {
                 </div>
             </div>
         </div>
-    )
+        <div className="flex w-11/12 mt-5">
+        <Filter showFilter={showFilter}/>
+        <SearchResult/>
+        </div>
+    </div>
+  )
 }
 
-export default SearchHeader
+export default SearchContent
