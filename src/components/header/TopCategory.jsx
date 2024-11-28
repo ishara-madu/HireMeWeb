@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { categoryData } from "../features/category/categoryThunk";
+import { categoryData } from "../../features/category/categoryThunk";
 
 
 function TopCategory() {

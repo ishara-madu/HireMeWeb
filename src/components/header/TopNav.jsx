@@ -3,11 +3,11 @@ import { useEffect, useState } from "react"
 import { CiSearch } from "react-icons/ci"
 import { IoHeartOutline, IoNotificationsOutline } from "react-icons/io5"
 import LazyLoad from "react-lazyload";
-import Profile from "./popups/profile";
-import Notifications from "./popups/Notifications";
-import Favorites from "./popups/Favorites";
+import Profile from "../popups/profile";
+import Notifications from "../popups/Notifications";
+import Favorites from "../popups/Favorites";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile } from "../features/profile/profileThunk";
+import { fetchProfile } from "../../features/profile/profileThunk";
 
 function TopNav() {
     const dispatch = useDispatch();

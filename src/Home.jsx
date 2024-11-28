@@ -1,5 +1,5 @@
-import TopNav from "./components/TopNav"
-import TopCategory from './components/TopCategory';
+import TopNav from "./components/header/TopNav"
+import TopCategory from './components/header/TopCategory';
 import HomeSlider from "./components/HomeSlider";
 import HorizontalMenus from "./components/horizontalMenu/HorizontalMenus";
 import { useDispatch, useSelector } from "react-redux";

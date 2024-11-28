@@ -1,9 +1,11 @@
-import TopNav from "./components/TopNav"
+import TopNav from "./components/header/TopNav"
+import SearchHeader from "./components/search/SearchHeader"
 
 function Search() {
     return (
-        <div className="flex w-full flex-col bg-[#ebebeb]">
+        <div className="flex min-h-svh item-center w-full flex-col bg-[#ebebeb]">
             <TopNav/>
+            <SearchHeader/>
         </div>
     )
 }

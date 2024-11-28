@@ -754,6 +754,10 @@ video {
   margin-top: 1rem;
 }
 
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
 .box-border {
   box-sizing: border-box;
 }
@@ -934,6 +938,10 @@ video {
   min-height: 16rem;
 }
 
+.min-h-svh {
+  min-height: 100svh;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -1060,6 +1068,10 @@ video {
 
 .items-start {
   align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
 }
 
 .items-center {
@@ -1379,6 +1391,11 @@ video {
 
 .bg-\[\#\] {
   background-color: #;
+}
+
+.bg-blue-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
 }
 
 .object-contain {
