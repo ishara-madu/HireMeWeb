@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CiLocationOn } from "react-icons/ci";
+import { CiLocationArrow1, CiLocationOn } from "react-icons/ci";
 import { FaChevronDown } from "react-icons/fa6"
 import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from "react-icons/md"
 
@@ -8,9 +8,10 @@ function Filter({showFilter}) {
     const [showRatings, setShowRatings] = useState(false);
     const [showLanguage, setShowLanguage] = useState(false);
     const [showAllLanguage, setShowAllLanguage] = useState(false);
+    const suggessions = ["language", "gsgsfds", "all"]
 
     return (
-        <div className={`flex ${showFilter ? 'w-[24%]':'w-0 overflow-hidden'} text-nowrap duration-300 flex-col`}>
+        <div className={`flex mt-3 ${showFilter ? 'w-[24%]':'w-0 overflow-hidden'} text-nowrap duration-300 flex-col`}>
             <div className="flex w-full flex-col">
                 <div className="flex w-full pb-2 items-center justify-center">
                     <div className="flex w-full h-12 rounded-sm overflow-hidden relative items-center">
@@ -20,6 +21,20 @@ function Filter({showFilter}) {
                         <input placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
                     </div>
                 </div>
+            </div>
+            <div className="flex-1 px-2 overflow-y-auto w-full flex-col items-center">
+                {
+                    suggessions.map((val,id) => (
+                        <div key={id} className="flex items-center gap-x-3 h-12 w-full border-b border-[#c5c5c5]">
+                            <div className="flex">
+                                <CiLocationArrow1 size={20} color="#aeadad" />
+                            </div>
+                            <div className="flex text-sm opacity-60 cursor-pointer">
+                                {val != undefined ? `${'val._normalized_city'},${'val.state'},${'val.country'}` : "default"}
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
             <div className="flex w-full px-2 flex-col border-t border-[#c5c5c5]">
                 <div onClick={() => setShowRatings((prev) => !prev)} className="flex w-full py-3 items-center justify-between">

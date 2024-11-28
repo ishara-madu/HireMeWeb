@@ -650,6 +650,18 @@ video {
   top: 70px;
 }
 
+.right-0 {
+  right: 0px;
+}
+
+.bottom-3 {
+  bottom: 0.75rem;
+}
+
+.top-5 {
+  top: 1.25rem;
+}
+
 .z-0 {
   z-index: 0;
 }
@@ -768,6 +780,46 @@ video {
 
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+.ml-0 {
+  margin-left: 0px;
+}
+
+.ml-\[-25\%\] {
+  margin-left: -25%;
+}
+
+.ml-\[-250px\] {
+  margin-left: -250px;
+}
+
+.ml-10 {
+  margin-left: 2.5rem;
+}
+
+.ml-\[-10px\] {
+  margin-left: -10px;
+}
+
+.ml-\[-100px\] {
+  margin-left: -100px;
+}
+
+.ml-\[-200px\] {
+  margin-left: -200px;
+}
+
+.ml-\[-400px\] {
+  margin-left: -400px;
+}
+
+.ml-\[-300px\] {
+  margin-left: -300px;
+}
+
+.ml-\[-320px\] {
+  margin-left: -320px;
 }
 
 .box-border {
@@ -1090,6 +1142,10 @@ video {
   width: 0px;
 }
 
+.w-60 {
+  width: 15rem;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1224,6 +1280,11 @@ video {
 .gap-x-20 {
   -moz-column-gap: 5rem;
        column-gap: 5rem;
+}
+
+.gap-x-0 {
+  -moz-column-gap: 0px;
+       column-gap: 0px;
 }
 
 .overflow-hidden {
@@ -1382,6 +1443,21 @@ video {
   border-color: ;
 }
 
+.border-\[\#727272\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(114 114 114 / var(--tw-border-opacity, 1));
+}
+
+.border-\[\#7c7b7b\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(124 123 123 / var(--tw-border-opacity, 1));
+}
+
+.border-\[\#9c9b9b\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(156 155 155 / var(--tw-border-opacity, 1));
+}
+
 .bg-\[\#373737\] {
   --tw-bg-opacity: 1;
   background-color: rgb(55 55 55 / var(--tw-bg-opacity, 1));
@@ -1482,6 +1558,11 @@ video {
 .bg-slate-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(203 213 225 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
 }
 
 .bg-gradient-to-t {
@@ -1682,6 +1763,26 @@ video {
   padding-bottom: 1rem;
 }
 
+.pb-3 {
+  padding-bottom: 0.75rem;
+}
+
+.pb-\[-12px\] {
+  padding-bottom: -12px;
+}
+
+.pb-\[-20px\] {
+  padding-bottom: -20px;
+}
+
+.pt-\[-12px\] {
+  padding-top: -12px;
+}
+
+.pl-5 {
+  padding-left: 1.25rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1828,6 +1929,10 @@ video {
 
 .opacity-0 {
   opacity: 0;
+}
+
+.opacity-70 {
+  opacity: 0.7;
 }
 
 .shadow-lg {
