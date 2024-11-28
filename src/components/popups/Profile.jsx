@@ -1,7 +1,16 @@
 /* eslint-disable react/prop-types */
 import LazyLoad from 'react-lazyload'
 
-function Profile({profile}) {
+function Profile({ profile }) {
+    const numberofFavorites = () => {
+        const fevIds = JSON.parse(localStorage.getItem("favorites")) || [];
+        const length = fevIds.length;
+        if (length > 9) {
+            return "9+"
+        } else {
+            return length
+        }
+    }
     return (
         <div className="flex justify-center w-72 h-auto absolute border shadow-xl border-[#c5c5c5] rounded-md top-[84px] right-5 z-50 bg-[#ebebeb]">
             <div className="flex w-11/12 h-auto flex-col">
@@ -19,10 +28,11 @@ function Profile({profile}) {
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
                     <div className="flex h-10 items-center justify-between">
                         <p className="text-sm opacity-80">Favorite</p>
-                        <div className="flex w-6 justify-center items-center h-6 text-sm bg-purple-500 font-semibold text-[#ebebeb] rounded-full">2</div>
+                        <div className={`flex w-6 justify-center items-center h-6 text-sm ${(numberofFavorites() > 0) || (numberofFavorites() === "0") ? 'bg-purple-500':'opacity-0'} font-semibold text-[#ebebeb] rounded-full`}>{numberofFavorites()}</div>
                     </div>
                     <div className="flex items-center text-sm h-10 opacity-80">Edit profile</div>
                     <div className="flex text-sm h-10 items-center opacity-80">Account settings</div>
+                    <div className="flex text-sm h-10 items-center opacity-80">Worker dashboard</div>
                 </div>
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
                     <div className="flex items-center justify-between h-10">

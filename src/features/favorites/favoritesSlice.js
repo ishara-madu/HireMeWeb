@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchBasedOnRating } from "./basedOnRatingThunk";
+import { fetchFavorites } from "./favoritesThunk";
 
-const basedOnRatingSlice = createSlice({
-    name: 'basedOnRating',
+const favoritesSlice = createSlice({
+    name:'favorites',
     initialState: {
         data: [],
         error: null,
@@ -11,19 +11,19 @@ const basedOnRatingSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(fetchBasedOnRating.pending, (state) => {
+        .addCase(fetchFavorites.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
-        .addCase(fetchBasedOnRating.fulfilled, (state, action) => {
+        .addCase(fetchFavorites.fulfilled, (state, action) => {
             state.loading = false;
             state.data = action.payload;
         })
-        .addCase(fetchBasedOnRating.rejected, (state, action) => {
+        .addCase(fetchFavorites.rejected, (state, action) => {
             state.loading = true;
             state.error = action.payload;
         });
     },
 })
 
-export default basedOnRatingSlice.reducer;
+export default favoritesSlice.reducer;
