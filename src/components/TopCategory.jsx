@@ -39,13 +39,12 @@ function TopCategory() {
                 <div className="flex h-full w-11/12 flex-row justify-center items-center">
                     {
                         lastTenCategory.map(
-                            (item) => (
-                                <>
-                                    <p key={item} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative" onMouseOver={() => handleMouseOver(item.name)} onMouseLeave={handleMouseOut}>{item.name}
-                                        {(subcategory && (activeCategory == item.name)) &&
-                                            <div className="absolute bottom-0" style={{ width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '8px solid #373737' }}></div>
-                                        }</p>
-                                </>
+                            (item, id) => (
+                                <div key={id} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative" onMouseOver={() => handleMouseOver(item.name)} onMouseLeave={handleMouseOut}>{item.name}
+                                    {(subcategory && (activeCategory == item.name)) &&
+                                        <div className="absolute bottom-0" style={{ width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '8px solid #373737' }}></div>
+                                    }
+                                </div>
                             )
                         )
                     }
@@ -55,15 +54,18 @@ function TopCategory() {
             {
                 subcategory && (
                     <div className="flex absolute w-full h-12 bg-[#373737] justify-center items-center z-50">
-                        <div onMouseOver={() => { handleMouseOver(activeCategory) }} onMouseLeave={handleMouseOut} className="flex h-full w-11/12 flex-row gap-x-10 justify-center items-center">
+                        <div onMouseOver={() => { handleMouseOver(activeCategory) }} onMouseLeave={handleMouseOut} className="flex overflow-x-scroll h-full w-11/12 flex-row justify-center items-center">
                             {
                                 category
                                     .filter((item) => item.name === activeCategory)
                                     .map(
-                                        (item) => (
-                                            item.subCategories.slice(-8).map((item) => (
-                                                <p key={item} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{item.name}</p>
-                                            ))
+                                        (item, id) => (
+                                            <div className="flex h-full w-full flex-row gap-x-10 justify-start text-nowrap items-center" key={id}>{
+                                                item.subCategories.slice(-10).map((item, id) => (
+                                                    <div key={id} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{item.name}</div>
+                                                ))
+                                            }
+                                            </div>
                                         )
                                     )
                             }

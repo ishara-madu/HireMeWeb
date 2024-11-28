@@ -1,18 +1,27 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CiSearch } from "react-icons/ci"
 import { IoHeartOutline, IoNotificationsOutline } from "react-icons/io5"
 import LazyLoad from "react-lazyload";
 import Profile from "./popups/profile";
 import Notifications from "./popups/Notifications";
 import Favorites from "./popups/Favorites";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProfile } from "../features/profile/profileThunk";
 
-function TopNav({ profile }) {
+function TopNav() {
+    const dispatch = useDispatch();
+
+    const profile = useSelector((state) => state.profile.data);
+
+    useEffect(() => {
+        dispatch(fetchProfile());
+    }, [dispatch]);
     const [showProfile, setShowProfile] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [showFavorites, setShowFavorites] = useState(false);
     return (
-        <div className="flex w-full h-20 border-b border-[#c5c5c5] justify-center items-center bg-[#ebebeb]">
+        <div className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
             <div className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
                 <div className="cursor-pointer text-xl">Logo</div>
                 <div className="flex flex-1 relative items-center">

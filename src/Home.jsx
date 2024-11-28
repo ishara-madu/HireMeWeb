@@ -7,13 +7,14 @@ import { useEffect, useState } from "react";
 import { fetchProfile } from "./features/profile/profileThunk";
 import { getFormattedLocationFromCoordinates } from "./util/getLocation";
 import EditLocation from "./components/popups/EditLocation";
+import Footer from './components/footer/Footer'
 
 
 function Home() {
     document.cookie = "uid=08d4f45c-d25f-45ea-a2b7-8765ac430cf6; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
-    const dispatch = useDispatch();
     const [location, setLocation] = useState(null);
     const [showLocation, setShowLocation] = useState(false);
+    const dispatch = useDispatch();
 
     const profile = useSelector((state) => state.profile.data);
 
@@ -36,18 +37,18 @@ function Home() {
     }
     return (
         <div onClick={()=>(setShowLocation(false))} className="flex w-full flex-col bg-[#ebebeb]">
-            <TopNav profile={profile} />
+            <TopNav />
             <TopCategory />
             {
-                profile.map(profile => (
-                    <div key={profile} className="flex w-full h-24 flex-row justify-center">
+                profile.map((profile,id) => (
+                    <div key={id} className="flex w-full h-24 flex-row justify-center">
                         <div className="flex w-11/12 h-full items-center gap-x-5">
                             <div className="flex h-14 w-14 items-center rounded-full overflow-hidden">
                                 <img src={profile.image} alt="" className="object-cover w-full h-full" />
                             </div>
                             <div className="flex flex-col gap-y-2 relative">
                                 <h2 className="text-2xl font-bold">Welcome back, {profile.name}</h2>
-                                <p className="text-sm flex items-center">{location} <p onClick={(e)=>(e.stopPropagation(),setShowLocation(true))} className="text-purple-800 text-xs font-bold underline ml-3">Edit location temparary for better result</p></p>
+                                <div className="text-sm flex items-center">{location} <div onClick={(e)=>(e.stopPropagation(),setShowLocation(true))} className="text-purple-800 text-xs font-bold underline ml-3">Edit location temparary for better result</div></div>
                                 {
                                     showLocation &&
                                     <EditLocation location={location} showPupup={handleSubmit}/>
@@ -59,6 +60,7 @@ function Home() {
             }
             <HomeSlider />
             <HorizontalMenus />
+            <Footer/>
         </div>
     )
 }
