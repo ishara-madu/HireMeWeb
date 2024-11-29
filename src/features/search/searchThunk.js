@@ -19,15 +19,20 @@ export const fetchResult = createAsyncThunk(
                 query = query.gt('users.rating ->> perc', filters.ratings);
             }
             if (filters.language) {
-                query = query.ilike(`users.languages`,filters.language);
+                query = query.ilike(`users.languages`, filters.language);
+            }
+            
+            
+            if (filters.newest) {
+                query = query.order('created_at', { ascending: filters.newest });
             }
 
-let { data } = await query;
+            let { data } = await query;
 
 
-return data;
+            return data;
         } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
-}
+            return thunkAPI.rejectWithValue(error.message);
+        }
     }
 )
