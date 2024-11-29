@@ -52,7 +52,7 @@ function SearchResult() {
     return (
         <div className="flex flex-1 flex-col pl-4">
             {loading && <LoadingSpinner/>}
-            {error && <p>Error: {error}</p>}
+            {error && <p className="flex justify-center items-center">Error: {error}</p>}
             {results.length === 0 && !loading && <p className="flex justify-center items-center">No results found.</p>}
             {
                 !loading &&

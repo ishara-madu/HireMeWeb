@@ -18,10 +18,11 @@ function Filter({ showFilter }) {
     const profile = useSelector((state) => state.profile.data);
     const [input, setInput] = useState(sessionStorage.getItem('location') || "" || profile[0].locationName);
     const languages = ["English", "Sinhala", "Mandarin", "Spanish", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Korean", "French", "Turkish", "Vietnamese", "Telugu", "Marathi", "Tamil", "Urdu", "Italian", "Gujarati", "Polish", "Ukrainian", "Malayalam", "Romanian", "Dutch", "Greek", "Czech", "Hungarian", "Swahili", "Thai"];
-
+    const ratingsVal = ["4.5", "4.0","3.5","3.0"]
     useEffect(() => {
         dispatch(fetchProfile());
     }, [dispatch]);
+
     useEffect(() => {
         const fetchLocation = async () => {
             const values = await getSuggestions(input);
@@ -45,6 +46,22 @@ function Filter({ showFilter }) {
 
         dispatch(setFilters({ ...filters, language: value }));
     }
+
+    // eslint-disable-next-line react/prop-types, no-unused-vars
+    const StarIcons = ({ value, size,color }) => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            if (value >= i) {
+                stars.push(<MdOutlineStarPurple500 color={color} key={i} size={size} />);
+            } else if (value >= i - 0.5) {
+                stars.push(<MdOutlineStarHalf color={color} key={i} size={size} />);
+            } else {
+                stars.push(<MdOutlineStarOutline color={color} key={i} size={size} />);
+            }
+        }
+
+        return <>{stars}</>;
+    };
 
     return (
         <div className={`flex mt-3 ${showFilter ? 'w-[24%]' : 'w-0 overflow-hidden'} h-auto text-nowrap justify-start duration-300 flex-col`}>
@@ -91,54 +108,17 @@ function Filter({ showFilter }) {
                 {
                     showRatings &&
                     <div className="flex mt-2 mb-4 gap-y-4 items-start w-full flex-col">
-                        <div className="flex gap-x-2 items-center">
-                            <input onChange={handleRatings} value={4.5} type='radio' name="rating" className="" />
-                            <div className="flex items-center">
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarHalf size={16} />
-                            </div>
-                            <div className="text-sm items-center">4.5 & up</div>
-                            <div className="text-sm opacity-60 items-center">(5300)</div>
-                        </div>
-                        <div className="flex gap-x-2 items-center">
-                            <input onChange={handleRatings} value={4} type='radio' name="rating" className="" />
-                            <div className="flex items-center">
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarOutline size={16} />
-                            </div>
-                            <div className="text-sm items-center">4.0 & up</div>
-                            <div className="text-sm opacity-60 items-center">(5300)</div>
-                        </div>
-                        <div className="flex gap-x-2 items-center">
-                            <input onChange={handleRatings} value={3.5} type='radio' name="rating" className="" />
-                            <div className="flex items-center">
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarHalf size={16} />
-                                <MdOutlineStarOutline size={16} />
-                            </div>
-                            <div className="text-sm items-center">3.5 & up</div>
-                            <div className="text-sm opacity-60 items-center">(5300)</div>
-                        </div>
-                        <div className="flex gap-x-2 items-center">
-                            <input onChange={handleRatings} value={3} type='radio' name="rating" className="" />
-                            <div className="flex items-center">
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarPurple500 size={16} />
-                                <MdOutlineStarOutline size={16} />
-                                <MdOutlineStarOutline size={16} />
-                            </div>
-                            <div className="text-sm items-center">3.0 & up</div>
-                            <div className="text-sm opacity-60 items-center">(5300)</div>
-                        </div>
+                        {
+                            ratingsVal.map((rating, index) => (
+                                <div key={index} className="flex gap-x-2 items-center">
+                                    <input onChange={handleRatings} value={rating} type='radio' name="rating" className="" />
+                                    <div className="flex items-center">
+                                        <StarIcons value={rating} size={16} color={""}/>
+                                    </div>
+                                    <div className="text-sm items-center">{rating} & up</div>
+                                </div>
+                            ))
+                        }
                     </div>
                 }
             </div>
@@ -153,11 +133,10 @@ function Filter({ showFilter }) {
                         {
                             languages.map((language, id) => (
                                 <div key={id} className="flex gap-x-2 items-center">
-                                    <input onChange={handleLanguageUncheck} type='radio' value={language} name="rating" className="" />
+                                    <input onChange={handleLanguageUncheck} type='radio' value={language} name="language" className="" />
                                     <div className="flex items-center text-sm">
                                         {language}
                                     </div>
-                                    <div className="text-sm opacity-60 items-center">(5,300)</div>
                                 </div>
                             ))
                         }
