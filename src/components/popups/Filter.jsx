@@ -1,36 +1,69 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CiLocationArrow1, CiLocationOn } from "react-icons/ci";
 import { FaChevronDown } from "react-icons/fa6"
 import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from "react-icons/md"
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProfile } from "../../features/profile/profileThunk";
+import { getSuggestions } from "../../util/getLocation";
 
 // eslint-disable-next-line react/prop-types
-function Filter({showFilter}) {
+function Filter({ showFilter }) {
     const [showRatings, setShowRatings] = useState(false);
     const [showLanguage, setShowLanguage] = useState(false);
     const [showAllLanguage, setShowAllLanguage] = useState(false);
-    const suggessions = ["language", "gsgsfds", "all"]
+    const [suggessions, setSuggessions] = useState([]);
+    const dispatch = useDispatch();
 
+    const profile = useSelector((state) => state.profile.data);
+    const [input, setInput] = useState(sessionStorage.getItem("tempInput") || (profile.map(val => val.locationName)));
+
+
+
+    useEffect(() => {
+        dispatch(fetchProfile());
+    }, [dispatch]);
+    useEffect(() => {
+        const fetchLocation = async () => {
+            const values = await getSuggestions(input);
+            setSuggessions(values.map(value => value.components));
+        };
+        fetchLocation();
+        sessionStorage.setItem("tempInput", input)
+    }, [input])
+
+
+    const handleChange = (e) => {
+        setInput(e.target.value);
+    }
     return (
-        <div className={`flex mt-3 ${showFilter ? 'w-[24%]':'w-0 overflow-hidden'} text-nowrap duration-300 flex-col`}>
+        <div className={`flex mt-3 ${showFilter ? 'w-[24%]' : 'w-0 overflow-hidden'} text-nowrap duration-300 flex-col`}>
             <div className="flex w-full flex-col">
                 <div className="flex w-full pb-2 items-center justify-center">
                     <div className="flex w-full h-12 rounded-sm overflow-hidden relative items-center">
                         <div className="absolute left-3">
                             <CiLocationOn size={20} color="#aeadad" />
                         </div>
-                        <input placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
+                        <input value={input} onChange={handleChange} placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
                     </div>
                 </div>
             </div>
             <div className="flex-1 px-2 overflow-y-auto w-full flex-col items-center">
                 {
-                    suggessions.map((val,id) => (
+                    suggessions.map((val, id) => (
                         <div key={id} className="flex items-center gap-x-3 h-12 w-full border-b border-[#c5c5c5]">
                             <div className="flex">
                                 <CiLocationArrow1 size={20} color="#aeadad" />
                             </div>
-                            <div className="flex text-sm opacity-60 cursor-pointer">
-                                {val != undefined ? `${'val._normalized_city'},${'val.state'},${'val.country'}` : "default"}
+                            <div onClick={() => (setInput(
+                                val != undefined
+                                    ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`
+                                    : 'default'
+                            ))} className="flex text-sm opacity-60 cursor-pointer">
+                                {
+                                    val != undefined
+                                        ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`
+                                        : 'default'
+                                }
                             </div>
                         </div>
                     ))

@@ -7,7 +7,7 @@ function Search() {
         <div className="flex h-auto min-h-svh item-center w-full flex-col bg-[#ebebeb]">
             <TopNav/>
             <SearchContent/>
-            {/* <Footer/> */}
+            <Footer/>
         </div>
     )
 }

@@ -3,17 +3,22 @@ import Filter from "../popups/Filter"
 import SearchResult from "./SearchResult"
 import { FaAngleDown } from "react-icons/fa"
 import { useState } from "react"
+import { useLocation } from "react-router-dom"
 
 function SearchContent() {
     const [showFilter, setShowFilter] = useState(true);
     const [showSort, setShowSort] = useState(false);
     const [currentSortValue, setCurrentSortValue] = useState('Most Relevent');
+    const path = useLocation();
+  const queryParams = new URLSearchParams(path.search);
+  const query = queryParams.get("query");
+  
     return (
         <div onClick={()=>setShowSort(false)} className="flex-1 flex-col flex items-center mt-10">
             <div className="flex w-full justify-center">
                 <div className="flex w-11/12 flex-col">
                     <div className="w-full text-3xl font-bold">
-                        10,000 results for “react native”
+                        10,000 results for “{query}”
                     </div>
                     <div className="flex w-full justify-between items-center">
                         <div onClick={(e)=>e.stopPropagation()} className="flex gap-x-2 mt-5">

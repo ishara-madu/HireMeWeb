@@ -8,8 +8,17 @@ import Notifications from "../popups/Notifications";
 import Favorites from "../popups/Favorites";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../features/profile/profileThunk";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function TopNav() {
+    const navigate = useNavigate();
+    const path = useLocation();
+    const queryParams = new URLSearchParams(path.search);
+    const query = queryParams.get("query");
+    const [showProfile, setShowProfile] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [showFavorites, setShowFavorites] = useState(false);
+    const [searchText, setSearchText] = useState(query || '');
     const dispatch = useDispatch();
 
     const profile = useSelector((state) => state.profile.data);
@@ -17,16 +26,20 @@ function TopNav() {
     useEffect(() => {
         dispatch(fetchProfile());
     }, [dispatch]);
-    const [showProfile, setShowProfile] = useState(false);
-    const [showNotifications, setShowNotifications] = useState(false);
-    const [showFavorites, setShowFavorites] = useState(false);
+
+    const handleSearch = (e) => {
+        e.preventDefault(); 
+        if (searchText.trim()) {
+            navigate(`/search?query=${encodeURIComponent(searchText)}`);
+        }
+    };
     return (
         <div className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
-            <div className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
+            <form onSubmit={handleSearch} className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
                 <div className="cursor-pointer text-xl">Logo</div>
                 <div className="flex flex-1 relative items-center">
                     <CiSearch size={20} className="absolute left-3" />
-                    <input type="text" className="text-sm w-full h-12 rounded-full px-10 flex font-normal outline-none border border-black" placeholder="Search for anything" />
+                    <input type="text" value={searchText} onChange={(e) => { setSearchText(e.target.value) }} className="text-sm w-full h-12 rounded-full px-10 flex font-normal outline-none border border-black" placeholder="Search for anything" />
                 </div>
                 {
                     profile.map(profile => (
@@ -36,7 +49,7 @@ function TopNav() {
                                     showFavorites && (
                                         <>
                                             <div className="absolute w-20 h-32 z-50"></div>
-                                            <Favorites/>
+                                            <Favorites />
                                         </>
                                     )
                                 }
@@ -70,7 +83,7 @@ function TopNav() {
                     ))
                 }
 
-            </div>
+            </form>
         </div>
     )
 }
