@@ -16,10 +16,8 @@ function Filter({ showFilter }) {
     const dispatch = useDispatch();
     const filters = useSelector((state) => state.search.filters);
     const profile = useSelector((state) => state.profile.data);
-    const [input, setInput] = useState(profile.map(val => val.locationName));
+    const [input, setInput] = useState(sessionStorage.getItem('location') || "" || profile[0].locationName);
     const languages = ["English", "Sinhala", "Mandarin", "Spanish", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Korean", "French", "Turkish", "Vietnamese", "Telugu", "Marathi", "Tamil", "Urdu", "Italian", "Gujarati", "Polish", "Ukrainian", "Malayalam", "Romanian", "Dutch", "Greek", "Czech", "Hungarian", "Swahili", "Thai"];
-
-
 
     useEffect(() => {
         dispatch(fetchProfile());
@@ -30,9 +28,9 @@ function Filter({ showFilter }) {
             setSuggessions(values.map(value => value.components));
         };
         fetchLocation();
+        sessionStorage.setItem('location',input)
     }, [input])
 
-    console.log(input);
     
     const handleSubmitLocation = (e) => {
         e.preventDefault()
@@ -66,11 +64,13 @@ function Filter({ showFilter }) {
                             <div className="flex">
                                 <CiLocationArrow1 size={20} color="#aeadad" />
                             </div>
-                            <div onClick={() => (setInput(
+                            <div onClick={() => {
+                                handleSubmitLocation();
+                                setInput(
                                 val != undefined
                                     ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`
                                     : 'default'
-                            ))} className="flex text-sm opacity-60 cursor-pointer">
+                            )}} className="flex text-sm opacity-60 cursor-pointer">
                                 {
                                     val != undefined
                                         ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`

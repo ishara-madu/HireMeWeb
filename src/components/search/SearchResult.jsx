@@ -64,10 +64,10 @@ function SearchResult() {
                         <div className="flex w-60 h-40 border border-[#c5c5c5] overflow-hidden rounded-md">
                             <img src="" alt="" className="w-full h-full object-cover" />
                         </div>
-                        <div className="flex flex-1 flex-col justify-start h-auto min-h-40">
+                        <div className="flex flex-1 flex-col gap-y-0.5 justify-start h-auto min-h-40">
                             <div className="flex text-base font-semibold">{result.title}</div>
-                            <div className="flex text-sm font-normal opacity-70">short description</div>
-                            <div className="flex text-xs font-normal opacity-60">usename</div>
+                            <div className="flex text-sm font-normal opacity-70">{result.description.short}</div>
+                            <div className="flex text-xs font-normal opacity-60">{result.users.name}</div>
                             <div className='flex items-center gap-x-1'>
                                 <p className='font-semibold text-sm'>{result.users.rating.perc}</p>
                                 <div className='flex items-center'>
@@ -77,10 +77,10 @@ function SearchResult() {
                             </div>
                             <div className="flex text-xs opacity-60 gap-x-1">
                                 <CiLocationOn size={15} />
-                                Nochchiyagama
+                                {result.users.locationName}
                             </div>
                             <div className="flex text-xs opacity-60">
-                                tags
+                                {result.tags.tagList.join(", ")}
                             </div>
                         </div>
 

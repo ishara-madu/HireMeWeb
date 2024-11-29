@@ -17,9 +17,7 @@ function SearchContent() {
     const queryParams = new URLSearchParams(path.search);
     const query = queryParams.get("query");
     useEffect(()=>{
-        dispatch(setFilters({ ...filters, searchResult: query }));
-        console.log(filters);
-        
+        dispatch(setFilters({ ...filters, searchResult: query }));        
     },[query,dispatch])
 
     return (
