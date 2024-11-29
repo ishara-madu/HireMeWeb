@@ -16,7 +16,7 @@ function Filter({ showFilter }) {
     const dispatch = useDispatch();
     const filters = useSelector((state) => state.search.filters);
     const profile = useSelector((state) => state.profile.data);
-    const [input, setInput] = useState(sessionStorage.getItem("tempInput") || (profile.map(val => val.locationName)));
+    const [input, setInput] = profile.map(val => val.locationName);
 
 
 
@@ -29,13 +29,18 @@ function Filter({ showFilter }) {
             setSuggessions(values.map(value => value.components));
         };
         fetchLocation();
-        sessionStorage.setItem("tempInput", input)
     }, [input])
 
-    const handleSubmitLocation =(e)=>{
+    const handleSubmitLocation = (e) => {
         e.preventDefault()
-        dispatch(setFilters({ ...filters,location: input }));
+        dispatch(setFilters({ ...filters, location: input }));
+
+    }
+    const handleRatings = ()=>{
         
+    }
+    const handleLanguage = ()=>{
+
     }
 
     const handleChange = (e) => {

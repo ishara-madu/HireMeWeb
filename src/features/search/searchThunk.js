@@ -15,8 +15,14 @@ export const fetchResult = createAsyncThunk(
             if (filters.location) {
                 query = query.ilike('users.locationName', `%${filters.location}%`);
             }
-            
-            let {data} = await query;
+            if (filters.ratings) {
+                query = query.gt('users.rating ->> perc.like', `%${filters.ratings}%`);
+            }
+            if (filters.language) {
+                query = query.contains('users.languages -> language', [filters.language]);
+            }
+
+            let { data } = await query;
 
 
             return data;
