@@ -16,7 +16,8 @@ function Filter({ showFilter }) {
     const dispatch = useDispatch();
     const filters = useSelector((state) => state.search.filters);
     const profile = useSelector((state) => state.profile.data);
-    const [input, setInput] = profile.map(val => val.locationName);
+    const [input, setInput] = useState(profile.map(val => val.locationName));
+    const languages = ["English", "Sinhala", "Mandarin", "Spanish", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Korean", "French", "Turkish", "Vietnamese", "Telugu", "Marathi", "Tamil", "Urdu", "Italian", "Gujarati", "Polish", "Ukrainian", "Malayalam", "Romanian", "Dutch", "Greek", "Czech", "Hungarian", "Swahili", "Thai"];
 
 
 
@@ -31,21 +32,21 @@ function Filter({ showFilter }) {
         fetchLocation();
     }, [input])
 
+    console.log(input);
+    
     const handleSubmitLocation = (e) => {
         e.preventDefault()
         dispatch(setFilters({ ...filters, location: input }));
 
     }
-    const handleRatings = (e)=>{
+    const handleRatings = (e) => {
         dispatch(setFilters({ ...filters, ratings: e.target.value }))
     }
-    const handleLanguage = ()=>{
+    const handleLanguage = () => {
 
     }
 
-    const handleChange = (e) => {
-        setInput(e.target.value);
-    }
+
     return (
         <div className={`flex mt-3 ${showFilter ? 'w-[24%]' : 'w-0 overflow-hidden'} h-auto text-nowrap justify-start duration-300 flex-col`}>
             <div className="flex w-full flex-col">
@@ -54,7 +55,7 @@ function Filter({ showFilter }) {
                         <div className="absolute left-3">
                             <CiLocationOn size={20} color="#aeadad" />
                         </div>
-                        <input value={input} onChange={handleChange} placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
+                        <input value={input} onChange={(e)=>setInput(e.target.value)} placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
                     </form>
                 </div>
             </div>
@@ -147,13 +148,17 @@ function Filter({ showFilter }) {
                 {
                     showLanguage &&
                     <div className={`flex mt-2 mb-4 gap-y-4 ${showAllLanguage ? 'h-auto' : 'max-h-36'} overflow-hidden relative items-start w-full flex-col`}>
-                        <div className="flex gap-x-2 items-center">
-                            <input type='checkbox' name="rating" className="" />
-                            <div className="flex items-center text-sm">
-                                English
-                            </div>
-                            <div className="text-sm opacity-60 items-center">(5,300)</div>
-                        </div>
+                        {
+                            languages.map((language, id) => (
+                                <div key={id} className="flex gap-x-2 items-center">
+                                    <input type='checkbox' name="rating" className="" />
+                                    <div className="flex items-center text-sm">
+                                        {language}
+                                    </div>
+                                    <div className="text-sm opacity-60 items-center">(5,300)</div>
+                                </div>
+                            ))
+                        }
                         <div onClick={() => setShowAllLanguage(prev => !prev)} className={`flex text-sm font-semibold bg-gradient-to-t from-[#ebebeb] to-[#ebebeb62] w-full bottom-0 items-end text-purple-600 ${showAllLanguage ? "flex h-auto" : "absolute h-14"}`}>
                             <div className="flex gap-x-3 items-center">
                                 {
