@@ -36,8 +36,8 @@ function Filter({ showFilter }) {
         dispatch(setFilters({ ...filters, location: input }));
 
     }
-    const handleRatings = ()=>{
-        
+    const handleRatings = (e)=>{
+        dispatch(setFilters({ ...filters, ratings: e.target.value }))
     }
     const handleLanguage = ()=>{
 
@@ -89,7 +89,7 @@ function Filter({ showFilter }) {
                     showRatings &&
                     <div className="flex mt-2 mb-4 gap-y-4 items-start w-full flex-col">
                         <div className="flex gap-x-2 items-center">
-                            <input type='radio' name="rating" className="" />
+                            <input onChange={handleRatings} value={4.5} type='radio' name="rating" className="" />
                             <div className="flex items-center">
                                 <MdOutlineStarPurple500 size={16} />
                                 <MdOutlineStarPurple500 size={16} />
@@ -101,7 +101,7 @@ function Filter({ showFilter }) {
                             <div className="text-sm opacity-60 items-center">(5300)</div>
                         </div>
                         <div className="flex gap-x-2 items-center">
-                            <input type='radio' name="rating" className="" />
+                            <input onChange={handleRatings} value={4} type='radio' name="rating" className="" />
                             <div className="flex items-center">
                                 <MdOutlineStarPurple500 size={16} />
                                 <MdOutlineStarPurple500 size={16} />
@@ -113,7 +113,7 @@ function Filter({ showFilter }) {
                             <div className="text-sm opacity-60 items-center">(5300)</div>
                         </div>
                         <div className="flex gap-x-2 items-center">
-                            <input type='radio' name="rating" className="" />
+                            <input onChange={handleRatings} value={3.5} type='radio' name="rating" className="" />
                             <div className="flex items-center">
                                 <MdOutlineStarPurple500 size={16} />
                                 <MdOutlineStarPurple500 size={16} />
@@ -125,7 +125,7 @@ function Filter({ showFilter }) {
                             <div className="text-sm opacity-60 items-center">(5300)</div>
                         </div>
                         <div className="flex gap-x-2 items-center">
-                            <input type='radio' name="rating" className="" />
+                            <input onChange={handleRatings} value={3} type='radio' name="rating" className="" />
                             <div className="flex items-center">
                                 <MdOutlineStarPurple500 size={16} />
                                 <MdOutlineStarPurple500 size={16} />

@@ -69,11 +69,11 @@ function SearchResult() {
                             <div className="flex text-sm font-normal opacity-70">short description</div>
                             <div className="flex text-xs font-normal opacity-60">usename</div>
                             <div className='flex items-center gap-x-1'>
-                                <p className='font-semibold text-sm'>{'3.0'}</p>
+                                <p className='font-semibold text-sm'>{result.users.rating.perc}</p>
                                 <div className='flex items-center'>
-                                    <StarIcons value={3} size={15} />
+                                    <StarIcons value={result.users.rating.perc} size={15} />
                                 </div>
-                                <p className='text-xs opacity-60'>{`(${([2, 2, 2, 2, 2]).reduce((accumulator, currentValue) => accumulator + currentValue, 0)})`}</p>
+                                <p className='text-xs opacity-60'>{`(${(result.users.rating.rating).reduce((accumulator, currentValue) => accumulator + currentValue, 0)})`}</p>
                             </div>
                             <div className="flex text-xs opacity-60 gap-x-1">
                                 <CiLocationOn size={15} />
