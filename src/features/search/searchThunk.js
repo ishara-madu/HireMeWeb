@@ -5,11 +5,11 @@ export const fetchResult = createAsyncThunk(
     'fetchResult',
     async (filters, thunkAPI) => {
         try {
-            let query = supabase.from('listings').select('*');
+            let query = supabase.from('listings').select('*,users(*)');
 
             if (filters.searchResult) {
                 query = query.or(
-                    `title.ilike.%${filters.query}%,description.ilike.%${filters.searchResult}%`
+                    // `description ->> long.ilike.%${filters.searchResult}%,description ->> short.ilike.%${filters.searchResult}%,description ->> keypoints.ilike.%${filters.searchResult}%,title.ilike.%${filters.searchResult}%,image.ilike.%${filters.searchResult}%,tags ->> tagList.ilike.%${filters.searchResult}%`
                 );
             }
             if (filters.location) {

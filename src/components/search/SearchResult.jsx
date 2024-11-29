@@ -4,6 +4,7 @@ import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchResult } from "../../features/search/searchThunk";
+import LoadingSpinner from "../LoadingSpinner";
 
 function SearchResult() {
     const [fevId, setFavId] = useState([""]);
@@ -51,9 +52,9 @@ function SearchResult() {
     }
     return (
         <div className="flex flex-1 flex-col pl-4">
-            {loading && <p>Loading...</p>}
+            {loading && <LoadingSpinner/>}
             {error && <p>Error: {error}</p>}
-            {results.length === 0 && !loading && <p>No results found.</p>}
+            {results.length === 0 && !loading && <p className="flex justify-center items-center">No results found.</p>}
             {
                 !loading &&
                 results.map((result, id) => (
