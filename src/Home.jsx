@@ -5,7 +5,6 @@ import HorizontalMenus from "./components/horizontalMenu/HorizontalMenus";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchProfile } from "./features/profile/profileThunk";
-import { getFormattedLocationFromCoordinates } from "./util/getLocation";
 import EditLocation from "./components/popups/EditLocation";
 import Footer from './components/footer/Footer'
 

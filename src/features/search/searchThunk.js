@@ -5,7 +5,7 @@ export const fetchResult = createAsyncThunk(
     'fetchResult',
     async (filters, thunkAPI) => {
         try {
-            let query = supabase.from('listings,users(*)').select('*');
+            let query = supabase.from('listings').select('*');
 
             if (filters.searchResult) {
                 query = query.or(
@@ -17,6 +17,8 @@ export const fetchResult = createAsyncThunk(
             }
             const { data, error } = await query;
             if (error) throw error;
+            console.log(data);
+            
             return data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);

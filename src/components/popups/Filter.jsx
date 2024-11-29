@@ -36,7 +36,7 @@ function Filter({ showFilter }) {
         setInput(e.target.value);
     }
     return (
-        <div className={`flex mt-3 ${showFilter ? 'w-[24%]' : 'w-0 overflow-hidden'} text-nowrap duration-300 flex-col`}>
+        <div className={`flex mt-3 ${showFilter ? 'w-[24%]' : 'w-0 overflow-hidden'} h-auto text-nowrap justify-start duration-300 flex-col`}>
             <div className="flex w-full flex-col">
                 <div className="flex w-full pb-2 items-center justify-center">
                     <div className="flex w-full h-12 rounded-sm overflow-hidden relative items-center">
@@ -47,10 +47,10 @@ function Filter({ showFilter }) {
                     </div>
                 </div>
             </div>
-            <div className="flex-1 px-2 overflow-y-auto w-full flex-col items-center">
+            <div className="flex px-2 overflow-y-auto w-full flex-col items-center">
                 {
                     suggessions.map((val, id) => (
-                        <div key={id} className="flex items-center gap-x-3 h-12 w-full border-b border-[#c5c5c5]">
+                        <div key={id} className="flex items-center gap-x-3 h-12 w-full border-[#c5c5c5]">
                             <div className="flex">
                                 <CiLocationArrow1 size={20} color="#aeadad" />
                             </div>
