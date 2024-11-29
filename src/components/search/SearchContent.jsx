@@ -8,18 +8,19 @@ import { useDispatch, useSelector } from "react-redux"
 import { setFilters } from "../../features/search/searchSlice"
 
 function SearchContent() {
-    const dispatch = useDispatch();
     const [showFilter, setShowFilter] = useState(true);
     const [showSort, setShowSort] = useState(false);
     const [currentSortValue, setCurrentSortValue] = useState('Most Relevent');
-    const filters = useSelector((state) => state.search.filters);
+    const dispatch = useDispatch();
+    const  filters  = useSelector((state) => state.search);
     const path = useLocation();
     const queryParams = new URLSearchParams(path.search);
     const query = queryParams.get("query");
-
     useEffect(()=>{
         dispatch(setFilters({ ...filters, searchResult: query }));
-    },[dispatch,query])
+        console.log(filters);
+        
+    },[query,dispatch])
 
     return (
         <div onClick={() => setShowSort(false)} className="flex-1 flex-col flex items-center mt-10">

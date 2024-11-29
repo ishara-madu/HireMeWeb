@@ -5,6 +5,7 @@ import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../features/profile/profileThunk";
 import { getSuggestions } from "../../util/getLocation";
+import { setFilters } from "../../features/search/searchSlice";
 
 // eslint-disable-next-line react/prop-types
 function Filter({ showFilter }) {
@@ -13,7 +14,7 @@ function Filter({ showFilter }) {
     const [showAllLanguage, setShowAllLanguage] = useState(false);
     const [suggessions, setSuggessions] = useState([]);
     const dispatch = useDispatch();
-
+    const filters = useSelector((state) => state.search.filters);
     const profile = useSelector((state) => state.profile.data);
     const [input, setInput] = useState(sessionStorage.getItem("tempInput") || (profile.map(val => val.locationName)));
 
@@ -31,6 +32,11 @@ function Filter({ showFilter }) {
         sessionStorage.setItem("tempInput", input)
     }, [input])
 
+    const handleSubmitLocation =(e)=>{
+        e.preventDefault()
+        dispatch(setFilters({ ...filters,location: input }));
+        
+    }
 
     const handleChange = (e) => {
         setInput(e.target.value);
@@ -39,12 +45,12 @@ function Filter({ showFilter }) {
         <div className={`flex mt-3 ${showFilter ? 'w-[24%]' : 'w-0 overflow-hidden'} h-auto text-nowrap justify-start duration-300 flex-col`}>
             <div className="flex w-full flex-col">
                 <div className="flex w-full pb-2 items-center justify-center">
-                    <div className="flex w-full h-12 rounded-sm overflow-hidden relative items-center">
+                    <form onSubmit={handleSubmitLocation} className="flex w-full h-12 rounded-sm overflow-hidden relative items-center">
                         <div className="absolute left-3">
                             <CiLocationOn size={20} color="#aeadad" />
                         </div>
                         <input value={input} onChange={handleChange} placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
-                    </div>
+                    </form>
                 </div>
             </div>
             <div className="flex px-2 overflow-y-auto w-full flex-col items-center">

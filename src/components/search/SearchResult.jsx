@@ -14,9 +14,11 @@ function SearchResult() {
 
 
     useEffect(() => {
-        // if (filters.searchResult || filters.location) {
+        if (filters.searchResult || filters.location) {
         dispatch(fetchResult(filters));
-        // }
+        }
+        console.log(filters);
+        
     }, [dispatch, filters]);
 
 
