@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from "react-icons/md";
@@ -12,13 +12,21 @@ function SearchResult() {
     const filters = useSelector((state) => state.search.filters);
     const { results, loading, error } = useSelector((state) => state.search);
 
+    const sortedResults = useMemo(() => {
+        return results
+            ? [...results].sort((a, b) => {
+                const sumA = a.users.rating.rating.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                const sumB = b.users.rating.rating.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                return sumB - sumA;  
+            })
+            : [];
+    }, [results]);
 
     useEffect(() => {
         if (filters.searchResult || filters.location) {
-        dispatch(fetchResult(filters));
+            dispatch(fetchResult(filters));
         }
-        console.log(filters);
-        
+
     }, [dispatch, filters]);
 
 
@@ -54,12 +62,12 @@ function SearchResult() {
     }
     return (
         <div className="flex flex-1 flex-col pl-4">
-            {loading && <LoadingSpinner/>}
+            {loading && <LoadingSpinner />}
             {error && <p>Error: {error}</p>}
-            {results.length === 0 && !loading && <p className="flex justify-center items-center">No results found.</p>}
+            {sortedResults.length === 0 && !loading && <p className="flex justify-center items-center">No results found.</p>}
             {
                 !loading &&
-                results.map((result, id) => (
+                sortedResults.map((result, id) => (
                     <div key={id} className="flex w-full gap-x-3 items-center py-3 h-48 max-h-auto border-b border-[#c5c5c5] relative">
                         <div className="flex w-60 h-40 border border-[#c5c5c5] overflow-hidden rounded-md">
                             <img src="" alt="" className="w-full h-full object-cover" />

@@ -28,10 +28,10 @@ function Filter({ showFilter }) {
             setSuggessions(values.map(value => value.components));
         };
         fetchLocation();
-        sessionStorage.setItem('location',input)
+        sessionStorage.setItem('location', input)
     }, [input])
 
-    
+
     const handleSubmitLocation = (e) => {
         e.preventDefault()
         dispatch(setFilters({ ...filters, location: input }));
@@ -40,10 +40,11 @@ function Filter({ showFilter }) {
     const handleRatings = (e) => {
         dispatch(setFilters({ ...filters, ratings: e.target.value }))
     }
-    const handleLanguage = () => {
+    const handleLanguageUncheck = (e) => {
+        const { value } = e.target;
 
+        dispatch(setFilters({ ...filters, language: value }));
     }
-
 
     return (
         <div className={`flex mt-3 ${showFilter ? 'w-[24%]' : 'w-0 overflow-hidden'} h-auto text-nowrap justify-start duration-300 flex-col`}>
@@ -53,7 +54,7 @@ function Filter({ showFilter }) {
                         <div className="absolute left-3">
                             <CiLocationOn size={20} color="#aeadad" />
                         </div>
-                        <input value={input} onChange={(e)=>setInput(e.target.value)} placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
+                        <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Search by location" className="flex h-full w-full pl-10 pr-5 text-sm border border-gray-300 bg-transparent rounded-md focus:outline-none" />
                     </form>
                 </div>
             </div>
@@ -67,10 +68,11 @@ function Filter({ showFilter }) {
                             <div onClick={() => {
                                 handleSubmitLocation();
                                 setInput(
-                                val != undefined
-                                    ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`
-                                    : 'default'
-                            )}} className="flex text-sm opacity-60 cursor-pointer">
+                                    val != undefined
+                                        ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`
+                                        : 'default'
+                                )
+                            }} className="flex text-sm opacity-60 cursor-pointer">
                                 {
                                     val != undefined
                                         ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`
@@ -151,7 +153,7 @@ function Filter({ showFilter }) {
                         {
                             languages.map((language, id) => (
                                 <div key={id} className="flex gap-x-2 items-center">
-                                    <input type='checkbox' name="rating" className="" />
+                                    <input onChange={handleLanguageUncheck} type='radio' value={language} name="rating" className="" />
                                     <div className="flex items-center text-sm">
                                         {language}
                                     </div>
