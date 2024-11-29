@@ -38,7 +38,7 @@ function SearchResult() {
     }
     return (
         <div className="flex flex-1 pl-4">
-            <div className="flex w-full gap-x-3 h-auto items-center py-3 border-b border-[#c5c5c5] relative">
+            <div className="flex w-full gap-x-3 items-center py-3 h-48 max-h-auto border-b border-[#c5c5c5] relative">
                 <div className="flex w-60 h-40 border border-[#c5c5c5] overflow-hidden rounded-md">
                     <img src="" alt="" className="w-full h-full object-cover" />
                 </div>

@@ -12,7 +12,6 @@ import Footer from './components/footer/Footer'
 
 function Home() {
     document.cookie = "uid=08d4f45c-d25f-45ea-a2b7-8765ac430cf6; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
-    const [location, setLocation] = useState(null);
     const [showLocation, setShowLocation] = useState(false);
     const dispatch = useDispatch();
 
@@ -23,12 +22,6 @@ function Home() {
     }, [dispatch]);
 
     useEffect(() => {
-        const fetchLocation = async () => {
-            const num = profile.map(profile => `${profile.latitude},${profile.longitude}`)
-            const locationData = await getFormattedLocationFromCoordinates(num);
-            setLocation(locationData.formattedAddress);
-        };
-        fetchLocation();
         sessionStorage.setItem('history', JSON.stringify((profile.map(history => history.searchHistory.history).flat())));
     }, [profile]);
 
@@ -48,10 +41,10 @@ function Home() {
                             </div>
                             <div className="flex flex-col gap-y-2 relative">
                                 <h2 className="text-2xl font-bold">Welcome back, {profile.name}</h2>
-                                <div className="text-sm flex items-center">{location} <div onClick={(e)=>(e.stopPropagation(),setShowLocation(true))} className="text-purple-800 text-xs font-bold underline ml-3">Edit location temparary for better result</div></div>
+                                <div className="text-sm flex items-center">{profile.locationName} <div onClick={(e)=>(e.stopPropagation(),setShowLocation(true))} className="text-purple-800 text-xs font-bold underline ml-3">Edit location temparary for better result</div></div>
                                 {
                                     showLocation &&
-                                    <EditLocation location={location} showPupup={handleSubmit}/>
+                                    <EditLocation location={profile} showPupup={handleSubmit}/>
                                 }
                             </div>
                         </div>

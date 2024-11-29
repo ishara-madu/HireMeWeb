@@ -5,7 +5,7 @@ import { getSuggestions } from "../../util/getLocation";
 
 function EditLocation({showPupup,...props}) {
     const [suggessions, setSuggessions] = useState([]);
-    const [input, setInput] = useState(props.location);
+    const [input, setInput] = useState(props.location.locationName);
     useEffect(() => {
         const fetchLocation = async () => {
             const values = await getSuggestions(input);
