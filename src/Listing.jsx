@@ -19,12 +19,11 @@ function Listing() {
         dispatch(fetchListning({ id: state }));
     }, [dispatch, state]);
 
-    const val = Object.values(data)[0];
     
     return (
         <div className="flex h-full min-h-svh item-center justify-center w-full flex-col bg-[#ebebeb]">
             <TopNav/>
-            <TopBar data={val}/>
+            <TopBar data={data}/>
             <Keypoints />
             <Description />
             <Worker />
