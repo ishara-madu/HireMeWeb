@@ -28,7 +28,7 @@ function Profile({ profile }) {
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
                     <div className="flex h-10 items-center justify-between">
                         <p className="text-sm opacity-80">Favorite</p>
-                        <div className={`flex w-6 justify-center items-center h-6 text-sm ${(numberofFavorites() > 0) || (numberofFavorites() === "0") ? 'bg-purple-500':'opacity-0'} font-semibold text-[#ebebeb] rounded-full`}>{numberofFavorites()}</div>
+                        <div className={`flex w-6 justify-center items-center h-6 text-sm ${(numberofFavorites() > 0) || (numberofFavorites() === "0") ? 'bg-green-500':'opacity-0'} font-semibold text-[#ebebeb] rounded-full`}>{numberofFavorites()}</div>
                     </div>
                     <div className="flex items-center text-sm h-10 opacity-80">Edit profile</div>
                     <div className="flex text-sm h-10 items-center opacity-80">Account settings</div>
@@ -37,7 +37,7 @@ function Profile({ profile }) {
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
                     <div className="flex items-center justify-between h-10">
                         <p className="opacity-80 text-sm">Notifications</p>
-                        <div className="flex w-7 justify-center items-center h-6 text-sm bg-purple-500 font-semibold text-[#ebebeb] rounded-full">9+</div>
+                        <div className="flex w-7 justify-center items-center h-6 text-sm bg-green-500 font-semibold text-[#ebebeb] rounded-full">9+</div>
                     </div>
                 </div>
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">

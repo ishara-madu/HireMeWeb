@@ -7,7 +7,7 @@ function Description({data}) {
     return (
         <div className='flex w-full h-auto bg-[#ebebeb] py-4 justify-center items-center'>
             <div className="flex w-10/12 h-auto">
-                <div className={`flex w-full ${showAllDescription ? 'h-28' : 'h-auto'} gap-y-3 overflow-hidden flex-col rounded-sm relative`}>
+                <div className={`flex w-7/12 ${showAllDescription ? 'h-28' : 'h-auto'} gap-y-3 overflow-hidden flex-col rounded-sm relative`}>
                     <div className="flex text-xl font-bold">Description</div>
                     <div className="flex text-sm">
                         {data.description.long}

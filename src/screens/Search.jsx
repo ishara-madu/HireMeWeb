@@ -1,6 +1,6 @@
-import Footer from "./components/footer/Footer"
-import TopNav from "./components/header/TopNav"
-import SearchContent from "./components/search/SearchContent"
+import Footer from "../components/footer/Footer"
+import TopNav from "../components/header/TopNav"
+import SearchContent from "../components/search/SearchContent"
 
 function Search() {
     return (

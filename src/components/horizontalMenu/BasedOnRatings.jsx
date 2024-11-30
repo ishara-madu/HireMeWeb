@@ -55,6 +55,7 @@ function BasedOnRatings() {
 
     const handleListClick = (data)=>{
         dispatch(setFilters({ id: data }));
+        sessionStorage.setItem("listingFilter", JSON.stringify({id:data}));
         navigate(`/listing`)
         window.scrollTo({
             top: 0,
@@ -106,7 +107,7 @@ function BasedOnRatings() {
                                                         </div>
                                                     </div>
                                                     <div className='flex w-full justify-evenly items-center mt-4'>
-                                                        <a href={`tel:${data.users.contact.phone}}`} onClick={(e) => {e.stopPropagation(); navigator.clipboard.writeText(data.users.contact.phone).then(alert('Mobile number copy to clipboard')) }} className='flex h-12 w-52 bg-purple-500 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
+                                                        <a href={`tel:${data.users.contact.phone}}`} onClick={(e) => {e.stopPropagation(); navigator.clipboard.writeText(data.users.contact.phone).then(alert('Mobile number copy to clipboard')) }} className='flex h-12 w-52 bg-green-600 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
                                                         <div onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleFavorites(data.id)

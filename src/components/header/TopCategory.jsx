@@ -59,7 +59,7 @@ function TopCategory() {
                 </div>
             </div>
 
-            {
+            {/* {
                 subcategory && (
                     <div className="flex absolute w-full h-12 bg-[#373737] justify-center items-center z-50">
                         <div onMouseOver={() => { handleMouseOver(activeCategory) }} onMouseLeave={handleMouseOut} className="flex overflow-x-scroll h-full w-11/12 flex-row justify-center items-center">
@@ -80,7 +80,7 @@ function TopCategory() {
                         </div>
                     </div>
                 )
-            }
+            } */}
 
         </div>
     )

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import LazyLoad from "react-lazyload";
 
 function Notifications() {
     const [isMainProfile, setIsMainProfile] = useState(true);
@@ -9,7 +8,7 @@ function Notifications() {
                 <div className="flex flex-col w-full pt-3 h-auto gap-y-4 items-center border-b border-[#c5c5c5]">
                     <div className="flex h-10 justify-between w-full items-center">
                         <p className="text-lg font-bold">Notifications</p>
-                        <button className="text-sm text-purple-500 font-semibold hover:text-purple-700">Settings</button>
+                        <button className="text-sm text-green-500 font-semibold hover:text-green-700">Settings</button>
                     </div>
                     <div className="flex h-8 justify-around w-full items-center">
                         <button onClick={() => { setIsMainProfile(true) }} className={`flex justify-center items-start text-sm h-full w-1/2 font-semibold hover:text-black ${isMainProfile ? 'text-black border-b-2 border-black' : 'text-gray-600'}`}>Main profile</button>

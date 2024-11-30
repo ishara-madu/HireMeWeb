@@ -51,18 +51,18 @@ function HomeSlider() {
 
 
     return (
-        <div className="h-full w-[95%] rounded-md z-0 my-0 mx-auto overflow-hidden relative">
+        <div className="h-full w-[95%] z-0 my-0 mx-auto relative">
             <Slider {...settings}>
                 {images.map((image, index) => (
-                    <LazyLoad key={index} once placeholder={<div>Loading...</div>}>
-                        <img
-                            src={image.image}
-                            srcSet={`${image.image}?w=400 400w, ${image.image}?w=800 800w`}
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            alt="Slide"
-                            className="w-full h-full object-cover"
-                        />
-                    </LazyLoad>
+                        <LazyLoad key={index} once placeholder={<div>Loading...</div>} className="flex relative">
+                            <img
+                                src={image.image}
+                                srcSet={`${image.image}?w=400 400w, ${image.image}?w=800 800w`}
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                alt="Slide"
+                                className="w-full h-full object-cover rounded-md"
+                            />
+                        </LazyLoad>
                 ))}
             </Slider>
         </div>

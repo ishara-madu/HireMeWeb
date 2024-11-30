@@ -1,12 +1,12 @@
-import TopNav from "./components/header/TopNav"
-import TopCategory from './components/header/TopCategory';
-import HomeSlider from "./components/HomeSlider";
-import HorizontalMenus from "./components/horizontalMenu/HorizontalMenus";
+import TopNav from "../components/header/TopNav"
+import TopCategory from '../components/header/TopCategory';
+import HomeSlider from "../components/HomeSlider";
+import HorizontalMenus from "../components/horizontalMenu/HorizontalMenus";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { fetchProfile } from "./features/profile/profileThunk";
-import EditLocation from "./components/popups/EditLocation";
-import Footer from './components/footer/Footer'
+import { fetchProfile } from "../features/profile/profileThunk";
+import EditLocation from "../components/popups/EditLocation";
+import Footer from '../components/footer/Footer'
 
 
 function Home() {
@@ -40,7 +40,7 @@ function Home() {
                             </div>
                             <div className="flex flex-col gap-y-2 relative">
                                 <h2 className="text-2xl font-bold">Welcome back, {profile.name}</h2>
-                                <div className="text-sm flex items-center">{profile.locationName} <div onClick={(e)=>(e.stopPropagation(),setShowLocation(true))} className="text-purple-800 text-xs font-bold underline ml-3">Edit location temparary for better result</div></div>
+                                <div className="text-sm flex items-center">{profile.locationName} <div onClick={(e)=>(e.stopPropagation(),setShowLocation(true))} className="text-green-700 text-xs font-bold underline ml-3">Edit location temparary for better result</div></div>
                                 {
                                     showLocation &&
                                     <EditLocation location={profile} showPupup={handleSubmit}/>

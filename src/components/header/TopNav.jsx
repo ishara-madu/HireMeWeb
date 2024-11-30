@@ -9,6 +9,7 @@ import Favorites from "../popups/Favorites";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../features/profile/profileThunk";
 import { useLocation, useNavigate } from "react-router-dom";
+import profileImage from '../../assets/logo.png'
 
 function TopNav() {
     const navigate = useNavigate();
@@ -36,7 +37,11 @@ function TopNav() {
     return (
         <div id="nav" className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
             <form onSubmit={handleSearch} className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
-                <div onClick={()=>{navigate('/',{replace:true})}} className="cursor-pointer text-xl">Logo</div>
+                <div onClick={()=>{navigate('/',{replace:true})}} className="cursor-pointer flex justify-center items-center h-full w-48">
+                    <LazyLoad height={50} once>
+                        <img src={profileImage} alt="logo" className="flex justify-center items-center h-full w-full object-contain" />
+                    </LazyLoad>
+                </div>
                 <div className="flex flex-1 relative items-center">
                     <CiSearch size={20} className="absolute left-3" />
                     <input type="text" value={searchText} onChange={(e) => { setSearchText(e.target.value) }} className="text-sm w-full h-12 rounded-full px-10 flex font-normal outline-none border border-black" placeholder="Search for anything" />

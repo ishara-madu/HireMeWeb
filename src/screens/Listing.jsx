@@ -1,13 +1,13 @@
-import Footer from "./components/footer/Footer"
-import TopNav from "./components/header/TopNav"
-import TopBar from "./components/listing/TopBar"
-import Keypoints from "./components/listing/Keypoints"
-import Description from "./components/listing/Description"
-import Worker from "./components/listing/Worker"
+import Footer from "../components/footer/Footer"
+import TopNav from "../components/header/TopNav"
+import TopBar from "../components/listing/TopBar"
+import Keypoints from "../components/listing/Keypoints"
+import Description from "../components/listing/Description"
+import Worker from "../components/listing/Worker"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { fetchListning } from "./features/listing/listingThunk"
-import LoadingSpinner from "./components/LoadingSpinner"
+import { fetchListning } from "../features/listing/listingThunk"
+import LoadingSpinner from "../components/LoadingSpinner"
 
 
 function Listing() {
@@ -15,8 +15,7 @@ function Listing() {
 
     const { data, loading, error, filters } = useSelector(state => state.listings);
     useEffect(() => {
-        dispatch(fetchListning(filters));
-
+        dispatch(fetchListning(JSON.parse(sessionStorage.getItem("listingFilter"))));
     }, [dispatch, filters]);
 
 
