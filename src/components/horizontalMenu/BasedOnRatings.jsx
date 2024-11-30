@@ -6,10 +6,12 @@ import LazyLoad from 'react-lazyload';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import ContentLoader from 'react-content-loader';
 import { CiBookmarkCheck } from 'react-icons/ci';
+import { useNavigate } from 'react-router-dom';
 function BasedOnRatings() {
     const [mouseOver, setMouseOver] = useState(null);
     const dispatch = useDispatch();
     const [fevId,setFavId] = useState([]);
+    const navigate = useNavigate();
 
     const { data: basedOnRating, loading } = useSelector((state) => state.basedOnRating);
 
@@ -50,12 +52,15 @@ function BasedOnRatings() {
     }
 
 
+    const handleListClick = (data)=>{
+        navigate('listing',{state:data})
+    }
 
     return (
         <div className="flex w-full h-auto justify-center items-center mt-8">
-            <div className="flex w-11/12 h-full flex-col justify-center">
+            <div className="flex w-11/12 h-full flex-col justify-center overflow-hidden">
                 <div className="text-2xl font-bold mb-5">Recommended to you based on ratings</div>
-                <div className="flex w-full overflow-x-auto justify-start">
+                <div className="flex w-full overflow-x-scroll justify-start">
                     {
                         !loading ? (
                             basedOnRating.map((data, index) => {
@@ -81,7 +86,7 @@ function BasedOnRatings() {
                                         </div>
                                         {
                                             mouseOver === index && (
-                                                <div className='flex flex-col items-center justify-between h-auto min-h-72 w-[290px] absolute bg-[#ececec] border border-[#b1b0b0] rounded-md shadow-2xl z-20 p-3'>
+                                                <div onClick={()=>(handleListClick(data.id))} className='flex flex-col items-center justify-between h-auto min-h-72 w-[290px] absolute bg-[#ececec] border border-[#b1b0b0] rounded-md shadow-2xl z-20 p-3'>
                                                     <div className='w-full'>
                                                         <div className='flex flex-col mb-1 gap-y-0.5'>
                                                             <div className='text-lg font-bold leading-5'>{data.title}</div>
@@ -95,8 +100,9 @@ function BasedOnRatings() {
                                                         </div>
                                                     </div>
                                                     <div className='flex w-full justify-evenly items-center mt-4'>
-                                                        <a href={`tel:${data.users.contact.phone}}`} onClick={() => { navigator.clipboard.writeText(data.users.contact.phone).then(alert('Mobile number copy to clipboard')) }} className='flex h-12 w-52 bg-purple-500 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
-                                                        <div onClick={() => {
+                                                        <a href={`tel:${data.users.contact.phone}}`} onClick={(e) => {e.stopPropagation(); navigator.clipboard.writeText(data.users.contact.phone).then(alert('Mobile number copy to clipboard')) }} className='flex h-12 w-52 bg-purple-500 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
+                                                        <div onClick={(e) => {
+                                                            e.stopPropagation();
                                                             handleFavorites(data.id)
                                                         }} className='p-[10px] border border-black hover:bg-[#e0e1e1] rounded-full'>
                                                             {

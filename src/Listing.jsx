@@ -7,7 +7,7 @@ import Worker from "./components/listing/Worker"
 
 function Listing() {
     return (
-        <div className="flex h-auto min-h-svh item-center w-full flex-col bg-[#ebebeb]">
+        <div className="flex h-full min-h-svh item-center justify-center w-full flex-col bg-[#ebebeb]">
             <TopNav/>
             <TopBar/>
             <Keypoints/>
