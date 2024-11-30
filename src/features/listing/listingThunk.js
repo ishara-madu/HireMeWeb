@@ -3,11 +3,11 @@ import { supabase } from "../../config/supabaseClient";
 
 export const fetchListning = createAsyncThunk(
     'fetchListning',
-    async(input,thunkAPI)=>{
+    async(filters,thunkAPI)=>{
         try {
             let query = supabase.from('listings').select('*,users!inner(*)');
-            if (input.id) {
-                query = query.eq('id', input.id);
+            if (filters.id) {
+                query = query.eq('id', filters.id);
             }
             let { data,error } = await query;
             if(error) throw error;

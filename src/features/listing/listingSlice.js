@@ -5,10 +5,18 @@ const listingSlice = createSlice({
     name: 'listings',
     initialState: {
         data: [],
+        filters: {},
         error: null,
         loading: true,
     },
-    reducers: {},
+    reducers: {
+        setFilters: (state, action) => {
+            state.filters = action.payload;
+        },
+        clearFilters: (state) => {
+            state.filters = {};
+        },
+    },
     extraReducers: (builder) => {
         builder
         .addCase(fetchListning.pending, (state) => {
@@ -26,4 +34,5 @@ const listingSlice = createSlice({
 
     }
 })
+export const { setFilters, clearFilters } = listingSlice.actions;
 export default listingSlice.reducer;

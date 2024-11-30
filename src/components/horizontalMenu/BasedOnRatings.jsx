@@ -7,6 +7,7 @@ import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import ContentLoader from 'react-content-loader';
 import { CiBookmarkCheck } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
+import { setFilters } from '../../features/listing/listingSlice';
 function BasedOnRatings() {
     const [mouseOver, setMouseOver] = useState(null);
     const dispatch = useDispatch();
@@ -53,7 +54,8 @@ function BasedOnRatings() {
 
 
     const handleListClick = (data)=>{
-        navigate('listing',{state:data})
+        dispatch(setFilters({ id: data }));
+        navigate(`/listing`)
         window.scrollTo({
             top: 0,
             behavior: "smooth"

@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react"
 import { FaChevronDown } from "react-icons/fa6"
 
-function Description() {
+function Description({data}) {
     const [showAllDescription, setShowAllDescription] = useState(true);
     return (
         <div className='flex w-full h-auto bg-[#ebebeb] py-4 justify-center items-center'>
@@ -9,9 +10,7 @@ function Description() {
                 <div className={`flex w-full ${showAllDescription ? 'h-28' : 'h-auto'} gap-y-3 overflow-hidden flex-col rounded-sm relative`}>
                     <div className="flex text-xl font-bold">Description</div>
                     <div className="flex text-sm">
-                        In this course you will learn the fundamentals of Google Sheets (some of which translates to Microsoft Excel!). You will not only learn the basics, like adding and subtracting. But you will also learn valuable advanced formulas like VLOOKUP, INDEX(MATCH()MATCH()), and IMPORTRANGE.
-                        In this course you will learn the fundamentals of Google Sheets (some of which translates to Microsoft Excel!). You will not only learn the basics, like adding and subtracting. But you will also learn valuable advanced formulas like VLOOKUP, INDEX(MATCH()MATCH()), and IMPORTRANGE.
-                        In this course you will learn the fundamentals of Google Sheets (some of which translates to Microsoft Excel!). You will not only learn the basics, like adding and subtracting. But you will also learn valuable advanced formulas like VLOOKUP, INDEX(MATCH()MATCH()), and IMPORTRANGE.
+                        {data.description.long}
                     </div>
                     {
                         showAllDescription ?
