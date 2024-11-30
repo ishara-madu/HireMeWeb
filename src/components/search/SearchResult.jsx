@@ -5,10 +5,13 @@ import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchResult } from "../../features/search/searchThunk";
 import LoadingSpinner from "../LoadingSpinner";
+import { setFilters } from "../../features/listing/listingSlice";
+import { useNavigate } from "react-router-dom";
 
 function SearchResult() {
     const [fevId, setFavId] = useState([]);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const filters = useSelector((state) => state.search.filters);
     const { results, loading, error } = useSelector((state) => state.search);
 
@@ -30,6 +33,15 @@ function SearchResult() {
             fev.splice(index, 1); // Remove the value at the found index
             localStorage.setItem("favorites", JSON.stringify(fev));
         }
+    }
+
+    const handleListClick = (data)=>{
+        dispatch(setFilters({ id: data }));
+        navigate(`/listing`)
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
     }
 
     // eslint-disable-next-line react/prop-types
@@ -56,7 +68,7 @@ function SearchResult() {
             {
                 !loading &&
                 results.map((result, id) => (
-                    <div key={id} className="flex w-full gap-x-3 items-center py-3 h-48 max-h-auto border-b border-[#c5c5c5] relative">
+                    <div onClick={()=>(handleListClick(result.id))} key={id} className="flex w-full gap-x-3 items-center py-3 h-48 max-h-auto border-b border-[#c5c5c5] relative">
                         <div className="flex w-60 h-40 border border-[#c5c5c5] overflow-hidden rounded-md">
                             <img src={result.image} alt="" className="w-full h-full object-cover" />
                         </div>

@@ -3,10 +3,11 @@ import LazyLoad from "react-lazyload"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFavorites } from '../../features/favorites/favoritesThunk';
+import LoadingSpinner from '../LoadingSpinner';
 function Favorites() {
     const dispatch = useDispatch();
 
-    const { data: favorites } = useSelector((state) => state.favorites);
+    const { data: favorites, loading } = useSelector((state) => state.favorites);
 
 
     useEffect(() => {
@@ -24,7 +25,7 @@ function Favorites() {
                             <>
                                 <div className="flex flex-col h-auto max-h-[500px] w-full overflow-y-auto">
                                     {
-                                        favorites.map((val,id) =>
+                                        favorites.map((val, id) =>
                                             <div key={id} className="flex w-full flex-col pt-3 border-b border-[#c5c5c5]">
                                                 <div className="flex h-16 items-center gap-x-2">
                                                     <div className="flex w-14 h-14 rounded-sm justify-center items-center overflow-hidden">
@@ -56,9 +57,16 @@ function Favorites() {
                             </>
                         )
                         :
-                        (<div className="flex w-full h-14">
-                            <div className="flex w-full h-full justify-center items-center text-sm text-gray-600">Your favorite is empty.</div>
-                        </div>)
+                        loading ?
+                            (
+                                <div className="flex w-full justify-center items-center h-14">
+                                <LoadingSpinner val={20}/>
+                            </div>
+                            ) :
+                            (<div className="flex w-full h-14">
+                                <div className="flex w-full h-full justify-center items-center text-sm text-gray-600">Your favorite is empty.</div>
+                            </div>
+                            )
                 }
 
             </div>
