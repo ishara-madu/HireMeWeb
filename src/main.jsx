@@ -5,6 +5,7 @@ import { store } from './store/store.js'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from "react-router";
 import Search from "./Search.jsx";
+import Worker from "./Worker.jsx";
 
 const root = document.getElementById("root");
 
@@ -14,6 +15,7 @@ ReactDOM.createRoot(root).render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="search" element={<Search />} />
+        <Route path="worker" element={<Worker />} />
       </Routes>
     </BrowserRouter>
   </Provider>
