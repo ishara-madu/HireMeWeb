@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryData } from "../../features/category/categoryThunk";
+import { useNavigate } from "react-router-dom";
 
 
 function TopCategory() {
@@ -8,6 +9,7 @@ function TopCategory() {
     const [activeCategory, setActiveCategory] = useState(''); // Track the active category
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const category = useSelector((state) => state.category.items);
 
@@ -32,6 +34,12 @@ function TopCategory() {
     const handleMouseOut = () => {
         setSubCategory(false);
         setActiveCategory('');
+    };
+
+    const handleSearch = (e) => {        
+        if (e.target.innerText.trim()) {
+            navigate(`/search?query=${encodeURIComponent(e.target.innerText)}`);
+        }
     };
     return (
         <div className="h-auto ">
@@ -62,7 +70,7 @@ function TopCategory() {
                                         (item, id) => (
                                             <div className="flex h-full w-full flex-row gap-x-10 justify-start text-nowrap items-center" key={id}>{
                                                 item.subCategories.slice(-10).map((item, id) => (
-                                                    <div key={id} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{item.name}</div>
+                                                    <div key={id} onClick={handleSearch} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{item.name}</div>
                                                 ))
                                             }
                                             </div>

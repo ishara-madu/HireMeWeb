@@ -9,7 +9,7 @@ import { CiBookmarkCheck } from 'react-icons/ci';
 function BasedOnRatings() {
     const [mouseOver, setMouseOver] = useState(null);
     const dispatch = useDispatch();
-    const [fevId,setFavId] = useState([""]);
+    const [fevId,setFavId] = useState([]);
 
     const { data: basedOnRating, loading } = useSelector((state) => state.basedOnRating);
 
@@ -34,7 +34,7 @@ function BasedOnRatings() {
         return <>{stars}</>;
     };
 
-    const fev = JSON.parse(localStorage.getItem("favorites")) || [""];
+    const fev = JSON.parse(localStorage.getItem("favorites")) || [];
     const handleFavorites = (favId) => {
         const included = fev.includes(favId);
         if (!included) {
