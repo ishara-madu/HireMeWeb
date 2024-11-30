@@ -6,6 +6,7 @@ import homeSliderReducer from '../features/homeSlide/homeSlideSlice';
 import basedOnRatingReducer from '../features/basedOnRating/basedOnRatingSlice'
 import favoritesReducer from '../features/favorites/favoritesSlice'
 import searchReducer from '../features/search/searchSlice'
+import listingReducer from '../features/listing/listingSlice'
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +16,8 @@ export const store = configureStore({
         profile:profileReducer,
         basedOnRating:basedOnRatingReducer,
         favorites: favoritesReducer,
-        search:searchReducer
+        search:searchReducer,
+        listing:listingReducer
+
     },
 });

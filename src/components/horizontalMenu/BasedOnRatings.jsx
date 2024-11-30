@@ -80,7 +80,7 @@ function BasedOnRatings() {
                                                     <div className='flex items-center'>
                                                         <StarIcons value={data.rating.perc} size={15} />
                                                     </div>
-                                                    <p className='text-xs opacity-60'>{`(${(data.rating.rating).reduce((accumulator, currentValue) => accumulator + currentValue, 0)})`}</p>
+                                                    <p className='text-xs opacity-60'>{`(${(data.rating.rating).reduce((accumulator, currentValue) => accumulator + currentValue, 0).toLocaleString()})`}</p>
                                                 </div>
                                             </div>
                                         </div>

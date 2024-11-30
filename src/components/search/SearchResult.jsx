@@ -15,7 +15,6 @@ function SearchResult() {
 
     useEffect(() => {
         dispatch(fetchResult(filters));
-        
     }, [dispatch, filters]);
 
     const fev = JSON.parse(localStorage.getItem("favorites")) || [];

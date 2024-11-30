@@ -6,6 +6,7 @@ const profileSlice = createSlice({
     initialState: {
         data: [],
         error: null,
+        
     },
     reducers: {},
     extraReducers: (builder) => {
