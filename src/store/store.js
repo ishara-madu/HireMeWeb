@@ -17,7 +17,7 @@ export const store = configureStore({
         basedOnRating:basedOnRatingReducer,
         favorites: favoritesReducer,
         search:searchReducer,
-        listing:listingReducer
+        listings:listingReducer
 
     },
 });

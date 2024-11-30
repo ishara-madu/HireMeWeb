@@ -11,6 +11,7 @@ export const fetchListning = createAsyncThunk(
             }
             let { data,error } = await query;
             if(error) throw error;
+            
             return data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error); 

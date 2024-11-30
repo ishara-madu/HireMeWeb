@@ -12,7 +12,7 @@ function Favorites() {
     useEffect(() => {
         const fevIds = JSON.parse(localStorage.getItem("favorites")) || [];
         dispatch(fetchFavorites(fevIds));
-    }, [dispatch, favorites]);
+    }, [dispatch]);
 
     return (
         <div className="flex justify-center w-80 h-auto absolute border shadow-xl border-[#c5c5c5] rounded-md top-[84px] right-36 z-50 bg-[#ebebeb]">

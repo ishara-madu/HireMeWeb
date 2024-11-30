@@ -11,7 +11,7 @@ const listingSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(fetchListning, (state) => {
+        .addCase(fetchListning.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
@@ -20,9 +20,9 @@ const listingSlice = createSlice({
             state.data = action.payload;
         })
         .addCase(fetchListning.rejected, (state, action) => {
-            state.loading = false;
+            state.loading = true;
             state.error = action.payload;
-        })
+        });
 
     }
 })
