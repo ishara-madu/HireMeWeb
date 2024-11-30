@@ -54,6 +54,10 @@ function BasedOnRatings() {
 
     const handleListClick = (data)=>{
         navigate('listing',{state:data})
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
     }
 
     return (

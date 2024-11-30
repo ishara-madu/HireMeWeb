@@ -34,7 +34,7 @@ function TopNav() {
         }
     };
     return (
-        <div className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
+        <div id="nav" className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
             <form onSubmit={handleSearch} className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
                 <div onClick={()=>{navigate('/',{replace:true})}} className="cursor-pointer text-xl">Logo</div>
                 <div className="flex flex-1 relative items-center">
