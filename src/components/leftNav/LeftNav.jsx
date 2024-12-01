@@ -1,37 +1,46 @@
 /* eslint-disable react/no-unknown-property */
-import {  useState } from "react"
-import { CiBoxList } from "react-icons/ci"
+import { FiUser } from "react-icons/fi";
+import { GoHome, GoTasklist } from "react-icons/go";
+import { IoMdHeartEmpty } from "react-icons/io";
+import { IoNotificationsOutline } from "react-icons/io5";
+import { LuSettings } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
 function LeftNav() {
     const navigate = useNavigate();
-    const handleNavigate =(val)=>{
+    const handleNavigate = (val) => {
         navigate(val.toString())
     }
-    const links ={
-        home:{
-            path:'/',
-            label:'Home'
+    const links = {
+        home: {
+            icon: <GoHome size={30} />,
+            path: '/',
+            label: 'Home'
         },
-        listings:{
-            path:'/showlisting',
-            label:'Listings'
+        listings: {
+            icon: <GoTasklist size={30} />,
+            path: '/show-listings',
+            label: 'Listings'
         },
-        notifications:{
-            path:'/notifications',
-            label:'Notifications'
+        notifications: {
+            icon: <IoNotificationsOutline size={30} />,
+            path: '/notifications',
+            label: 'Notifications'
         },
-        favorites:{
-            path:'/favorites',
-            label:'Favorites'
+        favorites: {
+            icon: <IoMdHeartEmpty size={30} />,
+            path: '/favorites',
+            label: 'Favorites'
         },
-        editProfile:{
-            path:'/edit-profile',
-            label:'Edit Profile'
+        editProfile: {
+            icon: <FiUser size={30} />,
+            path: '/edit-profile',
+            label: 'Edit Profile'
         },
-        accountSettings:{
-            path:'/account-settings',
-            label:'Account Settings'
+        accountSettings: {
+            icon: <LuSettings size={30} />,
+            path: '/account-settings',
+            label: 'Account Settings'
         }
     }
     return (
@@ -42,20 +51,13 @@ function LeftNav() {
                 </div>
                 <div className="flex w-full flex-col">
                     {
-                        Object.keys(links).map((link,index) => (
-                            <div key={index} onClick={()=>{handleNavigate(links[link].path)}} className="flex pl-4 w-full items-center gap-x-7 h-14">
-                                <div className={`flex ${links[link].path === navigate.pathname? 'text-white' : ''}`}>
-                                    {links[link].label}
-                                </div>
+                        Object.keys(links).map((link, index) => (
+                            <div key={index} onClick={() => { handleNavigate(links[link].path) }} className="flex ml-1 pl-3 w-full items-center gap-x-7 bg-[#373737] h-14">
+                                {links[link].icon}
+                                <div className="flex text-base font-semibold">{links[link].label}</div>
                             </div>
                         ))
                     }
-                    <div className="flex w-full bg-green-500">
-                        <div onClick={handleNavigate} className="flex ml-1 pl-3 w-full items-center gap-x-7 bg-[#373737] h-14">
-                            <CiBoxList size={30} />
-                            <div className="flex text-base font-semibold">Listnings</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
