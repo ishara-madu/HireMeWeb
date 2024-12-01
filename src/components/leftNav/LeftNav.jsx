@@ -1,13 +1,21 @@
 /* eslint-disable react/no-unknown-property */
+import { useEffect, useState } from "react";
 import { FiUser } from "react-icons/fi";
 import { GoHome, GoTasklist } from "react-icons/go";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { LuSettings } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function LeftNav() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const path = location.pathname;
+    const [currentPath, setCurrentPath] = useState('')
+    const [mouseOver, setMouseOver] = useState(false)
+    useEffect(() => {
+        setCurrentPath(path)
+    }, [path])
     const handleNavigate = (val) => {
         navigate(val.toString())
     }
@@ -44,21 +52,16 @@ function LeftNav() {
         }
     }
     return (
-        <div className="flex absolute z-50 bg-[#373737] w-80 justify-center h-full text-[#ebebeb]">
-            <div className="flex w-full h-auto flex-col">
-                <div onClick={handleNavigate} className="flex pl-4 w-full items-center gap-x-7 h-14">
-                    <div className="flex">Home</div>
-                </div>
-                <div className="flex w-full flex-col">
-                    {
-                        Object.keys(links).map((link, index) => (
-                            <div key={index} onClick={() => { handleNavigate(links[link].path) }} className="flex ml-1 pl-3 w-full items-center gap-x-7 bg-[#373737] h-14">
-                                {links[link].icon}
-                                <div className="flex text-base font-semibold">{links[link].label}</div>
-                            </div>
-                        ))
-                    }
-                </div>
+        <div onMouseOver={() => { setMouseOver(true) }} onMouseOut={() => { setMouseOver(false) }} className={`flex absolute z-50 bg-[#171717] ${mouseOver ? 'w-80' : 'w-16'} duration-300 text-nowrap justify-center h-full text-[#ebebeb] overflow-hidden`}>
+            <div className="flex w-full h-auto flex-col mt-5">
+                {
+                    Object.keys(links).map((link, index) => (
+                        <div key={index} onClick={() => { handleNavigate(links[link].path) }} className={`flex pl-3 w-80 items-center gap-x-7 ${currentPath == (links[link].path) ? 'border-green-500' : 'bg-[#171717]'} h-14 hover:bg-[#ebebeb] hover:bg-opacity-20 border-[#171717] border-l-4`}>
+                            {links[link].icon}
+                            <div className={`${mouseOver ? 'flex' : 'flex'} duration-300 text-base font-semibold`}>{links[link].label}</div>
+                        </div>
+                    ))
+                }
             </div>
         </div>
     )
