@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unknown-property */
 import { useEffect, useState } from "react";
-import { BsMotherboard } from "react-icons/bs";
 import { FiUser } from "react-icons/fi";
 import { GoHome, GoTasklist } from "react-icons/go";
 import { IoMdHeartEmpty } from "react-icons/io";
@@ -58,16 +57,18 @@ function LeftNav() {
         }
     }
     return (
-        <div onMouseOver={() => { setMouseOver(true) }} onMouseOut={() => { setMouseOver(false) }} className={`flex absolute z-50 bg-[#171717] ${mouseOver ? 'w-80' : 'w-16'} duration-300 text-nowrap justify-center h-full text-[#ebebeb] overflow-hidden`}>
-            <div className="flex w-full h-auto flex-col mt-5">
-                {
-                    Object.keys(links).map((link, index) => (
-                        <div key={index} onClick={() => { handleNavigate(links[link].path) }} className={`flex pl-3 w-80 items-center gap-x-7 ${currentPath == (links[link].path) ? 'border-green-500' : 'bg-[#171717]'} h-14 hover:bg-[#ebebeb] hover:bg-opacity-20 border-[#171717] border-l-4`}>
-                            {links[link].icon}
-                            <div className={`${mouseOver ? 'flex' : 'flex'} duration-300 text-base font-semibold`}>{links[link].label}</div>
-                        </div>
-                    ))
-                }
+        <div className="h-full w-16">
+            <div onMouseOver={() => { setMouseOver(true) }} onMouseOut={() => { setMouseOver(false) }} className={`flex absolute left-0 h-full z-50 bg-[#171717] ${mouseOver ? 'w-80' : 'w-16'} duration-300 text-nowrap justify-center h-full text-[#ebebeb] overflow-hidden`}>
+                <div className="flex w-full h-auto flex-col mt-5">
+                    {
+                        Object.keys(links).map((link, index) => (
+                            <div key={index} onClick={() => { handleNavigate(links[link].path) }} className={`flex pl-3 w-80 items-center gap-x-7 ${currentPath == (links[link].path) ? 'border-green-500' : 'bg-[#171717]'} h-14 hover:bg-[#ebebeb] hover:bg-opacity-20 border-[#171717] border-l-4`}>
+                                {links[link].icon}
+                                <div className={`${mouseOver ? 'flex' : 'flex'} duration-300 text-base font-semibold`}>{links[link].label}</div>
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
         </div>
     )

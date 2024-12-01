@@ -3,7 +3,7 @@ import FooterTop from "./FooterTop"
 
 function Footer() {
   return (
-    <div>
+    <div className="z-50 w-full">
         <FooterTop/>
         <div className="flex h-auto w-full justify-center bg-[#171717]">
             <div className="flex w-11/12 h-full items-start justify-around py-5">
