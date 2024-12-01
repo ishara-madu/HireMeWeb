@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFavorites } from '../../features/favorites/favoritesThunk';
 import LoadingSpinner from '../LoadingSpinner';
+import { Link } from "react-router-dom";
 function Favorites() {
     const dispatch = useDispatch();
 
@@ -49,9 +50,9 @@ function Favorites() {
                                 </div>
                                 <div className="flex h-14 w-full">
                                     <div className="flex justify-center items-center w-full h-full">
-                                        <div className="flex w-[95%] h-[70%] text-sm justify-center font-semibold items-center bg-[#171717] text-[#ebebeb] rounded-sm">
+                                        <Link to={'/favorites'} className="flex w-[95%] h-[70%] text-sm justify-center font-semibold items-center bg-[#171717] text-[#ebebeb] rounded-sm">
                                             Go to favorites
-                                        </div>
+                                        </Link>
                                     </div>
                                 </div>
                             </>

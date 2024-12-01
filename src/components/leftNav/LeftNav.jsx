@@ -1,9 +1,10 @@
 /* eslint-disable react/no-unknown-property */
 import { useEffect, useState } from "react";
+import { BsMotherboard } from "react-icons/bs";
 import { FiUser } from "react-icons/fi";
 import { GoHome, GoTasklist } from "react-icons/go";
 import { IoMdHeartEmpty } from "react-icons/io";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { IoDocumentTextOutline, IoNotificationsOutline } from "react-icons/io5";
 import { LuSettings } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -49,6 +50,11 @@ function LeftNav() {
             icon: <LuSettings size={30} />,
             path: '/account-settings',
             label: 'Account Settings'
+        },
+        help: {
+            icon: <IoDocumentTextOutline size={30} />,
+            path: '/documentations',
+            label: 'Documentations'
         }
     }
     return (

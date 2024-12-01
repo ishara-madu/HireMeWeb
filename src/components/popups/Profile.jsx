@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import LazyLoad from 'react-lazyload'
+import { Link } from 'react-router-dom';
 
 function Profile({ profile }) {
     const numberofFavorites = () => {
@@ -27,16 +28,16 @@ function Profile({ profile }) {
                 </div>
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
                     <div className="flex h-10 items-center justify-between">
-                        <p className="text-sm opacity-80">Favorite</p>
+                        <Link to={'/favorites'} className="text-sm opacity-80">Favorite</Link>
                         <div className={`flex w-6 justify-center items-center h-6 text-sm ${(numberofFavorites() > 0) || (numberofFavorites() === "0") ? 'bg-green-500':'opacity-0'} font-semibold text-[#ebebeb] rounded-full`}>{numberofFavorites()}</div>
                     </div>
-                    <div className="flex items-center text-sm h-10 opacity-80">Edit profile</div>
-                    <div className="flex text-sm h-10 items-center opacity-80">Account settings</div>
-                    <div className="flex text-sm h-10 items-center opacity-80">Worker dashboard</div>
+                    <Link to={'/edit-profile'} className="flex items-center text-sm h-10 opacity-80">Edit profile</Link>
+                    <Link to={'/account-settings'} className="flex text-sm h-10 items-center opacity-80">Account settings</Link>
+                    <Link to={'/show-listings'} className="flex text-sm h-10 items-center opacity-80">Worker dashboard</Link>
                 </div>
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
                     <div className="flex items-center justify-between h-10">
-                        <p className="opacity-80 text-sm">Notifications</p>
+                        <Link to={'/notifications'} className="opacity-80 text-sm">Notifications</Link>
                         <div className="flex w-7 justify-center items-center h-6 text-sm bg-green-500 font-semibold text-[#ebebeb] rounded-full">9+</div>
                     </div>
                 </div>

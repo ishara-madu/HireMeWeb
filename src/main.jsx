@@ -11,6 +11,7 @@ import Notifications from "./screens/Notifications.jsx";
 import Favorites from "./screens/Favorites.jsx";
 import EditProfile from "./screens/EditProfile.jsx";
 import AccountSettings from "./screens/AccountSettings.jsx";
+import Documentations from "./screens/Documentations.jsx";
 
 const root = document.getElementById("root");
 
@@ -26,6 +27,7 @@ ReactDOM.createRoot(root).render(
         <Route path="favorites" element={<Favorites />} />
         <Route path="edit-profile" element={<EditProfile />} />
         <Route path="account-settings" element={<AccountSettings />} />
+        <Route path="documentations" element={<Documentations />} />
 
       </Routes>
     </BrowserRouter>
