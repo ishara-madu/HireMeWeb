@@ -1,12 +1,13 @@
 import Footer from "../components/footer/Footer"
 import LeftNav from "../components/leftNav/LeftNav"
 import { useRef, useState } from "react"
-import { MdDeleteOutline, MdError, MdOutlineBusinessCenter } from "react-icons/md"
+import { MdBusinessCenter, MdDeleteOutline, MdError, MdOutlineBusinessCenter } from "react-icons/md"
 import placeholder from '../assets/placeholder.svg'
 import LoadingSpinner from "../components/LoadingSpinner"
 import { IoCloudDone } from "react-icons/io5"
 import { v4 as uuidv4 } from "uuid";
 import { PiPath, PiPathBold } from "react-icons/pi"
+import { FaBusinessTime } from "react-icons/fa6"
 
 
 function EditListings() {
@@ -18,17 +19,32 @@ function EditListings() {
         keypoints: ['', '', ''],
         category: ['', '', ''],
         avilability: ['', '', ''],
+        experienceObj: ['', '', ''],
+        categoryObj: ['', '', ''],
     });
     const [image, setImage] = useState(null)
     const imageInputRef = useRef(null)
     const availbilityRef = useRef(null)
-
+    const experienceRef = useRef(null)
+    const categoryRef = useRef(null)
     const [showAvailability, setShowAvailability] = useState(false);
+    const [showExperience, setshowExperience] = useState(false);
+    const [showCategory, setshowCategory] = useState(false);
 
     const availabilityTypes = ["Full-Time", "Part-Time", "Freelance/Contract", "Temporary", "Internship", "Remote", "Hybrid", "On-Demand/Per Task", "Shift-Based"];
+    const expericenceTypes = ["Entry-Level", "Junior", "Mid-Level", "Senior", "Lead", "Expert", "Manager", "Director", "Vice President", "C-Level Executive", "Intern", "Freelancer", "Consultant", "Experienced Professional"];
+    const categoryTypes = ["Programming,Front-End Web", "Programming,Back-End Web", "Programming,Mobile App Development", "Programming,Game Development","Design,UI/UX Design", "Design,Graphic Design", "Design,Product Design", "Design,Web Design","Marketing,Digital Marketing", "Marketing,Content Writing", "Marketing,SEO Optimization", "Marketing,Social Media Marketing","Marketing,Email Marketing", "Marketing,Influencer Marketing", "Marketing,Affiliate Marketing", "Marketing,Brand Strategy","Data Science,Data Analysis", "Data Science,Machine Learning", "Data Science,Artificial Intelligence", "Data Science,Deep Learning","Data Science,Big Data", "Data Science,Data Visualization", "Data Science,Data Engineering", "Data Science,Statistical Analysis","Media,Video Editing", "Media,Photography", "Media,3D Modeling", "Media,Animation","Media,Sound Editing", "Media,Podcasting", "Media,Film Production", "Media,Motion Graphics","Cybersecurity,Ethical Hacking", "Cybersecurity,Network Security", "Cybersecurity,Penetration Testing", "Cybersecurity,Data Privacy","Cybersecurity,Cloud Security", "Cybersecurity,Incident Response", "Cybersecurity,Security Auditing", "Cybersecurity,Vulnerability Assessment","Cloud Computing,Cloud Infrastructure", "Cloud Computing,Cloud Architecture", "Cloud Computing,Cloud Security", "Cloud Computing,Cloud Services","Cloud Computing,DevOps", "Cloud Computing,AWS", "Cloud Computing,Azure", "Cloud Computing,Google Cloud","IT,IT Support", "IT,System Administration", "IT,Network Administration", "IT,Cloud Administration","Business,Project Management", "Business,Product Management", "Business,Operations Management", "Business,Supply Chain Management","Business,Change Management", "Business,Strategy Consulting", "Business,Human Resources", "Business,Recruitment","Business,Financial Management", "Business,Accounting", "Business,Tax Consulting", "Business,Marketing Strategy","Business,Customer Service", "Business,Sales Management", "Business,Business Development", "Business,Negotiation","Finance,Investment Banking", "Finance,Corporate Finance", "Finance,Personal Finance", "Finance,Financial Analysis","Finance,Wealth Management", "Finance,Financial Planning", "Finance,Insurance", "Finance,Accounting","Law,Corporate Law", "Law,Criminal Law", "Law,Civil Law", "Law,Family Law","Law,Intellectual Property Law", "Law,Employment Law", "Law,Environmental Law", "Law,Immigration Law","Education,Instructional Design", "Education,Educational Consulting", "Education,Online Teaching", "Education,Tutoring","Education,Course Development", "Education,School Administration", "Education,Special Education", "Education,Teacher Training","Healthcare,Medical Research", "Healthcare,Nursing", "Healthcare,Physician", "Healthcare,Pharmacy","Healthcare,Physical Therapy", "Healthcare,Public Health", "Healthcare,Healthcare Administration", "Healthcare,Healthcare Consulting","Construction,Project Management", "Construction,Construction Design", "Construction,Construction Engineering", "Construction,Architecture","Engineering,Civil Engineering", "Engineering,Mechanical Engineering", "Engineering,Chemical Engineering", "Engineering,Electrical Engineering","Engineering,Software Engineering", "Engineering,Aerospace Engineering", "Engineering,Automotive Engineering", "Engineering,Environmental Engineering","Art,Illustration", "Art,Painting", "Art,Sculpture", "Art,Photography","Art,Calligraphy", "Art,Printmaking", "Art,Graphic Design", "Art,Animation","Entertainment,Music Production", "Entertainment,Songwriting", "Entertainment,Event Planning", "Entertainment,Theater","Entertainment,Film Production", "Entertainment,Radio", "Entertainment,Stand-Up Comedy", "Entertainment,Writing","Sales,Sales Management", "Sales,Account Management", "Sales,B2B Sales", "Sales,B2C Sales","Sales,Inside Sales", "Sales,Field Sales", "Sales,Sales Operations", "Sales,Sales Strategy"];
+
     const available = availabilityTypes.filter((availa) =>
         availa.toLowerCase().includes(fields.avilability[0]?.toLowerCase() || "")
     );
+    const experienceSuggesions = expericenceTypes.filter((val) =>
+        val.toLowerCase().includes(fields.experienceObj[0]?.toLowerCase() || "")
+    );
+    const categorySuggesions = categoryTypes.filter((val) =>
+        val.toLowerCase().includes(fields.categoryObj[0]?.toLowerCase() || "")
+    );
+
     const allKeys = Object.keys(fields);
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
 
@@ -95,7 +111,7 @@ function EditListings() {
     };
 
     return (
-        <div onClick={()=>setShowAvailability(false)} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
+        <div onClick={() => { setShowAvailability(false); setshowExperience(false);setshowCategory(false) }} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
             <div className="flex h-full flex-1 items-start justify-center w-full">
                 <LeftNav />
                 <div className="flex justify-start gap-y-5 flex-col items-start w-11/12 mb-10">
@@ -185,6 +201,8 @@ function EditListings() {
                             <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
                         </div>
 
+                        <div className="bg-zinc-400 w-full h-0.5 my-5" />
+
                         <div className="flex flex-col gap-y-2 w-full relative">
                             <div className="flex text-lg font-bold">
                                 Work Category
@@ -192,31 +210,41 @@ function EditListings() {
                             <div className="flex text-sm opacity-80">
                                 Choose a category that best fits your work. This helps others quickly understand what type of work you specialize in.
                             </div>
-                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.category[2] ? 'border-red-500' : ''}`}>
-                                <input name={'category'} maxLength={160}
-                                    placeholder="Go into detail about your work—share everything that makes it amazing!"
-                                    onChange={(e) => { handleInputChange(e, 10) }}
-                                    value={fields.category[0] || ''}
+                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.categoryObj[2] ? 'border-red-500' : ''}`}>
+                                <input ref={categoryRef} name={'categoryObj'} maxLength={101}
+                                    placeholder="Select a category (e.g., Design, Writing, Development, Marketing)..."
+                                    onChange={(e) => { handleInputChange(e, 100); setshowCategory(true) }}
+                                    onClick={(e) => { e.stopPropagation(); setshowCategory(true) }}
+                                    value={fields.categoryObj[0] || ''}
                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                    {10 - fields.category[1] || 0}
+                                    {100 - fields.categoryObj[1] || 0}
                                 </div>
                             </div>
                             <div className="flex flex-col relative">
                                 {
-                                    fields.category[2] &&
+                                    fields.categoryObj[2] &&
                                     <div className="flex text-xs text-red-500 mb-1">
-                                        {fields.category[2]}
+                                        {fields.categoryObj[2]}
                                     </div>
                                 }
-                                <div className="flex absolute justify-center top-0 w-full h-auto max-h-40 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
-                                    <div className="flex-1 overflow-y-auto items-center flex-col">
-                                        <div className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300">
-                                            <PiPathBold size={17} />
-                                            <div className="flex text-sm font-semibold">{fields.avilability[0]}</div>
+                                {
+                                    showCategory &&
+                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                        <div className="flex-1 overflow-y-auto items-center flex-col">
+                                            {
+                                                categorySuggesions.map((suggession, index) => (
+                                                    <div key={index} onClick={() => {
+                                                        availbilityRef.current.value = suggession; handleInputChange(categoryRef, 100);
+                                                    }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
+                                                        <MdBusinessCenter size={17} />
+                                                        <div className="flex text-sm font-semibold">{suggession}</div>
+                                                    </div>
+                                                ))
+                                            }
                                         </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
 
@@ -228,12 +256,15 @@ function EditListings() {
                                 Let others know when you’re available to work. Are you looking for full-time, part-time, freelance, or project-based opportunities?
                             </div>
                             <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.avilability[2] ? 'border-red-500' : ''}`}>
-                                <input ref={availbilityRef} name={'avilability'} maxLength={160}
-                                    placeholder="Select your availability"
-                                    onChange={(e) => {handleInputChange(e, 100);setShowAvailability(true) }}
-                                    onClick={(e) => {e.stopPropagation(); setShowAvailability(true)}}
+                                <input ref={availbilityRef} name={'avilability'} maxLength={21}
+                                    placeholder="Select your availability (e.g., Full-Time, Part-Time, Freelance)..."
+                                    onChange={(e) => { handleInputChange(e, 20); setShowAvailability(true) }}
+                                    onClick={(e) => { e.stopPropagation(); setShowAvailability(true) }}
                                     value={fields.avilability[0] || ''}
                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
+                                <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                    {20 - fields.avilability[1] || 0}
+                                </div>
                             </div>
                             <div className="flex flex-col relative">
                                 {
@@ -242,21 +273,68 @@ function EditListings() {
                                         {fields.avilability[2]}
                                     </div>
                                 }
-                                <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
-                                    <div className="flex-1 overflow-y-auto items-center flex-col">
-                                        {
-                                            showAvailability &&
-                                            available.map((availabilityType, index) => (
-                                                <div key={index} onClick={() => {
-                                                    availbilityRef.current.value = availabilityType; handleInputChange(availbilityRef, 100);
-                                                }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
-                                                    <MdOutlineBusinessCenter size={17} />
-                                                    <div className="flex text-sm font-semibold">{availabilityType}</div>
-                                                </div>
-                                            ))
-                                        }
+                                {
+                                    showAvailability &&
+                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                        <div className="flex-1 overflow-y-auto items-center flex-col">
+                                            {
+                                                available.map((availabilityType, index) => (
+                                                    <div key={index} onClick={() => {
+                                                        availbilityRef.current.value = availabilityType; handleInputChange(availbilityRef, 20);
+                                                    }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
+                                                        <MdBusinessCenter size={17} />
+                                                        <div className="flex text-sm font-semibold">{availabilityType}</div>
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
                                     </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-y-2 w-full relative">
+                            <div className="flex text-lg font-bold">
+                                Your Experience Level
+                            </div>
+                            <div className="flex text-sm opacity-80">
+                                Let others know how experienced you are in your field. Whether you’re just starting out or a seasoned professional, this helps set expectations.
+                            </div>
+                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.experienceObj[2] ? 'border-red-500' : ''}`}>
+                                <input ref={experienceRef} name={'experienceObj'} maxLength={21}
+                                    placeholder="Select your experience level (e.g., Beginner, Intermediate, Expert)..."
+                                    onChange={(e) => { handleInputChange(e, 20); setshowExperience(true) }}
+                                    onClick={(e) => { e.stopPropagation(); setshowExperience(true) }}
+                                    value={fields.experienceObj[0] || ''}
+                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
+                                <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                    {20 - fields.experienceObj[1] || 0}
                                 </div>
+                            </div>
+                            <div className="flex flex-col relative">
+                                {
+                                    fields.experienceObj[2] &&
+                                    <div className="flex text-xs text-red-500 mb-1">
+                                        {fields.experienceObj[2]}
+                                    </div>
+                                }
+                                {
+                                    showExperience &&
+                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                        <div className="flex-1 overflow-y-auto items-center flex-col">
+                                            {
+                                                experienceSuggesions.map((suggession, index) => (
+                                                    <div key={index} onClick={() => {
+                                                        experienceRef.current.value = suggession; handleInputChange(experienceRef, 20);
+                                                    }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
+                                                        <FaBusinessTime size={17} />
+                                                        <div className="flex text-sm font-semibold">{suggession}</div>
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
 
@@ -292,8 +370,6 @@ function EditListings() {
                                 {fields.img[2] || ''}
                             </div>
                         </div>
-
-                        <div className="bg-zinc-400 w-full h-0.5 my-5" />
 
 
 
