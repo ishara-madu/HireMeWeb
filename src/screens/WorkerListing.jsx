@@ -24,7 +24,7 @@ function WorkerListing() {
                 New listing
               </div>
             </div>
-            <div className="flex w-full h-32 border border-zinc-400 gap-x-3 rounded-sm">
+            <div className="flex w-full h-32 border border-zinc-400 gap-x-3 rounded-sm group relative">
               <LazyLoad>
                 <img src="https://via.placeholder.com/300x200" alt="Placeholder" className="w-32 h-32 object-cover" />
               </LazyLoad>
@@ -38,6 +38,7 @@ function WorkerListing() {
                   <div className="flex h-full w-[10%] bg-green-500"></div>
                 </div>
               </div>
+              <div className="flex w-full h-full absolute top-0 left-0 bg-zinc-500 bg-opacity-0 z-50 duration-200 justify-center items-center font-bold">Edit/Remove</div>
             </div>
             <div className="grid grid-cols-4 place-content-center gap-y-8 place-items-center pb-5">
               <div className="flex h-auto flex-col mx-5 gap-y-2 justify-center items-center shadow-2xl shadow-black my-2 rounded-sm overflow-hidden">
