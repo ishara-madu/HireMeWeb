@@ -7,36 +7,39 @@ import { MdDeleteOutline, MdError } from "react-icons/md"
 import placeholder from '../assets/placeholder.svg'
 import LoadingSpinner from "../components/LoadingSpinner"
 import { IoCloudDone } from "react-icons/io5"
+import { v4 as uuidv4 } from "uuid";
+
 
 function EditListings() {
-    // const [subfields, setsubFields] = useState([{ value: "" }]);
     const [fields, setFields] = useState({
         title: ['', '', ''],
-        short:['','',''],
-        long:['','',''],
-        img: ['', '', '']
+        short: ['', '', ''],
+        long: ['', '', ''],
+        img: ['', '', ''],
+        keypoints: ['', '', ''],
     });
     const [image, setImage] = useState(null)
     const imageInputRef = useRef(null)
-    // const handleAddField = () => {
-    //     setsubFields([...subfields, { value: "" }]);
-    // };
 
-    // const handleInputChange = (index, event) => {
-    //     const newFields = [...fields];
-    //     newFields[index].value = event.target.value; 
-    //     setFields(newFields);
-    // };
+    const allKeys = Object.keys(fields);
+    const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
 
-    // const handleRemoveField = (index,value) => {
-    //     const newsubFields = subfields.filter((_, val) => val !== index);
-    //     const newFields = Object.keys(fields).filter(val=>val !== value);
-    //     setsubFields(newsubFields);
-    //     // setFields(newFields)
-    //     console.log(newFields);
+    const handleAddField = (key) => {
+        setFields((prevFields) => {
+            const updatedFields = { ...prevFields };
+            updatedFields[`${key}${uuidv4()}`] = ['', '', ''];
+            return updatedFields;
+        });
+    }
 
+    const handleDelete = (key) => {
+        setFields((prevFields) => {
+            const updatedFields = { ...prevFields };
+            delete updatedFields[key];
+            return updatedFields;
+        });
+    }
 
-    // };
     const handleInputChange = (e, maxlength) => {
         let { name, value, files } = e.target;
         let length = value.length;
@@ -60,7 +63,7 @@ function EditListings() {
                 error = '';
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    setImage(e.target.result); // Set the image data URL for preview
+                    setImage(e.target.result);
                 };
                 reader.readAsDataURL(files[0]);
             }
@@ -132,6 +135,37 @@ function EditListings() {
                             </div>
                         </div>
 
+                        <div className="flex flex-col gap-y-2 w-full">
+                            <div className="flex text-lg font-bold">Why Hire Me?</div>
+                            <div className="flex text-sm opacity-80">Explain what sets you apart. Share your unique value, strengths, or approach that makes you the best choice.</div>
+                            {
+                                keypointFields.map((keypointField, index) => (
+                                    <div key={index}>
+                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
+                                            ${fields[keypointField][2] ? 'border-red-500' : ''} items-center`}>
+                                            <input
+                                                name={keypointField}
+                                                maxLength={12}
+                                                value={fields[keypointField][0] || ''}
+                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                                placeholder="Share your unique value, special skills, or why someone should work with you..." />
+                                            <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                                {10 - fields[keypointField][1]}
+                                            </div>
+                                            <div
+                                                onClick={() => handleDelete(keypointField)}
+                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                        </div>
+                                        <div className="flex text-xs text-red-500">
+                                            {fields[keypointField][2] || ''}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
+                        </div>
+
+
                         <div className="bg-zinc-400 w-full h-0.5 my-5" />
 
                         <div className="flex flex-col gap-y-2 w-full">
@@ -147,12 +181,12 @@ function EditListings() {
                                     <div className="flex w-auto text-sm">*Upload an image that represents your work (max 2MB). It could be a photo, graphic, or anything visual that captures its essence!</div>
                                     <input name={'img'} accept="image/*" ref={imageInputRef}
                                         placeholder="Go into detail about your work—share everything that makes it amazing!"
-                                        onChange={(e) => { handleInputChange(e, 1) }}
-                                        type="file" className="flex w-auto h-full bg-transparent font-light outline-none" />
+                                        onChange={(e) => { handleInputChange(e, 2) }}
+                                        type="file" className="flex w-auto h-full bg-transparent text-sm font-light outline-none" />
                                     {
                                         image &&
                                         <div className="flex">
-                                            <div onClick={() => {setImage(null);imageInputRef.current.value = null}} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                            <div onClick={() => { setImage(null); imageInputRef.current.value = null }} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                             <div className="flex w-10 justify-center items-center opacity-70 text-sm">
                                                 {fields.img[1]}
                                             </div>
@@ -165,21 +199,6 @@ function EditListings() {
                             </div>
                         </div>
 
-
-                        {/* <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">Why Hire Me?</div>
-                            <div className="flex text-sm opacity-80">Explain what sets you apart. Share your unique value, strengths, or approach that makes you the best choice.</div>
-                            {
-                                subfields.map((field, index) => (
-                                    <div key={index} className="flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center">
-                                        <input name={'keypoint' + index} onChange={(event) => handleInputChange(event)} value={fields['keypoint' + index]} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" placeholder="Clear and catchy title for your listing" />
-                                        <div className="flex w-12 justify-center items-center">{fields['keypoint' + index] ? (160 - fields['keypoint' + index].length) : 0}</div>
-                                        <div onClick={() => handleRemoveField(index,('keypoint' + index))} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
-                                    </div>
-                                ))
-                            }
-                            <div onClick={handleAddField} className="flex text-green-600 font-bold text-sm">+ Add more to your responce</div>
-                        </div> */}
                     </div>
                 </div>
             </div>
@@ -192,7 +211,7 @@ function EditListings() {
             </div> */}
             <div className="flex fixed text-red-600 top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-red-400 justify-center items-center rounded-sm">
                 <div className="flex text-sm opacity-60">
-                Not connected
+                    Not connected
                 </div>
                 <MdError size={18} />
             </div>
