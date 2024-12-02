@@ -1,7 +1,7 @@
 import Footer from "../components/footer/Footer"
 import LeftNav from "../components/leftNav/LeftNav"
 import { useRef, useState } from "react"
-import { MdDeleteOutline, MdError } from "react-icons/md"
+import { MdDeleteOutline, MdError, MdOutlineBusinessCenter } from "react-icons/md"
 import placeholder from '../assets/placeholder.svg'
 import LoadingSpinner from "../components/LoadingSpinner"
 import { IoCloudDone } from "react-icons/io5"
@@ -17,10 +17,18 @@ function EditListings() {
         img: ['', '', ''],
         keypoints: ['', '', ''],
         category: ['', '', ''],
+        avilability: ['', '', ''],
     });
     const [image, setImage] = useState(null)
     const imageInputRef = useRef(null)
+    const availbilityRef = useRef(null)
 
+    const [showAvailability, setShowAvailability] = useState(false);
+
+    const availabilityTypes = ["Full-Time", "Part-Time", "Freelance/Contract", "Temporary", "Internship", "Remote", "Hybrid", "On-Demand/Per Task", "Shift-Based"];
+    const available = availabilityTypes.filter((availa) =>
+        availa.toLowerCase().includes(fields.avilability[0]?.toLowerCase() || "")
+    );
     const allKeys = Object.keys(fields);
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
 
@@ -41,7 +49,19 @@ function EditListings() {
     }
 
     const handleInputChange = (e, maxlength) => {
-        let { name, value, files } = e.target;
+        let name, value, files;
+
+
+        if (e.target) {
+            name = e.target.name;
+            value = e.target.value;
+            files = e.target.files;
+        }
+        if (e.current) {
+            name = e.current.name;
+            value = e.current.value;
+            files = e.current.files;
+        }
         let length = value.length;
         let error;
         if (length <= maxlength) {
@@ -75,7 +95,7 @@ function EditListings() {
     };
 
     return (
-        <div className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
+        <div onClick={()=>setShowAvailability(false)} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
             <div className="flex h-full flex-1 items-start justify-center w-full">
                 <LeftNav />
                 <div className="flex justify-start gap-y-5 flex-col items-start w-11/12 mb-10">
@@ -189,33 +209,52 @@ function EditListings() {
                                         {fields.category[2]}
                                     </div>
                                 }
-                                <div className="flex absolute justify-center top-0 w-full h-auto bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
-                                    <div className="flex w-[95%] overflow-y-scroll items-start h-10 flex-col">
-                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
-                                            <PiPathBold size={17}/>
-                                            <div className="flex text-sm font-semibold">programming,java</div>
+                                <div className="flex absolute justify-center top-0 w-full h-auto max-h-40 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                    <div className="flex-1 overflow-y-auto items-center flex-col">
+                                        <div className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300">
+                                            <PiPathBold size={17} />
+                                            <div className="flex text-sm font-semibold">{fields.avilability[0]}</div>
                                         </div>
-                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
-                                            <PiPathBold size={17}/>
-                                            <div className="flex text-sm font-semibold">programming,java</div>
-                                        </div>
-                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
-                                            <PiPathBold size={17}/>
-                                            <div className="flex text-sm font-semibold">programming,java</div>
-                                        </div>
-                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
-                                            <PiPathBold size={17}/>
-                                            <div className="flex text-sm font-semibold">programming,java</div>
-                                        </div>
-                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
-                                            <PiPathBold size={17}/>
-                                            <div className="flex text-sm font-semibold">programming,java</div>
-                                        </div>
-                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
-                                            <PiPathBold size={17}/>
-                                            <div className="flex text-sm font-semibold">programming,java</div>
-                                        </div>
-                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-y-2 w-full relative">
+                            <div className="flex text-lg font-bold">
+                                Your Availability
+                            </div>
+                            <div className="flex text-sm opacity-80">
+                                Let others know when you’re available to work. Are you looking for full-time, part-time, freelance, or project-based opportunities?
+                            </div>
+                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.avilability[2] ? 'border-red-500' : ''}`}>
+                                <input ref={availbilityRef} name={'avilability'} maxLength={160}
+                                    placeholder="Select your availability"
+                                    onChange={(e) => {handleInputChange(e, 100);setShowAvailability(true) }}
+                                    onClick={(e) => {e.stopPropagation(); setShowAvailability(true)}}
+                                    value={fields.avilability[0] || ''}
+                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
+                            </div>
+                            <div className="flex flex-col relative">
+                                {
+                                    fields.avilability[2] &&
+                                    <div className="flex text-xs text-red-500 mb-1">
+                                        {fields.avilability[2]}
+                                    </div>
+                                }
+                                <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                    <div className="flex-1 overflow-y-auto items-center flex-col">
+                                        {
+                                            showAvailability &&
+                                            available.map((availabilityType, index) => (
+                                                <div key={index} onClick={() => {
+                                                    availbilityRef.current.value = availabilityType; handleInputChange(availbilityRef, 100);
+                                                }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
+                                                    <MdOutlineBusinessCenter size={17} />
+                                                    <div className="flex text-sm font-semibold">{availabilityType}</div>
+                                                </div>
+                                            ))
+                                        }
                                     </div>
                                 </div>
                             </div>
