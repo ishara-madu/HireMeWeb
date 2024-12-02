@@ -1,6 +1,4 @@
-import LazyLoad from "react-lazyload"
 import Footer from "../components/footer/Footer"
-import { CiSearch } from "react-icons/ci"
 import LeftNav from "../components/leftNav/LeftNav"
 import { useRef, useState } from "react"
 import { MdDeleteOutline, MdError } from "react-icons/md"
@@ -8,6 +6,7 @@ import placeholder from '../assets/placeholder.svg'
 import LoadingSpinner from "../components/LoadingSpinner"
 import { IoCloudDone } from "react-icons/io5"
 import { v4 as uuidv4 } from "uuid";
+import { PiPath, PiPathBold } from "react-icons/pi"
 
 
 function EditListings() {
@@ -17,6 +16,7 @@ function EditListings() {
         long: ['', '', ''],
         img: ['', '', ''],
         keypoints: ['', '', ''],
+        category: ['', '', ''],
     });
     const [image, setImage] = useState(null)
     const imageInputRef = useRef(null)
@@ -165,6 +165,61 @@ function EditListings() {
                             <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
                         </div>
 
+                        <div className="flex flex-col gap-y-2 w-full relative">
+                            <div className="flex text-lg font-bold">
+                                Work Category
+                            </div>
+                            <div className="flex text-sm opacity-80">
+                                Choose a category that best fits your work. This helps others quickly understand what type of work you specialize in.
+                            </div>
+                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.category[2] ? 'border-red-500' : ''}`}>
+                                <input name={'category'} maxLength={160}
+                                    placeholder="Go into detail about your work—share everything that makes it amazing!"
+                                    onChange={(e) => { handleInputChange(e, 10) }}
+                                    value={fields.category[0] || ''}
+                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
+                                <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                    {10 - fields.category[1] || 0}
+                                </div>
+                            </div>
+                            <div className="flex flex-col relative">
+                                {
+                                    fields.category[2] &&
+                                    <div className="flex text-xs text-red-500 mb-1">
+                                        {fields.category[2]}
+                                    </div>
+                                }
+                                <div className="flex absolute justify-center top-0 w-full h-auto bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                    <div className="flex w-[95%] overflow-y-scroll items-start h-10 flex-col">
+                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
+                                            <PiPathBold size={17}/>
+                                            <div className="flex text-sm font-semibold">programming,java</div>
+                                        </div>
+                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
+                                            <PiPathBold size={17}/>
+                                            <div className="flex text-sm font-semibold">programming,java</div>
+                                        </div>
+                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
+                                            <PiPathBold size={17}/>
+                                            <div className="flex text-sm font-semibold">programming,java</div>
+                                        </div>
+                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
+                                            <PiPathBold size={17}/>
+                                            <div className="flex text-sm font-semibold">programming,java</div>
+                                        </div>
+                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
+                                            <PiPathBold size={17}/>
+                                            <div className="flex text-sm font-semibold">programming,java</div>
+                                        </div>
+                                        <div className="flex h-14 gap-x-3 w-full items-center opacity-70">
+                                            <PiPathBold size={17}/>
+                                            <div className="flex text-sm font-semibold">programming,java</div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div className="bg-zinc-400 w-full h-0.5 my-5" />
 
@@ -198,6 +253,11 @@ function EditListings() {
                                 {fields.img[2] || ''}
                             </div>
                         </div>
+
+                        <div className="bg-zinc-400 w-full h-0.5 my-5" />
+
+
+
 
                     </div>
                 </div>
