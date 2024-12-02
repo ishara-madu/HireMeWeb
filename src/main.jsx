@@ -12,6 +12,7 @@ import Favorites from "./screens/Favorites.jsx";
 import EditProfile from "./screens/EditProfile.jsx";
 import AccountSettings from "./screens/AccountSettings.jsx";
 import Documentations from "./screens/Documentations.jsx";
+import EditListings from "./screens/EditListings.jsx";
 
 const root = document.getElementById("root");
 
@@ -23,6 +24,7 @@ ReactDOM.createRoot(root).render(
         <Route path="search" element={<Search />} />
         <Route path="listing" element={<Listing />} />
         <Route path="show-listings" element={<WorkerListing />} />
+        <Route path="show-listings/manage" element={<EditListings />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="favorites" element={<Favorites />} />
         <Route path="edit-profile" element={<EditProfile />} />

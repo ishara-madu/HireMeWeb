@@ -2,7 +2,6 @@ import { CiSearch } from "react-icons/ci"
 import Footer from "../components/footer/Footer"
 import LeftNav from "../components/leftNav/LeftNav"
 import LazyLoad from "react-lazyload"
-import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from "react-icons/md";
 
 function WorkerListing() {
 
@@ -25,7 +24,7 @@ function WorkerListing() {
                 New listing
               </div>
             </div>
-            <div className="flex w-full h-32 border border-zinc-400 gap-x-3">
+            <div className="flex w-full h-32 border border-zinc-400 gap-x-3 rounded-sm">
               <LazyLoad>
                 <img src="https://via.placeholder.com/300x200" alt="Placeholder" className="w-32 h-32 object-cover" />
               </LazyLoad>
@@ -40,8 +39,8 @@ function WorkerListing() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-4 place-content-center gap-y-8 place-items-center">
-              <div className="flex h-auto flex-col mx-5 gap-y-2 justify-center items-center shadow-sm shadow-black my-2 rounded-sm overflow-hidden">
+            <div className="grid grid-cols-4 place-content-center gap-y-8 place-items-center pb-5">
+              <div className="flex h-auto flex-col mx-5 gap-y-2 justify-center items-center shadow-2xl shadow-black my-2 rounded-sm overflow-hidden">
                 <div className="w-64 h-44 flex items-center justify-center overflow-hidden">
                   <LazyLoad height={176} offset={100} once className='w-full h-full'>
                     <img src={'data.image'} alt={'data.title'} className="flex w-full h-full object-cover" />
