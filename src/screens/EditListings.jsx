@@ -18,8 +18,9 @@ function EditListings() {
         img: ['', '', ''],
         keypoints: ['', '', ''],
         experienceDetail: ['', '', ''],
-        tags: ['ishara', '', ''],
-        tags1: ['bandra', '', ''],
+        tag: ['', '', ''],
+        qualification: ['', '', ''],
+        highlights: ['', '', ''],
         category: ['', '', ''],
         avilability: ['', '', ''],
         experienceObj: ['', '', ''],
@@ -52,6 +53,8 @@ function EditListings() {
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
     const experienceFields = allKeys.filter((key) => key.startsWith("experienceDetail"))
     const tagsFields = allKeys.filter((key) => key.startsWith("tags"))
+    const qualificationFields = allKeys.filter((key) => key.startsWith("qualification"))
+    const highlightsFields = allKeys.filter((key) => key.startsWith("highlights"))
 
     const handleAddField = (key) => {
         setFields((prevFields) => {
@@ -59,7 +62,7 @@ function EditListings() {
             updatedFields[`${key}${uuidv4()}`] = ['', '', ''];
             return updatedFields;
         });
-        
+
     }
 
     const handleDelete = (key) => {
@@ -70,20 +73,21 @@ function EditListings() {
         });
     }
 
-    const handleChips = (e) => {
+    const handleChips = (e,maxlength) => {
         let name, value;
         if (e.target) {
             name = e.target.name;
             value = e.target.value;
         }
-        if (e.key === ' ' || e.key === 'Enter') {
+        if ((e.key === ' ' || e.key === 'Enter') && maxlength > value.length) {
             const words = value.split(' ');
             const lastWord = words[words.length - 1];
 
             if (lastWord.startsWith('#') && lastWord.length > 1) {
                 setFields((prevFields) => {
                     const updatedFields = { ...prevFields };
-                    updatedFields[`${name}${uuidv4()}`] = [lastWord, '', ''];
+                    updatedFields[`${name}s${uuidv4()}`] = [lastWord, '', ''];
+                    updatedFields[`${name}`] = ['', '', ''];
                     return updatedFields;
                 });
             }
@@ -138,8 +142,11 @@ function EditListings() {
             <div className="flex h-full flex-1 items-start justify-center w-full">
                 <LeftNav />
                 <div className="flex justify-start gap-y-5 flex-col items-start w-11/12 mb-10">
-                    <div className="flex w-full mt-10 text-3xl font-bold">Manage your course</div>
-                    <div className="flex w-full flex-col gap-y-8">
+                <div className="flex w-full justify-between mt-10 items-center">
+                    <div className="flex w-auto text-3xl font-bold">Manage your course</div>
+                    <div className="flex w-auto text-sm font-bold px-10 text-[#ebebeb] hover:bg-green-600 cursor-pointer border border-zinc-300 rounded-sm bg-green-500 h-10 items-center">Submit</div>
+                </div>
+                    <div className="flex w-full flex-col gap-y-8 mb-10">
                         <div className="flex flex-col gap-y-2 w-full">
                             <div className="flex text-lg font-bold">What’s Your Work About?</div>
                             <div className="flex text-sm opacity-80">This is where you share the name of your work. Keep it short and clear so people instantly know what it’s about!</div>
@@ -232,18 +239,24 @@ function EditListings() {
                         <div className="flex flex-col gap-y-2 w-full">
                             <div className="flex text-lg font-bold">What Tools and Technologies Do You Use?</div>
                             <div className="flex text-sm opacity-80">Let us know the tools, software, and technologies you work with, whether it’s for #development, #design, or something else, like #JavaScript, #React, #Adobe, #Photoshop, #Git.</div>
-                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden ${fields.tags[2] ? 'border-red-500' : ''} items-center`}>
+                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden ${fields.tag[2] ? 'border-red-500' : ''} items-center`}>
                                 <input
-                                    name={'tags'}
-                                    maxLength={12}
-                                    onKeyDown={(e) => handleChips(e)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                    name={'tag'}
+                                    maxLength={13}
+                                    value={fields.tag[0]}
+                                    onChange={(e) => { handleInputChange(e, 12)}}
+                                    onKeyDown={(e) => handleChips(e,12)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
                                     placeholder="e.g., #JavaScript, #React, #Adobe, #Photoshop, #Git" />
+                                <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                    {12 - fields.tag[1] || 0}
+                                </div>
                             </div>
                             <div className="flex text-xs text-red-500">
-                                {fields.tags[2] || ''}
+                                {fields.tag[2] || ''}
                             </div>
                             <div className="flex w-full h-auto gap-3 flex-wrap">
                                 {
+                                    tagsFields &&
                                     tagsFields.map((tagsField, index) => (
                                         <div key={index} className="flex flex-col">
                                             <div className={`flex h-12 w-auto border border-zinc-400 bg-zinc-300 rounded-sm overflow-hidden ${fields[tagsField][2] ? 'border-red-500' : ''} items-center`}>
@@ -460,6 +473,66 @@ function EditListings() {
                             <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
                         </div>
 
+                        <div className="flex flex-col gap-y-2 w-full">
+                            <div className="flex text-lg font-bold">Certificates and Qualifications</div>
+                            <div className="flex text-sm opacity-80">Tell us about any certifications or qualifications you’ve earned that show your expertise or add to your skillset.</div>
+                            {
+                                qualificationFields.map((qualificationField, index) => (
+                                    <div key={index}>
+                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
+                                            ${fields[qualificationField][2] ? 'border-red-500' : ''} items-center`}>
+                                            <input
+                                                name={qualificationField}
+                                                maxLength={12}
+                                                value={fields[qualificationField][0] || ''}
+                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                                placeholder="e.g., Google Analytics : www.qualification.com/google-analytics" />
+                                            <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                                {10 - fields[qualificationField][1]}
+                                            </div>
+                                            <div
+                                                onClick={() => handleDelete(qualificationField)}
+                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                        </div>
+                                        <div className="flex text-xs text-red-500">
+                                            {fields[qualificationField][2] || ''}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            <div onClick={() => handleAddField('qualification')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
+                        </div>
+
+                        <div className="flex flex-col gap-y-2 w-full">
+                            <div className="flex text-lg font-bold">Portfolio Highlights (Project Links)</div>
+                            <div className="flex text-sm opacity-80">Share a few of your standout projects or pieces from your portfolio. Include links if you can!</div>
+                            {
+                                highlightsFields.map((highlightsField, index) => (
+                                    <div key={index}>
+                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
+                                            ${fields[highlightsField][2] ? 'border-red-500' : ''} items-center`}>
+                                            <input
+                                                name={highlightsField}
+                                                maxLength={12}
+                                                value={fields[highlightsField][0] || ''}
+                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                                placeholder="e.g., My portfolio : www.behance.net/my-portfolio" />
+                                            <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                                {10 - fields[highlightsField][1]}
+                                            </div>
+                                            <div
+                                                onClick={() => handleDelete(highlightsField)}
+                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                        </div>
+                                        <div className="flex text-xs text-red-500">
+                                            {fields[highlightsField][2] || ''}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            <div onClick={() => handleAddField('highlights')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -470,12 +543,12 @@ function EditListings() {
                 </div>
                 <IoCloudDone size={18}/>
             </div> */}
-            <div className="flex fixed text-red-600 top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-red-400 justify-center items-center rounded-sm">
+            {/* <div className="flex fixed text-red-600 top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-red-400 justify-center items-center rounded-sm">
                 <div className="flex text-sm opacity-60">
                     Not connected
                 </div>
                 <MdError size={18} />
-            </div>
+            </div> */}
             {/* <div className="flex fixed top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-green-400 justify-center items-center rounded-sm">
                 <div className="flex text-sm opacity-60">
                 Updating
