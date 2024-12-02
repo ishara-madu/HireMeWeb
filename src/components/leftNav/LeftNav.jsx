@@ -55,7 +55,7 @@ function LeftNav() {
     }
     return (
         <div className="h-full w-16">
-            <div onMouseOver={() => { setMouseOver(true) }} onMouseOut={() => { setMouseOver(false) }} className={`flex absolute left-0 h-full z-50 bg-[#171717] ${mouseOver ? 'w-80' : 'w-16'} duration-300 text-nowrap justify-center h-full text-[#ebebeb] overflow-hidden`}>
+            <div onMouseOver={() => { setMouseOver(true) }} onMouseOut={() => { setMouseOver(false) }} className={`flex fixed left-0 h-full z-50 bg-[#171717] ${mouseOver ? 'w-80' : 'w-16'} duration-300 text-nowrap justify-center h-full text-[#ebebeb] overflow-hidden`}>
                 <div className="flex w-full h-auto flex-col">
                     <Link to={'/'} className="flex pl-5 w-80 items-center h-20 hover:bg-[#ebebeb] hover:bg-opacity-20 border-[#171717]">
                         <div className="flex h-[60%] items-end">
