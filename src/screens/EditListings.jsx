@@ -17,6 +17,7 @@ function EditListings() {
         long: ['', '', ''],
         img: ['', '', ''],
         keypoints: ['', '', ''],
+        experienceDetail: ['', '', ''],
         category: ['', '', ''],
         avilability: ['', '', ''],
         experienceObj: ['', '', ''],
@@ -33,7 +34,7 @@ function EditListings() {
 
     const availabilityTypes = ["Full-Time", "Part-Time", "Freelance/Contract", "Temporary", "Internship", "Remote", "Hybrid", "On-Demand/Per Task", "Shift-Based"];
     const expericenceTypes = ["Entry-Level", "Junior", "Mid-Level", "Senior", "Lead", "Expert", "Manager", "Director", "Vice President", "C-Level Executive", "Intern", "Freelancer", "Consultant", "Experienced Professional"];
-    const categoryTypes = ["Programming,Front-End Web", "Programming,Back-End Web", "Programming,Mobile App Development", "Programming,Game Development","Design,UI/UX Design", "Design,Graphic Design", "Design,Product Design", "Design,Web Design","Marketing,Digital Marketing", "Marketing,Content Writing", "Marketing,SEO Optimization", "Marketing,Social Media Marketing","Marketing,Email Marketing", "Marketing,Influencer Marketing", "Marketing,Affiliate Marketing", "Marketing,Brand Strategy","Data Science,Data Analysis", "Data Science,Machine Learning", "Data Science,Artificial Intelligence", "Data Science,Deep Learning","Data Science,Big Data", "Data Science,Data Visualization", "Data Science,Data Engineering", "Data Science,Statistical Analysis","Media,Video Editing", "Media,Photography", "Media,3D Modeling", "Media,Animation","Media,Sound Editing", "Media,Podcasting", "Media,Film Production", "Media,Motion Graphics","Cybersecurity,Ethical Hacking", "Cybersecurity,Network Security", "Cybersecurity,Penetration Testing", "Cybersecurity,Data Privacy","Cybersecurity,Cloud Security", "Cybersecurity,Incident Response", "Cybersecurity,Security Auditing", "Cybersecurity,Vulnerability Assessment","Cloud Computing,Cloud Infrastructure", "Cloud Computing,Cloud Architecture", "Cloud Computing,Cloud Security", "Cloud Computing,Cloud Services","Cloud Computing,DevOps", "Cloud Computing,AWS", "Cloud Computing,Azure", "Cloud Computing,Google Cloud","IT,IT Support", "IT,System Administration", "IT,Network Administration", "IT,Cloud Administration","Business,Project Management", "Business,Product Management", "Business,Operations Management", "Business,Supply Chain Management","Business,Change Management", "Business,Strategy Consulting", "Business,Human Resources", "Business,Recruitment","Business,Financial Management", "Business,Accounting", "Business,Tax Consulting", "Business,Marketing Strategy","Business,Customer Service", "Business,Sales Management", "Business,Business Development", "Business,Negotiation","Finance,Investment Banking", "Finance,Corporate Finance", "Finance,Personal Finance", "Finance,Financial Analysis","Finance,Wealth Management", "Finance,Financial Planning", "Finance,Insurance", "Finance,Accounting","Law,Corporate Law", "Law,Criminal Law", "Law,Civil Law", "Law,Family Law","Law,Intellectual Property Law", "Law,Employment Law", "Law,Environmental Law", "Law,Immigration Law","Education,Instructional Design", "Education,Educational Consulting", "Education,Online Teaching", "Education,Tutoring","Education,Course Development", "Education,School Administration", "Education,Special Education", "Education,Teacher Training","Healthcare,Medical Research", "Healthcare,Nursing", "Healthcare,Physician", "Healthcare,Pharmacy","Healthcare,Physical Therapy", "Healthcare,Public Health", "Healthcare,Healthcare Administration", "Healthcare,Healthcare Consulting","Construction,Project Management", "Construction,Construction Design", "Construction,Construction Engineering", "Construction,Architecture","Engineering,Civil Engineering", "Engineering,Mechanical Engineering", "Engineering,Chemical Engineering", "Engineering,Electrical Engineering","Engineering,Software Engineering", "Engineering,Aerospace Engineering", "Engineering,Automotive Engineering", "Engineering,Environmental Engineering","Art,Illustration", "Art,Painting", "Art,Sculpture", "Art,Photography","Art,Calligraphy", "Art,Printmaking", "Art,Graphic Design", "Art,Animation","Entertainment,Music Production", "Entertainment,Songwriting", "Entertainment,Event Planning", "Entertainment,Theater","Entertainment,Film Production", "Entertainment,Radio", "Entertainment,Stand-Up Comedy", "Entertainment,Writing","Sales,Sales Management", "Sales,Account Management", "Sales,B2B Sales", "Sales,B2C Sales","Sales,Inside Sales", "Sales,Field Sales", "Sales,Sales Operations", "Sales,Sales Strategy"];
+    const categoryTypes = ["Programming,Front-End Web", "Programming,Back-End Web", "Programming,Mobile App Development", "Programming,Game Development", "Design,UI/UX Design", "Design,Graphic Design", "Design,Product Design", "Design,Web Design", "Marketing,Digital Marketing", "Marketing,Content Writing", "Marketing,SEO Optimization", "Marketing,Social Media Marketing", "Marketing,Email Marketing", "Marketing,Influencer Marketing", "Marketing,Affiliate Marketing", "Marketing,Brand Strategy", "Data Science,Data Analysis", "Data Science,Machine Learning", "Data Science,Artificial Intelligence", "Data Science,Deep Learning", "Data Science,Big Data", "Data Science,Data Visualization", "Data Science,Data Engineering", "Data Science,Statistical Analysis", "Media,Video Editing", "Media,Photography", "Media,3D Modeling", "Media,Animation", "Media,Sound Editing", "Media,Podcasting", "Media,Film Production", "Media,Motion Graphics", "Cybersecurity,Ethical Hacking", "Cybersecurity,Network Security", "Cybersecurity,Penetration Testing", "Cybersecurity,Data Privacy", "Cybersecurity,Cloud Security", "Cybersecurity,Incident Response", "Cybersecurity,Security Auditing", "Cybersecurity,Vulnerability Assessment", "Cloud Computing,Cloud Infrastructure", "Cloud Computing,Cloud Architecture", "Cloud Computing,Cloud Security", "Cloud Computing,Cloud Services", "Cloud Computing,DevOps", "Cloud Computing,AWS", "Cloud Computing,Azure", "Cloud Computing,Google Cloud", "IT,IT Support", "IT,System Administration", "IT,Network Administration", "IT,Cloud Administration", "Business,Project Management", "Business,Product Management", "Business,Operations Management", "Business,Supply Chain Management", "Business,Change Management", "Business,Strategy Consulting", "Business,Human Resources", "Business,Recruitment", "Business,Financial Management", "Business,Accounting", "Business,Tax Consulting", "Business,Marketing Strategy", "Business,Customer Service", "Business,Sales Management", "Business,Business Development", "Business,Negotiation", "Finance,Investment Banking", "Finance,Corporate Finance", "Finance,Personal Finance", "Finance,Financial Analysis", "Finance,Wealth Management", "Finance,Financial Planning", "Finance,Insurance", "Finance,Accounting", "Law,Corporate Law", "Law,Criminal Law", "Law,Civil Law", "Law,Family Law", "Law,Intellectual Property Law", "Law,Employment Law", "Law,Environmental Law", "Law,Immigration Law", "Education,Instructional Design", "Education,Educational Consulting", "Education,Online Teaching", "Education,Tutoring", "Education,Course Development", "Education,School Administration", "Education,Special Education", "Education,Teacher Training", "Healthcare,Medical Research", "Healthcare,Nursing", "Healthcare,Physician", "Healthcare,Pharmacy", "Healthcare,Physical Therapy", "Healthcare,Public Health", "Healthcare,Healthcare Administration", "Healthcare,Healthcare Consulting", "Construction,Project Management", "Construction,Construction Design", "Construction,Construction Engineering", "Construction,Architecture", "Engineering,Civil Engineering", "Engineering,Mechanical Engineering", "Engineering,Chemical Engineering", "Engineering,Electrical Engineering", "Engineering,Software Engineering", "Engineering,Aerospace Engineering", "Engineering,Automotive Engineering", "Engineering,Environmental Engineering", "Art,Illustration", "Art,Painting", "Art,Sculpture", "Art,Photography", "Art,Calligraphy", "Art,Printmaking", "Art,Graphic Design", "Art,Animation", "Entertainment,Music Production", "Entertainment,Songwriting", "Entertainment,Event Planning", "Entertainment,Theater", "Entertainment,Film Production", "Entertainment,Radio", "Entertainment,Stand-Up Comedy", "Entertainment,Writing", "Sales,Sales Management", "Sales,Account Management", "Sales,B2B Sales", "Sales,B2C Sales", "Sales,Inside Sales", "Sales,Field Sales", "Sales,Sales Operations", "Sales,Sales Strategy"];
 
     const available = availabilityTypes.filter((availa) =>
         availa.toLowerCase().includes(fields.avilability[0]?.toLowerCase() || "")
@@ -47,6 +48,7 @@ function EditListings() {
 
     const allKeys = Object.keys(fields);
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
+    const experienceFields = allKeys.filter((key) => key.startsWith("experienceDetail"))
 
     const handleAddField = (key) => {
         setFields((prevFields) => {
@@ -111,7 +113,7 @@ function EditListings() {
     };
 
     return (
-        <div onClick={() => { setShowAvailability(false); setshowExperience(false);setshowCategory(false) }} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
+        <div onClick={() => { setShowAvailability(false); setshowExperience(false); setshowCategory(false) }} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
             <div className="flex h-full flex-1 items-start justify-center w-full">
                 <LeftNav />
                 <div className="flex justify-start gap-y-5 flex-col items-start w-11/12 mb-10">
@@ -156,13 +158,13 @@ function EditListings() {
                             <div className="flex text-sm opacity-80">
                                 Here’s your chance to dive deep and share all the details about your work. Explain what you’ve done, how you did it, and why it’s special. Don’t hold back—this is your moment to shine!
                             </div>
-                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.long[2] ? 'border-red-500' : ''}`}>
-                                <input name={'long'} maxLength={160}
+                            <div className={`flex h-auto w-full border border-zinc-400 rounded-sm overflow-hidden items-end ${fields.long[2] ? 'border-red-500' : ''}`}>
+                                <textarea name={'long'} maxLength={160} rows={10}
                                     placeholder="Go into detail about your work—share everything that makes it amazing!"
                                     onChange={(e) => { handleInputChange(e, 10) }}
                                     value={fields.long[0] || ''}
-                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
-                                <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 py-3 font-light outline-none" />
+                                <div className="flex w-10 h-full justify-center items-center opacity-70 text-sm">
                                     {10 - fields.long[1] || 0}
                                 </div>
                             </div>
@@ -171,34 +173,37 @@ function EditListings() {
                             </div>
                         </div>
 
+                        <div className="bg-zinc-400 w-full h-0.5 my-5" />
+
                         <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">Why Hire Me?</div>
-                            <div className="flex text-sm opacity-80">Explain what sets you apart. Share your unique value, strengths, or approach that makes you the best choice.</div>
-                            {
-                                keypointFields.map((keypointField, index) => (
-                                    <div key={index}>
-                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
-                                            ${fields[keypointField][2] ? 'border-red-500' : ''} items-center`}>
-                                            <input
-                                                name={keypointField}
-                                                maxLength={12}
-                                                value={fields[keypointField][0] || ''}
-                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
-                                                placeholder="Share your unique value, special skills, or why someone should work with you..." />
+                            <div className="flex text-lg font-bold">
+                                Showcase Your Work
+                            </div>
+                            <div className="flex text-sm opacity-80">
+                                A picture is worth a thousand words! Upload an image to help others better understand and connect with your work. Make sure it’s clear, high-quality, and relevant.
+                            </div>
+                            <div className={`flex h-44 w-auto border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.img[2] ? 'border-red-500' : ''}`}>
+                                <img src={image || placeholder} alt="" className="w-64 h-44 object-contain" />
+                                <div className="flex w-auto flex-col pl-5 gap-3">
+                                    <div className="flex w-auto text-sm">*Upload an image that represents your work (max 2MB). It could be a photo, graphic, or anything visual that captures its essence!</div>
+                                    <input name={'img'} accept="image/*" ref={imageInputRef}
+                                        placeholder="Go into detail about your work—share everything that makes it amazing!"
+                                        onChange={(e) => { handleInputChange(e, 2) }}
+                                        type="file" className="flex w-auto h-full bg-transparent text-sm font-light outline-none" />
+                                    {
+                                        image &&
+                                        <div className="flex">
+                                            <div onClick={() => { setImage(null); imageInputRef.current.value = null }} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                             <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                {10 - fields[keypointField][1]}
+                                                {fields.img[1]}
                                             </div>
-                                            <div
-                                                onClick={() => handleDelete(keypointField)}
-                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                         </div>
-                                        <div className="flex text-xs text-red-500">
-                                            {fields[keypointField][2] || ''}
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                            <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
+                                    }
+                                </div>
+                            </div>
+                            <div className="flex text-xs text-red-500">
+                                {fields.img[2] || ''}
+                            </div>
                         </div>
 
                         <div className="bg-zinc-400 w-full h-0.5 my-5" />
@@ -230,7 +235,7 @@ function EditListings() {
                                 }
                                 {
                                     showCategory &&
-                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-64 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
                                         <div className="flex-1 overflow-y-auto items-center flex-col">
                                             {
                                                 categorySuggesions.map((suggession, index) => (
@@ -275,7 +280,7 @@ function EditListings() {
                                 }
                                 {
                                     showAvailability &&
-                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-64 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
                                         <div className="flex-1 overflow-y-auto items-center flex-col">
                                             {
                                                 available.map((availabilityType, index) => (
@@ -320,7 +325,7 @@ function EditListings() {
                                 }
                                 {
                                     showExperience &&
-                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-60 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
+                                    <div className="flex absolute justify-center top-0 w-full h-auto max-h-64 bg-[#f5f4f4] shadow-2xl z-50 rounded-sm border border-zinc-300">
                                         <div className="flex-1 overflow-y-auto items-center flex-col">
                                             {
                                                 experienceSuggesions.map((suggession, index) => (
@@ -341,38 +346,64 @@ function EditListings() {
                         <div className="bg-zinc-400 w-full h-0.5 my-5" />
 
                         <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">
-                                Showcase Your Work
-                            </div>
-                            <div className="flex text-sm opacity-80">
-                                A picture is worth a thousand words! Upload an image to help others better understand and connect with your work. Make sure it’s clear, high-quality, and relevant.
-                            </div>
-                            <div className={`flex h-44 w-auto border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.img[2] ? 'border-red-500' : ''}`}>
-                                <img src={image || placeholder} alt="" className="w-64 h-44 object-contain" />
-                                <div className="flex w-auto flex-col pl-5 gap-3">
-                                    <div className="flex w-auto text-sm">*Upload an image that represents your work (max 2MB). It could be a photo, graphic, or anything visual that captures its essence!</div>
-                                    <input name={'img'} accept="image/*" ref={imageInputRef}
-                                        placeholder="Go into detail about your work—share everything that makes it amazing!"
-                                        onChange={(e) => { handleInputChange(e, 2) }}
-                                        type="file" className="flex w-auto h-full bg-transparent text-sm font-light outline-none" />
-                                    {
-                                        image &&
-                                        <div className="flex">
-                                            <div onClick={() => { setImage(null); imageInputRef.current.value = null }} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                            <div className="flex text-lg font-bold">Tell Us About Your Work Experience</div>
+                            <div className="flex text-sm opacity-80">Share the details of your job, including your role, responsibilities, and any achievements or highlights.</div>
+                            {
+                                experienceFields.map((experienceField, index) => (
+                                    <div key={index}>
+                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
+                                            ${fields[experienceField][2] ? 'border-red-500' : ''} items-center`}>
+                                            <input
+                                                name={experienceField}
+                                                maxLength={12}
+                                                value={fields[experienceField][0] || ''}
+                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                                placeholder="e.g., Software Engineer at XYZ Corp, building web apps, leading a small team of developers." />
                                             <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                {fields.img[1]}
+                                                {10 - fields[experienceField][1]}
                                             </div>
+                                            <div
+                                                onClick={() => handleDelete(experienceField)}
+                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                         </div>
-                                    }
-                                </div>
-                            </div>
-                            <div className="flex text-xs text-red-500">
-                                {fields.img[2] || ''}
-                            </div>
+                                        <div className="flex text-xs text-red-500">
+                                            {fields[experienceField][2] || ''}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            <div onClick={() => handleAddField('experienceDetail')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
                         </div>
 
-
-
+                        <div className="flex flex-col gap-y-2 w-full">
+                            <div className="flex text-lg font-bold">Why Hire Me?</div>
+                            <div className="flex text-sm opacity-80">Explain what sets you apart. Share your unique value, strengths, or approach that makes you the best choice.</div>
+                            {
+                                keypointFields.map((keypointField, index) => (
+                                    <div key={index}>
+                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
+                                            ${fields[keypointField][2] ? 'border-red-500' : ''} items-center`}>
+                                            <input
+                                                name={keypointField}
+                                                maxLength={12}
+                                                value={fields[keypointField][0] || ''}
+                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                                placeholder="Share your unique value, special skills, or why someone should work with you..." />
+                                            <div className="flex w-10 justify-center items-center opacity-70 text-sm">
+                                                {10 - fields[keypointField][1]}
+                                            </div>
+                                            <div
+                                                onClick={() => handleDelete(keypointField)}
+                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                        </div>
+                                        <div className="flex text-xs text-red-500">
+                                            {fields[keypointField][2] || ''}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
+                        </div>
 
                     </div>
                 </div>

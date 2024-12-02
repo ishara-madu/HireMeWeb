@@ -905,6 +905,10 @@ video {
   max-height: 10rem;
 }
 
+.max-h-64 {
+  max-height: 16rem;
+}
+
 .min-h-40 {
   min-height: 10rem;
 }
