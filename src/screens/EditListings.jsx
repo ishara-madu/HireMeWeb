@@ -18,6 +18,8 @@ function EditListings() {
         img: ['', '', ''],
         keypoints: ['', '', ''],
         experienceDetail: ['', '', ''],
+        tags: ['ishara', '', ''],
+        tags1: ['bandra', '', ''],
         category: ['', '', ''],
         avilability: ['', '', ''],
         experienceObj: ['', '', ''],
@@ -49,6 +51,7 @@ function EditListings() {
     const allKeys = Object.keys(fields);
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
     const experienceFields = allKeys.filter((key) => key.startsWith("experienceDetail"))
+    const tagsFields = allKeys.filter((key) => key.startsWith("tags"))
 
     const handleAddField = (key) => {
         setFields((prevFields) => {
@@ -56,6 +59,7 @@ function EditListings() {
             updatedFields[`${key}${uuidv4()}`] = ['', '', ''];
             return updatedFields;
         });
+        
     }
 
     const handleDelete = (key) => {
@@ -66,10 +70,28 @@ function EditListings() {
         });
     }
 
+    const handleChips = (e) => {
+        let name, value;
+        if (e.target) {
+            name = e.target.name;
+            value = e.target.value;
+        }
+        if (e.key === ' ' || e.key === 'Enter') {
+            const words = value.split(' ');
+            const lastWord = words[words.length - 1];
+
+            if (lastWord.startsWith('#') && lastWord.length > 1) {
+                setFields((prevFields) => {
+                    const updatedFields = { ...prevFields };
+                    updatedFields[`${name}${uuidv4()}`] = [lastWord, '', ''];
+                    return updatedFields;
+                });
+            }
+        }
+
+    }
     const handleInputChange = (e, maxlength) => {
         let name, value, files;
-
-
         if (e.target) {
             name = e.target.name;
             value = e.target.value;
@@ -86,7 +108,6 @@ function EditListings() {
             error = ''
         } else {
             error = `Text exceeds the maximum limit of ${maxlength} characters.`;
-            setImage(null)
         }
         if (files) {
             const maxSizeInMB = maxlength;
@@ -96,7 +117,7 @@ function EditListings() {
                 error = `File size exceeds ${maxSizeInMB} MB. Please upload a smaller file.`;
                 imageInputRef.current.value = null;
                 value = '';
-                setImage()
+                setImage(null)
             } else {
                 error = '';
                 const reader = new FileReader();
@@ -164,7 +185,7 @@ function EditListings() {
                                     onChange={(e) => { handleInputChange(e, 10) }}
                                     value={fields.long[0] || ''}
                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 py-3 font-light outline-none" />
-                                <div className="flex w-10 h-full justify-center items-center opacity-70 text-sm">
+                                <div className="flex w-10 h-full pb-3 justify-center items-center opacity-70 text-sm">
                                     {10 - fields.long[1] || 0}
                                 </div>
                             </div>
@@ -207,6 +228,40 @@ function EditListings() {
                         </div>
 
                         <div className="bg-zinc-400 w-full h-0.5 my-5" />
+
+                        <div className="flex flex-col gap-y-2 w-full">
+                            <div className="flex text-lg font-bold">What Tools and Technologies Do You Use?</div>
+                            <div className="flex text-sm opacity-80">Let us know the tools, software, and technologies you work with, whether it’s for #development, #design, or something else, like #JavaScript, #React, #Adobe, #Photoshop, #Git.</div>
+                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden ${fields.tags[2] ? 'border-red-500' : ''} items-center`}>
+                                <input
+                                    name={'tags'}
+                                    maxLength={12}
+                                    onKeyDown={(e) => handleChips(e)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                    placeholder="e.g., #JavaScript, #React, #Adobe, #Photoshop, #Git" />
+                            </div>
+                            <div className="flex text-xs text-red-500">
+                                {fields.tags[2] || ''}
+                            </div>
+                            <div className="flex w-full h-auto gap-3 flex-wrap">
+                                {
+                                    tagsFields.map((tagsField, index) => (
+                                        <div key={index} className="flex flex-col">
+                                            <div className={`flex h-12 w-auto border border-zinc-400 bg-zinc-300 rounded-sm overflow-hidden ${fields[tagsField][2] ? 'border-red-500' : ''} items-center`}>
+                                                <div className="flex w-auto h-full items-center justify-center bg-transparent pl-3 font-light outline-none">
+                                                    {fields[tagsField][0]}
+                                                </div>
+                                                <div
+                                                    onClick={() => handleDelete(tagsField)}
+                                                    className="flex w-9 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={20} /></div>
+                                            </div>
+                                            <div className="flex text-xs text-red-500">
+                                                {fields[tagsField][2] || ''}
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
 
                         <div className="flex flex-col gap-y-2 w-full relative">
                             <div className="flex text-lg font-bold">
