@@ -73,7 +73,7 @@ function EditListings() {
         });
     }
 
-    const handleChips = (e,maxlength) => {
+    const handleChips = (e, maxlength) => {
         let name, value;
         if (e.target) {
             name = e.target.name;
@@ -142,10 +142,13 @@ function EditListings() {
             <div className="flex h-full flex-1 items-start justify-center w-full">
                 <LeftNav />
                 <div className="flex justify-start gap-y-5 flex-col items-start w-11/12 mb-10">
-                <div className="flex w-full justify-between mt-10 items-center">
-                    <div className="flex w-auto text-3xl font-bold">Manage your course</div>
-                    <div className="flex w-auto text-sm font-bold px-10 text-[#ebebeb] hover:bg-green-600 cursor-pointer border border-zinc-300 rounded-sm bg-green-500 h-10 items-center">Submit</div>
-                </div>
+                    <div className="flex w-full justify-between mt-10 items-center">
+                        <div className="flex w-auto text-3xl font-bold">Manage your course</div>
+                        <div className="flex gap-x-5">
+                            <div className="flex w-auto text-sm font-bold px-10 hover:bg-zinc-500 cursor-pointer border border-zinc-300 rounded-sm bg-zinc-400 h-10 items-center">Remove</div>
+                            <div className="flex w-auto text-sm font-bold px-10 text-[#ebebeb] hover:bg-green-600 cursor-pointer border border-zinc-300 rounded-sm bg-green-500 h-10 items-center">Submit</div>
+                        </div>
+                    </div>
                     <div className="flex w-full flex-col gap-y-8 mb-10">
                         <div className="flex flex-col gap-y-2 w-full">
                             <div className="flex text-lg font-bold">What’s Your Work About?</div>
@@ -244,8 +247,8 @@ function EditListings() {
                                     name={'tag'}
                                     maxLength={13}
                                     value={fields.tag[0]}
-                                    onChange={(e) => { handleInputChange(e, 12)}}
-                                    onKeyDown={(e) => handleChips(e,12)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                    onChange={(e) => { handleInputChange(e, 12) }}
+                                    onKeyDown={(e) => handleChips(e, 12)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
                                     placeholder="e.g., #JavaScript, #React, #Adobe, #Photoshop, #Git" />
                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
                                     {12 - fields.tag[1] || 0}
