@@ -38,6 +38,11 @@ function WorkerListing() {
 
     return `${percentage}%`;
   };
+
+
+  const handleManageResults = (id)=>{
+    sessionStorage.setItem('listingFilter',id)
+  }
   return (
     <div className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
       <div className="flex h-full flex-1 items-start justify-center w-full">
@@ -52,7 +57,7 @@ function WorkerListing() {
                 </div>
                 <input onChange={(e) => setsearch(e.target.value)} value={search} type="text" className="flex flex-1 h-full outline-none bg-transparent" placeholder="Search your listning" />
               </div>
-              <Link to={'/'} className="flex justify-center items-center w-60 rounded-sm h-12 bg-green-500 text-[#ebebeb] font-bold text-base cursor-pointer">
+              <Link to={`/show-listings/manage`} onClick={()=>{handleManageResults()}} className="flex justify-center items-center w-60 rounded-sm h-12 bg-green-500 text-[#ebebeb] font-bold text-base cursor-pointer">
                 New listing
               </Link>
             </div>
@@ -67,7 +72,7 @@ function WorkerListing() {
               <div className="flex flex-col gap-y-5">
                 {
                   unsubmitted.map((data, index) => (
-                    <div key={index} className="flex w-full h-auto  border border-zinc-400 gap-x-3 rounded-sm group relative cursor-pointer">
+                    <Link to={`/show-listings/manage`} onClick={()=>handleManageResults(data.id)} key={index} className="flex w-full h-auto  border border-zinc-400 gap-x-3 rounded-sm group relative cursor-pointer">
                       <LazyLoad>
                         <img src={data.image || placeholder} alt="Placeholder" className="w-44 h-32 bg-zinc-200 object-contain" />
                       </LazyLoad>
@@ -87,7 +92,7 @@ function WorkerListing() {
                         </div>
                       </div>
                       <div className="flex w-full h-full absolute top-0 left-0 bg-opacity-0 opacity-0 group-hover:opacity-100 group-hover:text-green-600 duration-300 z-50 justify-center items-center font-bold">Edit/Manage listing</div>
-                    </div>
+                    </Link>
                   ))
                 }
 

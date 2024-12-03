@@ -880,6 +880,10 @@ video {
   min-height: 100lvh;
 }
 
+.min-h-full {
+  min-height: 100%;
+}
+
 .w-0 {
   width: 0px;
 }
@@ -1010,6 +1014,10 @@ video {
 
 .w-44 {
   width: 11rem;
+}
+
+.min-w-full {
+  min-width: 100%;
 }
 
 .flex-1 {
