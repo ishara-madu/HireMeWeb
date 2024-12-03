@@ -1,6 +1,6 @@
 import Footer from "../components/footer/Footer"
 import LeftNav from "../components/leftNav/LeftNav"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { MdBusinessCenter, MdDeleteOutline, MdError, MdOutlineBusinessCenter } from "react-icons/md"
 import placeholder from '../assets/placeholder.svg'
 import addimage from '../assets/add-image.svg'
@@ -9,9 +9,18 @@ import { IoCloudDone } from "react-icons/io5"
 import { v4 as uuidv4 } from "uuid";
 import { PiPath, PiPathBold } from "react-icons/pi"
 import { FaBusinessTime } from "react-icons/fa6"
+import { useDispatch, useSelector } from "react-redux"
+import getCookie from "../util/getCookie"
+import { fetchListning } from "../features/listing/listingThunk"
 
 
 function EditListings() {
+    
+    const dispatch = useDispatch()
+  const { data, loading, error } = useSelector(state => state.listings)
+  useEffect(() => {
+    dispatch(fetchListning({ userId: getCookie('uid') }))
+  }, [dispatch])
     const [fields, setFields] = useState({
         title: ['', '', ''],
         short: ['', '', ''],
@@ -52,10 +61,7 @@ function EditListings() {
 
     const allKeys = Object.keys(fields);
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
-    const experienceFields = allKeys.filter((key) => key.startsWith("experienceDetail"))
     const tagsFields = allKeys.filter((key) => key.startsWith("tags"))
-    const qualificationFields = allKeys.filter((key) => key.startsWith("qualification"))
-    const highlightsFields = allKeys.filter((key) => key.startsWith("highlights"))
 
     const handleAddField = (key) => {
         setFields((prevFields) => {
@@ -137,6 +143,9 @@ function EditListings() {
             [name]: [value, length, error],
         }));
     };
+
+
+    
 
     return (
         <div onClick={() => { setShowAvailability(false); setshowExperience(false); setshowCategory(false) }} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
