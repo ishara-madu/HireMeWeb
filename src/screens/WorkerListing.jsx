@@ -18,11 +18,26 @@ function WorkerListing() {
   }, [dispatch])
 
   const sercheddata = data.filter(val => val.title.toLowerCase().includes(search.toLowerCase()))
-  console.log(sercheddata);
 
   const submitted = sercheddata.filter(val => val.submission === true);
   const unsubmitted = sercheddata.filter(val => val.submission === false);
 
+  const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+  };
+
+  const checkPercentage = (data) => {
+    let percentage = 0;
+    const tablenames = ["title", "description.short", "description.long", "description.keypoints", "tags.tagList", "category", "options.availability", "options.experienceLevel", "image","submission"];
+
+    tablenames.forEach((name) => {
+      if (getNestedValue(data, name)) {
+        percentage += (100 / tablenames.length);
+      }
+    });
+
+    return `${percentage}%`;
+  };
   return (
     <div className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
       <div className="flex h-full flex-1 items-start justify-center w-full">
@@ -65,9 +80,9 @@ function WorkerListing() {
                           <div className="flex text-xs opacity-60">{`Draft : ${data.submission ? 'published' : 'unpublished'}`}</div>
                         </div>
                         <div className="flex flex-1 items-center justify-center px-2 gap-x-2">
-                          <div className="flex items-center text-sm font-bold">Process</div>
+                          <div className="flex items-center text-sm font-bold">{parseInt(checkPercentage(data)) >= 100 ? 'Completed' : 'Process'}</div>
                           <div className="flex flex-1 bg-zinc-400 h-2">
-                            <div className="flex h-full w-[10%] bg-green-500"></div>
+                            <div className="flex h-full bg-green-500" style={{ width: checkPercentage(data) }}></div>
                           </div>
                         </div>
                       </div>

@@ -144,7 +144,7 @@ function EditListings() {
                 <LeftNav />
                 <div className="flex justify-start gap-y-5 flex-col items-start w-11/12 mb-10">
                     <div className="flex w-full justify-between mt-10 items-center">
-                        <div className="flex w-auto text-3xl font-bold">Manage your course</div>
+                        <div className="flex w-auto text-3xl font-bold">Manage your listing</div>
                         <div className="flex gap-x-5">
                             <div className="flex w-auto text-sm font-bold px-10 hover:bg-zinc-500 cursor-pointer border border-zinc-300 text-white rounded-sm bg-zinc-400 h-10 items-center">Remove</div>
                             <div className="flex w-auto text-sm font-bold px-10 text-[#fff] hover:bg-green-600 cursor-pointer border border-zinc-300 rounded-sm bg-green-500 h-10 items-center">Submit</div>
@@ -205,37 +205,34 @@ function EditListings() {
                             </div>
                         </div>
 
-                        <div className="bg-zinc-400 w-full h-0.5 my-5" />
-
                         <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">
-                                Showcase Your Work
-                            </div>
-                            <div className="flex text-sm opacity-80">
-                                A picture is worth a thousand words! Upload an image to help others better understand and connect with your work. Make sure it’s clear, high-quality, and relevant.
-                            </div>
-                            <div className={`flex h-44 w-auto border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.img[2] ? 'border-red-500' : ''}`}>
-                                <img src={image || placeholder} alt="" className="w-64 h-44 object-contain cursor-pointer" onClick={()=>(imageInputRef.current.click())}/>
-                                <div className="flex w-auto flex-col pl-5 gap-3">
-                                    <div className="flex w-auto text-sm">*Upload an image that represents your work (max 2MB). It could be a photo, graphic, or anything visual that captures its essence!</div>
-                                    <input name={'img'} accept="image/*" ref={imageInputRef}
-                                        placeholder="Go into detail about your work—share everything that makes it amazing!"
-                                        onChange={(e) => { handleInputChange(e, 2) }}
-                                        type="file" className="flex w-auto h-full bg-transparent text-sm font-light outline-none" />
-                                    {
-                                        image &&
-                                        <div className="flex">
-                                            <div onClick={() => { setImage(null); imageInputRef.current.value = null }} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                            <div className="flex text-lg font-bold">Why Hire Me?</div>
+                            <div className="flex text-sm opacity-80">Explain what sets you apart. Share your unique value, strengths, or approach that makes you the best choice.</div>
+                            {
+                                keypointFields.map((keypointField, index) => (
+                                    <div key={index}>
+                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
+                                            ${fields[keypointField][2] ? 'border-red-500' : ''} items-center`}>
+                                            <input
+                                                name={keypointField}
+                                                maxLength={12}
+                                                value={fields[keypointField][0] || ''}
+                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                                placeholder="Share your unique value, special skills, or why someone should work with you..." />
                                             <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                {fields.img[1]}
+                                                {10 - fields[keypointField][1]}
                                             </div>
+                                            <div
+                                                onClick={() => handleDelete(keypointField)}
+                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                         </div>
-                                    }
-                                </div>
-                            </div>
-                            <div className="flex text-xs text-red-500">
-                                {fields.img[2] || ''}
-                            </div>
+                                        <div className="flex text-xs text-red-500">
+                                            {fields[keypointField][2] || ''}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
                         </div>
 
                         <div className="bg-zinc-400 w-full h-0.5 my-5" />
@@ -291,7 +288,7 @@ function EditListings() {
                                 <input ref={categoryRef} name={'categoryObj'} maxLength={101}
                                     placeholder="Select a category (e.g., Design, Writing, Development, Marketing)..."
                                     onChange={(e) => { handleInputChange(e, 100); setshowCategory(true) }}
-                                    onClick={(e) => { e.stopPropagation(); setshowCategory(true) }}
+                                    onClick={(e) => { e.stopPropagation(); setshowCategory(true); setShowAvailability(false); setshowExperience(false); }}
                                     value={fields.categoryObj[0] || ''}
                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
@@ -336,7 +333,7 @@ function EditListings() {
                                 <input ref={availbilityRef} name={'avilability'} maxLength={21}
                                     placeholder="Select your availability (e.g., Full-Time, Part-Time, Freelance)..."
                                     onChange={(e) => { handleInputChange(e, 20); setShowAvailability(true) }}
-                                    onClick={(e) => { e.stopPropagation(); setShowAvailability(true) }}
+                                    onClick={(e) => { e.stopPropagation(); setShowAvailability(true); setshowExperience(false); setshowCategory(false) }}
                                     value={fields.avilability[0] || ''}
                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
@@ -381,7 +378,7 @@ function EditListings() {
                                 <input ref={experienceRef} name={'experienceObj'} maxLength={21}
                                     placeholder="Select your experience level (e.g., Beginner, Intermediate, Expert)..."
                                     onChange={(e) => { handleInputChange(e, 20); setshowExperience(true) }}
-                                    onClick={(e) => { e.stopPropagation(); setshowExperience(true) }}
+                                    onClick={(e) => { e.stopPropagation(); setshowExperience(true); setShowAvailability(false); setshowCategory(false) }}
                                     value={fields.experienceObj[0] || ''}
                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
@@ -418,123 +415,34 @@ function EditListings() {
                         <div className="bg-zinc-400 w-full h-0.5 my-5" />
 
                         <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">Tell Us About Your Work Experience</div>
-                            <div className="flex text-sm opacity-80">Share the details of your job, including your role, responsibilities, and any achievements or highlights.</div>
-                            {
-                                experienceFields.map((experienceField, index) => (
-                                    <div key={index}>
-                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
-                                            ${fields[experienceField][2] ? 'border-red-500' : ''} items-center`}>
-                                            <input
-                                                name={experienceField}
-                                                maxLength={12}
-                                                value={fields[experienceField][0] || ''}
-                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
-                                                placeholder="e.g., Software Engineer at XYZ Corp, building web apps, leading a small team of developers." />
+                            <div className="flex text-lg font-bold">
+                                Showcase Your Work
+                            </div>
+                            <div className="flex text-sm opacity-80">
+                                A picture is worth a thousand words! Upload an image to help others better understand and connect with your work. Make sure it’s clear, high-quality, and relevant.
+                            </div>
+                            <div className={`flex h-44 w-auto border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.img[2] ? 'border-red-500' : ''}`}>
+                                <img src={image || placeholder} alt="" className="w-64 h-44 object-contain cursor-pointer" onClick={() => (imageInputRef.current.click())} />
+                                <div className="flex w-auto flex-col pl-5 gap-3">
+                                    <div className="flex w-auto text-sm">*Upload an image that represents your work (max 2MB). It could be a photo, graphic, or anything visual that captures its essence!</div>
+                                    <input name={'img'} accept="image/*" ref={imageInputRef}
+                                        placeholder="Go into detail about your work—share everything that makes it amazing!"
+                                        onChange={(e) => { handleInputChange(e, 2) }}
+                                        type="file" className="flex w-auto h-full bg-transparent text-sm font-light outline-none" />
+                                    {
+                                        image &&
+                                        <div className="flex">
+                                            <div onClick={() => { setImage(null); imageInputRef.current.value = null }} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                             <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                {10 - fields[experienceField][1]}
+                                                {fields.img[1]}
                                             </div>
-                                            <div
-                                                onClick={() => handleDelete(experienceField)}
-                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                         </div>
-                                        <div className="flex text-xs text-red-500">
-                                            {fields[experienceField][2] || ''}
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                            <div onClick={() => handleAddField('experienceDetail')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
-                        </div>
-
-                        <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">Why Hire Me?</div>
-                            <div className="flex text-sm opacity-80">Explain what sets you apart. Share your unique value, strengths, or approach that makes you the best choice.</div>
-                            {
-                                keypointFields.map((keypointField, index) => (
-                                    <div key={index}>
-                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
-                                            ${fields[keypointField][2] ? 'border-red-500' : ''} items-center`}>
-                                            <input
-                                                name={keypointField}
-                                                maxLength={12}
-                                                value={fields[keypointField][0] || ''}
-                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
-                                                placeholder="Share your unique value, special skills, or why someone should work with you..." />
-                                            <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                {10 - fields[keypointField][1]}
-                                            </div>
-                                            <div
-                                                onClick={() => handleDelete(keypointField)}
-                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
-                                        </div>
-                                        <div className="flex text-xs text-red-500">
-                                            {fields[keypointField][2] || ''}
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                            <div onClick={() => handleAddField('keypoints')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
-                        </div>
-
-                        <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">Certificates and Qualifications</div>
-                            <div className="flex text-sm opacity-80">Tell us about any certifications or qualifications you’ve earned that show your expertise or add to your skillset.</div>
-                            {
-                                qualificationFields.map((qualificationField, index) => (
-                                    <div key={index}>
-                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
-                                            ${fields[qualificationField][2] ? 'border-red-500' : ''} items-center`}>
-                                            <input
-                                                name={qualificationField}
-                                                maxLength={12}
-                                                value={fields[qualificationField][0] || ''}
-                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
-                                                placeholder="e.g., Google Analytics : www.qualification.com/google-analytics" />
-                                            <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                {10 - fields[qualificationField][1]}
-                                            </div>
-                                            <div
-                                                onClick={() => handleDelete(qualificationField)}
-                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
-                                        </div>
-                                        <div className="flex text-xs text-red-500">
-                                            {fields[qualificationField][2] || ''}
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                            <div onClick={() => handleAddField('qualification')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
-                        </div>
-
-                        <div className="flex flex-col gap-y-2 w-full">
-                            <div className="flex text-lg font-bold">Portfolio Highlights (Project Links)</div>
-                            <div className="flex text-sm opacity-80">Share a few of your standout projects or pieces from your portfolio. Include links if you can!</div>
-                            {
-                                highlightsFields.map((highlightsField, index) => (
-                                    <div key={index}>
-                                        <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden 
-                                            ${fields[highlightsField][2] ? 'border-red-500' : ''} items-center`}>
-                                            <input
-                                                name={highlightsField}
-                                                maxLength={12}
-                                                value={fields[highlightsField][0] || ''}
-                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
-                                                placeholder="e.g., My portfolio : www.behance.net/my-portfolio" />
-                                            <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                {10 - fields[highlightsField][1]}
-                                            </div>
-                                            <div
-                                                onClick={() => handleDelete(highlightsField)}
-                                                className="flex w-10 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
-                                        </div>
-                                        <div className="flex text-xs text-red-500">
-                                            {fields[highlightsField][2] || ''}
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                            <div onClick={() => handleAddField('highlights')} className="flex text-green-600 font-bold text-sm cursor-pointer">+ Add more to your responce</div>
+                                    }
+                                </div>
+                            </div>
+                            <div className="flex text-xs text-red-500">
+                                {fields.img[2] || ''}
+                            </div>
                         </div>
 
                     </div>
