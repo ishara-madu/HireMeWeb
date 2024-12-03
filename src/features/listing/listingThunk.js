@@ -9,6 +9,9 @@ export const fetchListning = createAsyncThunk(
             if (filters.id) {
                 query = query.eq('id', filters.id);
             }
+            if (filters.userId) {
+                query = query.eq('uid', filters.userId);
+            }
             let { data,error } = await query;
             if(error) throw error;
             

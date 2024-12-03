@@ -3,6 +3,7 @@ import LeftNav from "../components/leftNav/LeftNav"
 import { useRef, useState } from "react"
 import { MdBusinessCenter, MdDeleteOutline, MdError, MdOutlineBusinessCenter } from "react-icons/md"
 import placeholder from '../assets/placeholder.svg'
+import addimage from '../assets/add-image.svg'
 import LoadingSpinner from "../components/LoadingSpinner"
 import { IoCloudDone } from "react-icons/io5"
 import { v4 as uuidv4 } from "uuid";
@@ -145,8 +146,8 @@ function EditListings() {
                     <div className="flex w-full justify-between mt-10 items-center">
                         <div className="flex w-auto text-3xl font-bold">Manage your course</div>
                         <div className="flex gap-x-5">
-                            <div className="flex w-auto text-sm font-bold px-10 hover:bg-zinc-500 cursor-pointer border border-zinc-300 rounded-sm bg-zinc-400 h-10 items-center">Remove</div>
-                            <div className="flex w-auto text-sm font-bold px-10 text-[#ebebeb] hover:bg-green-600 cursor-pointer border border-zinc-300 rounded-sm bg-green-500 h-10 items-center">Submit</div>
+                            <div className="flex w-auto text-sm font-bold px-10 hover:bg-zinc-500 cursor-pointer border border-zinc-300 text-white rounded-sm bg-zinc-400 h-10 items-center">Remove</div>
+                            <div className="flex w-auto text-sm font-bold px-10 text-[#fff] hover:bg-green-600 cursor-pointer border border-zinc-300 rounded-sm bg-green-500 h-10 items-center">Submit</div>
                         </div>
                     </div>
                     <div className="flex w-full flex-col gap-y-8 mb-10">
@@ -214,7 +215,7 @@ function EditListings() {
                                 A picture is worth a thousand words! Upload an image to help others better understand and connect with your work. Make sure it’s clear, high-quality, and relevant.
                             </div>
                             <div className={`flex h-44 w-auto border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.img[2] ? 'border-red-500' : ''}`}>
-                                <img src={image || placeholder} alt="" className="w-64 h-44 object-contain" />
+                                <img src={image || placeholder} alt="" className="w-64 h-44 object-contain cursor-pointer" onClick={()=>(imageInputRef.current.click())}/>
                                 <div className="flex w-auto flex-col pl-5 gap-3">
                                     <div className="flex w-auto text-sm">*Upload an image that represents your work (max 2MB). It could be a photo, graphic, or anything visual that captures its essence!</div>
                                     <input name={'img'} accept="image/*" ref={imageInputRef}
