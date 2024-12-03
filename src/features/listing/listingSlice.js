@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchListning } from "./listingThunk";
+import { createListing, deleteListing, fetchListning, updateListing } from "./listingThunk";
 
 const listingSlice = createSlice({
     name: 'listings',

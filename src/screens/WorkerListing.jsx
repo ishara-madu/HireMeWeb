@@ -17,8 +17,11 @@ function WorkerListing() {
     dispatch(fetchListning({ userId: getCookie('uid') }))
   }, [dispatch])
 
-  const sercheddata = data.filter(val => val.title.toLowerCase().includes(search.toLowerCase()))
-
+  const sercheddata = data.filter(val => {
+    // Allow null values to pass through the filter
+    return val.title === null || val.title === undefined || val.title === '' || (val.title && val.title.toLowerCase().includes(search.toLowerCase()));
+  });
+  
   const submitted = sercheddata.filter(val => val.submission === true);
   const unsubmitted = sercheddata.filter(val => val.submission === false);
 
@@ -80,7 +83,7 @@ function WorkerListing() {
                         <div className="flex w-[40%] h-full py-2 flex-col justify-between font-semibold">
                           <div className="flex flex-col">
                             <div className="flex">{data.title}</div>
-                            <div className="flex text-sm font-normal opacity-70">{data.description.short}</div>
+                            <div className="flex text-sm font-normal opacity-70">{data.descritption && data.description.short}</div>
                           </div>
                           <div className="flex text-xs opacity-60">{`Draft : ${data.submission ? 'published' : 'unpublished'}`}</div>
                         </div>

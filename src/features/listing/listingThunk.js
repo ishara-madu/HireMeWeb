@@ -12,12 +12,10 @@ export const fetchListning = createAsyncThunk(
             if (filters.userId) {
                 query = query.eq('uid', filters.userId);
             }
-            if (filters.uid && filters.lid) {
+            if (filters.uid || filters.lid) {
                 query = query
                     .eq('uid', filters.uid || null)
                     .eq('id', filters.lid || null);
-            } else if (filters.uid || filters.lid) {
-                ''
             }
             let { data, error } = await query;
             if (error) throw error;
@@ -35,7 +33,13 @@ export const createListing = createAsyncThunk(
         try {
             const { data, error } = await supabase
                 .from("listings")
-                .insert([newListing]);
+                .insert([
+                    {
+                        title: newListing.new.title,
+                        description: newListing.new.description,
+                        uid: newListing.uid, // Ensure that uid is included in the insert data
+                    },
+                ]);
             if (error) throw error;
 
             return data[0]; // Assuming only one listing is created
