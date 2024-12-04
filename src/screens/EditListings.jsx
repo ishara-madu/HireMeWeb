@@ -86,9 +86,9 @@ function EditListings() {
                             setFields((prev) => ({ ...prev, [name + uuidv4()]: [val, '', ''] }))
                         ))
                 }
-                data[0].description ? mapMoreValues(data[0].description && data[0].description.keypoints, 'keypoints') : mapMoreValues([""], 'keypoints');
+                data[0]?.description ? Array.isArray(data[0]?.description.keypoints) ? mapMoreValues(data[0]?.description && data[0]?.description.keypoints, 'keypoints') : mapMoreValues([data[0]?.description.keypoints], 'keypoints') : mapMoreValues([""], 'keypoints');
 
-                mapMoreValues(data[0].tags && data[0].tags.tagList, 'tagLists');
+                mapMoreValues(data[0]?.tags && data[0].tags.tagList, 'tagLists');
             }
         }
     }, [data, loading]);
@@ -160,27 +160,24 @@ function EditListings() {
             const lastWord = words[words.length - 1];
 
             if (lastWord.startsWith('#') && lastWord.length > 1) {
-                const tagListValues = Object.keys(fields)
-                    .filter(key => key.startsWith('tagList')) // Filter keys that start with 'tagList'
-                    .map(key => fields[key]);
-
-                    console.log(((tagListValues.map(tagList => tagList[0])).includes(lastWord)));
-                    
-                setFields((prevFields) => {
-                    const updatedFields = { ...prevFields };
-                    updatedFields[`${name}s${uuidv4()}`] = [lastWord, '', ''];
-                    updatedFields[`${name}`] = ['', '', ''];
-                    const currentTagList = upadate_data?.[0]?.tags?.tagList || data?.[0]?.tags?.tagList || [];
-                    dispatch(updateListing({
-                        id: { uid: uid, lid: lid },
-                        updates: {
-                            tags: {
-                                tagList: [...currentTagList, lastWord]
+                const currentTagList = upadate_data?.[0]?.tags?.tagList || data?.[0]?.tags?.tagList || [];
+                if (!currentTagList.includes(lastWord)) {
+                    setFields((prevFields) => {
+                        const updatedFields = { ...prevFields };
+                        updatedFields[`${name}s${uuidv4()}`] = [lastWord, '', ''];
+                        updatedFields[`${name}`] = ['', '', ''];
+                        dispatch(updateListing({
+                            id: { uid: uid, lid: lid },
+                            updates: {
+                                tags: {
+                                    tagList: [...currentTagList, lastWord]
+                                }
                             }
-                        }
-                    }));
-                    return updatedFields;
-                });
+                        }));
+                        return updatedFields;
+                    });
+                }
+
             }
         }
 
@@ -251,6 +248,17 @@ function EditListings() {
                 }
             }));
         }
+        //  else if (name.startsWith('keypoints')) {
+        //     dispatch(updateListing({
+        //         id: { uid: uid, lid: lid },
+        //         updates: {
+        //             description: {
+        //                 ...upadate_data?.[0]?.description,
+        //                 keypoints: value
+        //             }
+        //         }
+        //     }));
+        // }
 
     };
 
