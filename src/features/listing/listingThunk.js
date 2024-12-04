@@ -40,7 +40,7 @@ export const updateListing = createAsyncThunk(
         try {
             const { data, error } = await supabase
                 .from("listings")
-                .update(updates)
+                .update({...updates,updated_at: new Date()})
                 .eq("id", id.lid)
                 .eq("uid", id.uid);
             if (error) throw error;

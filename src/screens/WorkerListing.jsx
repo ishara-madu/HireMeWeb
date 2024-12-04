@@ -102,11 +102,11 @@ function WorkerListing() {
                       <div className="flex flex-1 group-hover:opacity-5 duration-300">
                         <div className="flex w-[40%] h-full py-2 flex-col justify-between font-semibold">
                           <div className="flex flex-col">
-                            <div className="flex">{data.title}</div>
-                            <div className="flex text-sm font-normal opacity-70">{data.descritption && data.description.short}</div>
+                            <div className="flex">{data?.title}</div>
+                            <div className="flex text-sm font-normal opacity-70">{data?.description?.short}</div>
                           </div>
                           <div className="flex flex-col">
-                            <div className="flex text-xs opacity-60">{`Created on ${handleDate(data.created_at)}`}</div>
+                            <div className="flex text-xs opacity-60">{`${data.updated_at ? 'Updated on ':'Created on '}${handleDate(data.updated_at || data.created_at)}`}</div>
                             <div className="flex text-xs opacity-60">{`Draft : unpublished`}</div>
                           </div>
                         </div>

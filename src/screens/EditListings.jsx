@@ -21,7 +21,7 @@ function EditListings() {
     const [showDeleteConfirm, setshowDeleteConfirm] = useState(false)
     const dispatch = useDispatch()
     const [showTopLoading, setshowTopLoading] = useState(false)
-    const { data, loading, error, upadate_loading, upadate_error } = useSelector(state => state.listings)
+    const { data, loading, error, upadate_loading, upadate_error, upadate_data } = useSelector(state => state.listings)
 
 
     const uid = getCookie('uid');
@@ -50,7 +50,7 @@ function EditListings() {
             }, 1000);
             return () => clearTimeout(timer);
         }
-    }, [upadate_loading, data, upadate_error]);
+    }, [upadate_loading, upadate_data, upadate_error]);
 
     const [fields, setFields] = useState({
         title: ['', '', ''],
@@ -59,7 +59,7 @@ function EditListings() {
         img: [null, '', ''],
         keypoints: ['', '', ''],
         confirm: ['', '', ''],
-        tag: ['', '', ''],
+        tagList: ['', '', ''],
         availability: ['', '', ''],
         experienceLevel: ['', '', ''],
         category: ['', '', ''],
@@ -70,13 +70,13 @@ function EditListings() {
             if (data.length > 0) {
                 const newFields = {
                     title: [data[0].title || '', '', ''],
-                    short: [data[0].description && data[0].description.short || '', '', ''],
-                    long: [data[0].description && data[0].description.long || '', '', ''],
+                    short: [data[0]?.description?.short || '', '', ''],
+                    long: [data[0]?.description?.long || '', '', ''],
                     img: [data[0].image || '', '', ''],
-                    tag: [data[0].tag || '', '', ''],
+                    tagList: ['', '', ''],
                     confirm: ['', '', ''],
-                    availability: [data[0].options && data[0].options.availability || '', '', ''],
-                    experienceLevel: [data[0].options && data[0].options.experienceLevel || '', '', ''],
+                    availability: [data[0]?.options?.availability || '', '', ''],
+                    experienceLevel: [data[0]?.options?.experienceLevel || '', '', ''],
                     category: [data[0].category || '', '', ''],
                 };
                 setFields(newFields);
@@ -88,7 +88,7 @@ function EditListings() {
                 }
                 data[0].description ? mapMoreValues(data[0].description && data[0].description.keypoints, 'keypoints') : mapMoreValues([""], 'keypoints');
 
-                mapMoreValues(data[0].tags && data[0].tags.tagList, 'tags');
+                mapMoreValues(data[0].tags && data[0].tags.tagList, 'tagLists');
             }
         }
     }, [data, loading]);
@@ -118,7 +118,7 @@ function EditListings() {
 
     const allKeys = Object.keys(fields);
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
-    const tagsFields = allKeys.filter((key) => key.startsWith("tags"))
+    const tagsFields = allKeys.filter((key) => key.startsWith("tagLists"))
 
     const handleAddField = (key) => {
         setFields((prevFields) => {
@@ -135,6 +135,18 @@ function EditListings() {
             delete updatedFields[key];
             return updatedFields;
         });
+
+        if (key.startsWith('tagList')) {
+            const updatedFields = upadate_data?.[0]?.tags?.tagList?.filter(val => val !== fields[key][0]) || data?.[0]?.tags?.tagList?.filter(val => val !== fields[key][0]) || [];
+            dispatch(updateListing({
+                id: { uid: uid, lid: lid },
+                updates: {
+                    tags: {
+                        tagList: [...updatedFields]
+                    }
+                }
+            }));
+        }
     }
 
     const handleChips = (e, maxlength) => {
@@ -148,10 +160,25 @@ function EditListings() {
             const lastWord = words[words.length - 1];
 
             if (lastWord.startsWith('#') && lastWord.length > 1) {
+                const tagListValues = Object.keys(fields)
+                    .filter(key => key.startsWith('tagList')) // Filter keys that start with 'tagList'
+                    .map(key => fields[key]);
+
+                    console.log(((tagListValues.map(tagList => tagList[0])).includes(lastWord)));
+                    
                 setFields((prevFields) => {
                     const updatedFields = { ...prevFields };
                     updatedFields[`${name}s${uuidv4()}`] = [lastWord, '', ''];
                     updatedFields[`${name}`] = ['', '', ''];
+                    const currentTagList = upadate_data?.[0]?.tags?.tagList || data?.[0]?.tags?.tagList || [];
+                    dispatch(updateListing({
+                        id: { uid: uid, lid: lid },
+                        updates: {
+                            tags: {
+                                tagList: [...currentTagList, lastWord]
+                            }
+                        }
+                    }));
                     return updatedFields;
                 });
             }
@@ -208,24 +235,23 @@ function EditListings() {
                 id: { uid: uid, lid: lid },
                 updates: {
                     description: {
-                        ...data?.[0].description,
+                        ...upadate_data?.[0]?.description,
                         [name]: value
                     }
                 }
-            }));            
-        }else if (["availability", "experienceLevel"].includes(name)) {
+            }));
+        } else if (["availability", "experienceLevel"].includes(name)) {
             dispatch(updateListing({
                 id: { uid: uid, lid: lid },
                 updates: {
                     options: {
-                        ...data?.[0].options,
+                        ...upadate_data?.[0]?.options,
                         [name]: value
                     }
                 }
-            }));            
+            }));
         }
-        console.log(data);
-        
+
     };
 
     const handleClickConfirm = () => {
@@ -376,20 +402,20 @@ function EditListings() {
                                         <div className="flex flex-col gap-y-2 w-full">
                                             <div className="flex text-lg font-bold">What Tools and Technologies Do You Use?</div>
                                             <div className="flex text-sm opacity-80">Let us know the tools, software, and technologies you work with, whether it’s for #development, #design, or something else, like #JavaScript, #React, #Adobe, #Photoshop, #Git.</div>
-                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden ${fields.tag[2] ? 'border-red-500' : ''} items-center`}>
+                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden ${fields.tagList[2] ? 'border-red-500' : ''} items-center`}>
                                                 <input
-                                                    name={'tag'}
+                                                    name={'tagList'}
                                                     maxLength={13}
-                                                    value={fields.tag[0]}
+                                                    value={fields.tagList[0]}
                                                     onChange={(e) => { handleInputChange(e, 12) }}
                                                     onKeyDown={(e) => handleChips(e, 12)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
                                                     placeholder="e.g., #JavaScript, #React, #Adobe, #Photoshop, #Git" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {12 - fields.tag[1] || 0}
+                                                    {12 - fields.tagList[1] || 0}
                                                 </div>
                                             </div>
                                             <div className="flex text-xs text-red-500">
-                                                {fields.tag[2] || ''}
+                                                {fields.tagList[2] || ''}
                                             </div>
                                             <div className="flex w-full h-auto gap-3 flex-wrap">
                                                 {
