@@ -36,19 +36,6 @@ function EditListings() {
 
     }, [dispatch, lid, uid]);
 
-    // const val = {
-    //     title: '',
-    //     description: {
-    //         short: '',
-    //         long: '',
-    //         keypoints: ''
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     dispatch(createListing({ uid: uid, new: val }))
-    // }, [error])
-
 
     const [fields, setFields] = useState({
         title: ['', '', ''],
@@ -207,6 +194,11 @@ function EditListings() {
     return (
         <>
             {
+                error ? 
+                <div className="flex h-auto min-h-lvh justify-center items-center">
+                    Some error found please try again later
+                </div>
+                :
                 <div onClick={() => { setShowAvailability(false); setshowExperience(false); setshowCategory(false) }} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
                     <div className="flex h-full flex-1 items-start justify-center w-full">
                         <LeftNav />
