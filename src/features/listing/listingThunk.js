@@ -16,6 +16,7 @@ export const fetchListning = createAsyncThunk(
             if (filters?.uid || filters?.lid) {
                 if (!filters?.lid && filters?.uid) {
                     const tempid = v4();
+                    sessionStorage.setItem('listingFilter',tempid);
                     await supabase.from("listings").insert([{id:tempid,uid:filters.uid}]);
                     query = query.eq('uid', filters.uid).eq('id', tempid);                    
                 } else {
