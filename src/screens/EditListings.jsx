@@ -11,12 +11,13 @@ import { PiPath, PiPathBold } from "react-icons/pi"
 import { FaBusinessTime } from "react-icons/fa6"
 import { useDispatch, useSelector } from "react-redux"
 import getCookie from "../util/getCookie"
-import { createListing, fetchListning } from "../features/listing/listingThunk"
-import { useSearchParams } from "react-router-dom"
+import { createListing, deleteListing, fetchListning } from "../features/listing/listingThunk"
 import { processFilters, setFilters } from "../features/listing/listingSlice"
+import { Link, useNavigate, useNavigation } from "react-router-dom"
 
 
 function EditListings() {
+    const navigate = useNavigate()
     const [showDeleteConfirm, setshowDeleteConfirm] = useState(false)
     const dispatch = useDispatch()
     const { data, loading, error, filters } = useSelector(state => state.listings)
@@ -24,9 +25,6 @@ function EditListings() {
     const uid = getCookie('uid');
     const lid = sessionStorage.getItem('listingFilter');
 
-
-
-    console.log(lid);
     useEffect(() => {
         if (lid != 'undefined') {
             dispatch(fetchListning({ uid: uid, lid: lid }));
@@ -42,6 +40,7 @@ function EditListings() {
         long: ['', '', ''],
         img: [null, '', ''],
         keypoints: ['', '', ''],
+        confirm: ['', '', ''],
         tag: ['', '', ''],
         avilability: ['', '', ''],
         experienceObj: ['', '', ''],
@@ -59,6 +58,7 @@ function EditListings() {
                     long: [data[0].description && data[0].description.long || '', '', ''],
                     img: [data[0].image || '', '', ''],
                     tag: [data[0].tag || '', '', ''],
+                    confirm: ['', '', ''],
                     avilability: [data[0].options && data[0].options.availability || '', '', ''],
                     experienceObj: [data[0].options && data[0].options.experienceLevel || '', '', ''],
                     categoryObj: [data[0].category || '', '', ''],
@@ -187,7 +187,19 @@ function EditListings() {
 
     };
 
-
+    const handleClickConfirm = () => {
+        if (fields.confirm?.[0].toLowerCase() === "confirm") {
+            dispatch(deleteListing(lid));
+            setshowDeleteConfirm(false);
+            navigate('/show-listings');
+            dispatch(fetchListning({ userId: uid }));
+        } else {
+            setFields((prevFields) => ({
+                ...prevFields,
+                confirm: [fields.confirm?.[0], fields.confirm?.[1], 'Deletion failed. Please ensure you type "CONFIRM" correctly to proceed.'],
+            }));
+        }
+    }
 
 
     return (
@@ -219,12 +231,15 @@ function EditListings() {
                                                     showDeleteConfirm &&
                                                     <div className="absolute flex flex-col w-72 h-auto p-4 shadow-2xl justify-center gap-y-5 items-center shadow-black z-50 left-0 rounded-sm border border-zinc-300 top-0 bg-[#eceaea]">
                                                         <div className="text-black text-sm">Are you sure you want to delete this listing? Please type <b className="text-red-500"> &quot;CONFIRM&quot; </b> in the box below to proceed. This action cannot be undone.</div>
-                                                        <div className="flex w-full rounded-sm overflow-hidden h-10 text-black px-2 font-normal border border-zinc-400">
-                                                            <input type="text" name="" id="" className="w-full bg-transparent outline-none h-full" placeholder="Enter &quot;CONFIRM&quot; here" />
+                                                        <div className="flex w-full h-auto flex-col">
+                                                            <div className={`flex w-full rounded-sm overflow-hidden h-10 text-black font-normal border ${fields.confirm?.[2] ? 'border-red-500' : 'border-zinc-400'}`}>
+                                                                <input name='confirm' maxLength={7} onChange={(e) => { handleInputChange(e, 7) }} value={fields?.confirm?.[0]} type="text" className="w-full px-2 bg-transparent outline-none h-full" placeholder="Enter &quot;CONFIRM&quot; here" />
+                                                            </div>
+                                                            <div className="flex text-xs text-red-500 font-normal">{fields?.confirm?.[2]}</div>
                                                         </div>
-                                                        <div className="flex w-full justify-end gap-x-2 text-[#ebebeb]">
-                                                            <div onClick={() => setshowDeleteConfirm(false)} className="flex w-16 rounded-sm h-8 bg-zinc-500 items-center justify-center cursor-pointer">Cancel</div>
-                                                            <div className="flex w-16 rounded-sm h-8 bg-red-600 items-center justify-center cursor-pointer">Confirm</div>
+                                                        <div onClick={(e) => { e.stopPropagation() }} className="flex w-full justify-end gap-x-2 text-[#ebebeb]">
+                                                            <div onClick={() => { setshowDeleteConfirm(false) }} className="flex w-16 rounded-sm h-8 bg-zinc-500 items-center justify-center cursor-pointer">Cancel</div>
+                                                            <div onClick={handleClickConfirm} className="flex w-16 rounded-sm h-8 bg-red-600 items-center justify-center cursor-pointer">Confirm</div>
                                                         </div>
                                                     </div>
                                                 }

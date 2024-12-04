@@ -54,7 +54,7 @@ const listingSlice = createSlice({
             })
             // Delete Listing
             .addCase(deleteListing.fulfilled, (state, action) => {
-                state.listings = state.listings.filter((item) => item.id !== action.payload);
+                state.listings = state.listings?.filter((item) => item.id !== action.payload);
             })
             .addCase(deleteListing.rejected, (state, action) => {
                 state.error = action.payload;

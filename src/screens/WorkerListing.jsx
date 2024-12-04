@@ -17,13 +17,12 @@ function WorkerListing() {
     dispatch(fetchListning({ userId: getCookie('uid') }))
   }, [dispatch])
 
-  const sercheddata = data.filter(val => {
-    // Allow null values to pass through the filter
+  const sercheddata = data?.filter(val => {
     return val.title === null || val.title === undefined || val.title === '' || (val.title && val.title.toLowerCase().includes(search.toLowerCase()));
   });
   
-  const submitted = sercheddata.filter(val => val.submission === true);
-  const unsubmitted = sercheddata.filter(val => val.submission === false);
+  const submitted = sercheddata?.filter(val => val.submission === true);
+  const unsubmitted = sercheddata?.filter(val => val.submission === false);
 
   const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, key) => acc && acc[key], obj);
@@ -74,7 +73,7 @@ function WorkerListing() {
               (!loading && !error) &&
               <div className="flex flex-col gap-y-5">
                 {
-                  unsubmitted.map((data, index) => (
+                  unsubmitted?.map((data, index) => (
                     <Link to={`/show-listings/manage`} onClick={()=>handleManageResults(data.id)} key={index} className="flex w-full h-auto  border border-zinc-400 gap-x-3 rounded-sm group relative cursor-pointer">
                       <LazyLoad>
                         <img src={data.image || placeholder} alt="Placeholder" className="w-44 h-32 bg-zinc-200 object-contain" />
@@ -101,7 +100,7 @@ function WorkerListing() {
 
                 <div className="grid grid-cols-4 place-content-center gap-y-8 place-items-center pb-5">
                   {
-                    submitted.map((data, index) => (
+                    submitted?.map((data, index) => (
                       <div key={index} className="flex h-auto flex-col group mx-5 gap-y-2 justify-start items-center min-h-72 shadow-2xl shadow-black my-2 rounded-sm overflow-hidden relative cursor-pointer">
                         <div className="w-64 h-44 flex items-start justify-center overflow-hidden group-hover:opacity-5 duration-300">
                           <LazyLoad height={176} offset={100} once className='w-full h-full'>

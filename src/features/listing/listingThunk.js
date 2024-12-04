@@ -23,7 +23,9 @@ export const fetchListning = createAsyncThunk(
                     query = query.eq('uid', filters.uid).eq('id', filters.lid);
                 }
             }
-            
+            if(filters.delete && filters.lid){
+                query = supabase.from("listings").delete().eq("id", filters.lid);
+            }
             let { data, error } = await query;
             if (error) throw error;
 
@@ -79,13 +81,10 @@ export const deleteListing = createAsyncThunk(
     "listings/delete",
     async (id, thunkAPI) => {
         try {
-            const { data, error } = await supabase
-                .from("listings")
-                .delete()
-                .eq("id", id);
+            const { data, error } = await supabase.from("listings").delete().eq("id",id);
             if (error) throw error;
 
-            return id; // Return the ID of the deleted listing for reference
+            return id; 
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }
