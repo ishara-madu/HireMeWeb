@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "../../config/supabaseClient";
+import { v4 } from "uuid";
 
 export const fetchListning = createAsyncThunk(
     'fetchListning',
@@ -12,11 +13,16 @@ export const fetchListning = createAsyncThunk(
             if (filters.userId) {
                 query = query.eq('uid', filters.userId);
             }
-            if (filters.uid || filters.lid) {
-                query = query
-                    .eq('uid', filters.uid || null)
-                    .eq('id', filters.lid || null);
+            if (filters?.uid || filters?.lid) {
+                if (!filters?.lid && filters?.uid) {
+                    const tempid = v4();
+                    supabase.from("listings").insert([{id:tempid}]).eq('uid', filters.uid);
+                    query = query.eq('uid', filters.uid).eq('id', tempid);
+                } else {
+                    query = query.eq('uid', filters.uid).eq('id', filters.lid);
+                }
             }
+            
             let { data, error } = await query;
             if (error) throw error;
 
@@ -37,7 +43,7 @@ export const createListing = createAsyncThunk(
                     {
                         title: newListing.new.title,
                         description: newListing.new.description,
-                        uid: newListing.uid, // Ensure that uid is included in the insert data
+                        uid: newListing.uid,
                     },
                 ]);
             if (error) throw error;

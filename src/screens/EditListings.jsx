@@ -23,13 +23,16 @@ function EditListings() {
     const { data, loading, error, filters } = useSelector(state => state.listings)
 
     const uid = getCookie('uid');
-    const lid = sessionStorage.getItem('listingFilter')
-
+    const lid = sessionStorage.getItem('listingFilter') || data[0]?.id;
+    
 
     useEffect(() => {
-       
-
+        
+        if (lid != 'undefined') {
             dispatch(fetchListning({ uid: uid, lid: lid }));
+        } else {
+            dispatch(fetchListning({ uid: uid }));
+        }
 
     }, [dispatch, lid, uid]);
 
@@ -66,8 +69,8 @@ function EditListings() {
             if (data.length > 0) {
                 const newFields = {
                     title: [data[0].title || '', '', ''],
-                    short: [data.description ? data[0].description.short : '', '', ''],
-                    long: [data[0].description.long || '', '', ''],
+                    short: [data[0].description && data[0].description.short || '', '', ''],
+                    long: [data[0].description && data[0].description.long || '', '', ''],
                     img: [data[0].image || '', '', ''],
                     tag: [data[0].tag || '', '', ''],
                     avilability: [data[0].options && data[0].options.availability || '', '', ''],
@@ -81,8 +84,8 @@ function EditListings() {
                             setFields((prev) => ({ ...prev, [name + uuidv4()]: [val, '', ''] }))
                         ))
                 }
-                mapMoreValues(data[0].description.keypoints, 'keypoints');
-                mapMoreValues(data[0].tags.tagList, 'tags');
+                mapMoreValues(data[0].description && data[0].description.keypoints, 'keypoints');
+                mapMoreValues(data[0].tags && data[0].tags.tagList, 'tags');
             }
         }
     }, [data, loading]);
