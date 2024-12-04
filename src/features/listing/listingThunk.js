@@ -59,7 +59,7 @@ export const deleteListing = createAsyncThunk(
             const { data, error } = await supabase.from("listings").delete().eq("id",id);
             if (error) throw error;
             
-            return [id];
+            return data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }

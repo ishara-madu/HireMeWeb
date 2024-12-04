@@ -22,7 +22,7 @@ function EditListings() {
     const dispatch = useDispatch()
     const [showTopLoading, setshowTopLoading] = useState(false)
     const { data, loading, error, upadate_loading, upadate_error, upadate_data } = useSelector(state => state.listings)
-
+    const [imageUrl, setimageUrl] = useState('')
 
     const uid = getCookie('uid');
     const lid = sessionStorage.getItem('listingFilter');
@@ -37,7 +37,7 @@ function EditListings() {
 
 
     useEffect(() => {
-        if (data == lid) {
+        if (data == null) {
             navigate('/show-listings');
         }
     }, [data])
@@ -50,7 +50,7 @@ function EditListings() {
             }, 1000);
             return () => clearTimeout(timer);
         }
-    }, [upadate_loading, upadate_data, upadate_error]);
+    }, [upadate_loading, upadate_error]);
 
     const [fields, setFields] = useState({
         title: ['', '', ''],
@@ -89,6 +89,7 @@ function EditListings() {
                 data[0]?.description ? Array.isArray(data[0]?.description.keypoints) ? mapMoreValues(data[0]?.description && data[0]?.description.keypoints, 'keypoints') : mapMoreValues([data[0]?.description.keypoints], 'keypoints') : mapMoreValues([""], 'keypoints');
 
                 mapMoreValues(data[0]?.tags && data[0].tags.tagList, 'tagLists');
+                setimageUrl(data[0]?.image || '')
             }
         }
     }, [data, loading]);
@@ -143,6 +144,19 @@ function EditListings() {
                 updates: {
                     tags: {
                         tagList: [...updatedFields]
+                    }
+                }
+            }));
+        }
+        if (key.startsWith('keypoints')) {
+            const updatedFields = upadate_data?.[0]?.description?.keypoints?.filter(val => val !== fields[key][0]) || data?.[0]?.description?.keypoints?.filter(val => val !== fields[key][0]) || [];
+            dispatch(updateListing({
+                id: { uid: uid, lid: lid },
+                updates: {
+                    description: {
+                        short:fields.short[0],
+                        long:fields.long[0],
+                        keypoints: [...updatedFields]
                     }
                 }
             }));
@@ -227,7 +241,8 @@ function EditListings() {
         }));
         if (["title", "image", "category"].includes(name)) {
             dispatch(updateListing({ id: { uid: uid, lid: lid }, updates: { [name]: value } }));
-        } else if (["short", "long"].includes(name)) {
+        }
+        if (["short", "long"].includes(name)) {
             dispatch(updateListing({
                 id: { uid: uid, lid: lid },
                 updates: {
@@ -237,7 +252,7 @@ function EditListings() {
                     }
                 }
             }));
-        } else if (["availability", "experienceLevel"].includes(name)) {
+        } if (["availability", "experienceLevel"].includes(name)) {
             dispatch(updateListing({
                 id: { uid: uid, lid: lid },
                 updates: {
@@ -248,17 +263,22 @@ function EditListings() {
                 }
             }));
         }
-        //  else if (name.startsWith('keypoints')) {
-        //     dispatch(updateListing({
-        //         id: { uid: uid, lid: lid },
-        //         updates: {
-        //             description: {
-        //                 ...upadate_data?.[0]?.description,
-        //                 keypoints: value
-        //             }
-        //         }
-        //     }));
-        // }
+        if (name.startsWith('keypoints')) {
+            const tagListValues = Object.keys(fields)
+                .filter(key => key.startsWith('keypoints'))
+                .map(key => fields[key]).map(val => val[0]);
+            dispatch(updateListing({
+                id: { uid: uid, lid: lid },
+                updates: {
+                    description: {
+                        short:fields.short[0],
+                        long:fields.long[0],
+                        keypoints: [...tagListValues]
+                    }
+                }
+            }));
+        }
+
 
     };
 
