@@ -8,6 +8,8 @@ import ContentLoader from 'react-content-loader';
 import { CiBookmarkCheck } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { setFilters } from '../../features/listing/listingSlice';
+import placeholder from '../../assets/placeholder.svg'
+
 function BasedOnRatings() {
     const [mouseOver, setMouseOver] = useState(null);
     const dispatch = useDispatch();
@@ -76,7 +78,7 @@ function BasedOnRatings() {
                                         <div className="flex h-auto flex-col mx-5 gap-y-2 justify-center items-center shadow-sm shadow-black my-2 rounded-sm overflow-hidden">
                                             <div className="w-64 h-44 flex items-center justify-center overflow-hidden">
                                                 <LazyLoad height={176} offset={100} once className='w-full h-full'>
-                                                    <img src={data.image} alt={data.title} className="flex w-full h-full object-cover" />
+                                                    <img src={data.image || placeholder} alt={data.title} className="flex w-full h-full object-contain" />
                                                 </LazyLoad>
                                             </div>
                                             <div className='flex flex-col w-64 gap-y-1 p-1'>

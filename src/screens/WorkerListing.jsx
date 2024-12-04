@@ -12,15 +12,22 @@ import { Link } from "react-router-dom"
 function WorkerListing() {
   const [search, setsearch] = useState('')
   const dispatch = useDispatch()
-  const { data, loading, error,filters } = useSelector(state => state.listings)
+  const { data, loading, error, filters } = useSelector(state => state.listings)
   useEffect(() => {
     dispatch(fetchListning({ userId: getCookie('uid') }));
-  }, [dispatch,filters])
+  }, [dispatch, filters])
 
-  const sercheddata = data?.filter(val => {
-    return val.title === null || val.title === undefined || val.title === '' || (val.title && val.title.toLowerCase().includes(search.toLowerCase()));
-  });
-  
+  const sercheddata = data
+    ?.filter((val) => {
+      return (
+        val.title === null ||
+        val.title === undefined ||
+        val.title === '' ||
+        (val.title && val.title.toLowerCase().includes(search.toLowerCase()))
+      );
+    })
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
   const submitted = sercheddata?.filter(val => val.submission === true);
   const unsubmitted = sercheddata?.filter(val => val.submission === false);
 
@@ -30,7 +37,7 @@ function WorkerListing() {
 
   const checkPercentage = (data) => {
     let percentage = 0;
-    const tablenames = ["title", "description.short", "description.long", "description.keypoints", "tags.tagList", "category", "options.availability", "options.experienceLevel", "image","submission"];
+    const tablenames = ["title", "description.short", "description.long", "description.keypoints", "tags.tagList", "category", "options.availability", "options.experienceLevel", "image", "submission"];
 
     tablenames.forEach((name) => {
       if (getNestedValue(data, name)) {
@@ -42,8 +49,23 @@ function WorkerListing() {
   };
 
 
-  const handleManageResults = (id)=>{
-    sessionStorage.setItem('listingFilter',id)
+  const handleDate = (isoString) => {
+    const date = new Date(isoString);
+
+    // Format with timezone
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    };
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  }
+
+  const handleManageResults = (id) => {
+    sessionStorage.setItem('listingFilter', id)
   }
   return (
     <div className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
@@ -59,7 +81,7 @@ function WorkerListing() {
                 </div>
                 <input onChange={(e) => setsearch(e.target.value)} value={search} type="text" className="flex flex-1 h-full outline-none bg-transparent" placeholder="Search your listning" />
               </div>
-              <Link to={`/show-listings/manage`} onClick={()=>{handleManageResults()}} className="flex justify-center items-center w-60 rounded-sm h-12 bg-green-500 text-[#ebebeb] font-bold text-base cursor-pointer">
+              <Link to={`/show-listings/manage`} onClick={() => { handleManageResults() }} className="flex justify-center items-center w-60 rounded-sm h-12 bg-green-500 text-[#ebebeb] font-bold text-base cursor-pointer">
                 New listing
               </Link>
             </div>
@@ -74,7 +96,7 @@ function WorkerListing() {
               <div className="flex flex-col gap-y-5">
                 {
                   unsubmitted?.map((data, index) => (
-                    <Link to={`/show-listings/manage`} onClick={()=>handleManageResults(data.id)} key={index} className="flex w-full h-auto  border border-zinc-400 gap-x-3 rounded-sm group relative cursor-pointer">
+                    <Link to={`/show-listings/manage`} onClick={() => handleManageResults(data.id)} key={index} className="flex w-full h-auto  border border-zinc-400 gap-x-3 rounded-sm group relative cursor-pointer">
                       <LazyLoad>
                         <img src={data.image || placeholder} alt="Placeholder" className="w-44 h-32 bg-zinc-200 object-contain" />
                       </LazyLoad>
@@ -84,7 +106,10 @@ function WorkerListing() {
                             <div className="flex">{data.title}</div>
                             <div className="flex text-sm font-normal opacity-70">{data.descritption && data.description.short}</div>
                           </div>
-                          <div className="flex text-xs opacity-60">{`Draft : ${data.submission ? 'published' : 'unpublished'}`}</div>
+                          <div className="flex flex-col">
+                            <div className="flex text-xs opacity-60">{`Created on ${handleDate(data.created_at)}`}</div>
+                            <div className="flex text-xs opacity-60">{`Draft : unpublished`}</div>
+                          </div>
                         </div>
                         <div className="flex flex-1 items-center justify-center px-2 gap-x-2">
                           <div className="flex items-center text-sm font-bold">{parseInt(checkPercentage(data)) >= 100 ? 'Completed' : 'Process'}</div>

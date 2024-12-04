@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchFavorites } from '../../features/favorites/favoritesThunk';
 import LoadingSpinner from '../LoadingSpinner';
 import { Link } from "react-router-dom";
+import placeholder from '../../assets/placeholder.svg'
 function Favorites() {
     const dispatch = useDispatch();
 
@@ -31,7 +32,7 @@ function Favorites() {
                                                 <div className="flex h-16 items-center gap-x-2">
                                                     <div className="flex w-14 h-14 rounded-sm justify-center items-center overflow-hidden">
                                                         <LazyLoad height={56} once>
-                                                            <img src={val.image} alt="Profile Pic" className="object-contain w-full h-full rounded-sm" />
+                                                            <img src={val.image || placeholder} alt="Profile Pic" className="object-contain w-full h-full rounded-sm" />
                                                         </LazyLoad>
                                                     </div>
                                                     <div className="flex h-full flex-col justify-center items-start">

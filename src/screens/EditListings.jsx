@@ -22,8 +22,6 @@ function EditListings() {
     const dispatch = useDispatch()
     const { data, loading, error, filters } = useSelector(state => state.listings)
 
-    console.log(data);
-
 
     const uid = getCookie('uid');
     const lid = sessionStorage.getItem('listingFilter');

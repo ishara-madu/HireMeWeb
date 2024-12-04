@@ -5,6 +5,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaBusinessTime } from "react-icons/fa6";
 import { IoHeart, IoHeartOutline } from "react-icons/io5"
 import { MdBusinessCenter, MdOutlineWorkspacePremium } from "react-icons/md";
+import placeholder from '../../assets/placeholder.svg'
 
 function FixedContent({ data }) {
     const [fevId, setFavId] = useState([]);
@@ -26,7 +27,7 @@ function FixedContent({ data }) {
         <div className="flex w-80 absolute z-20 top-0">
             <div className="flex w-full flex-col h-auto items-center rounded-md overflow-hidden gap-y-5 justify-center bg-[#ebebeb] shadow-md shadow-black">
                 <div className="flex w-full h-52">
-                    <img src={data.image} alt={data.title} className="w-full h-full object-cover" />
+                    <img src={data.image || placeholder} alt={data.title} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex w-11/12 flex-col gap-y-2">
                     <div className="flex items-center opacity-60 text-sm gap-x-2">
