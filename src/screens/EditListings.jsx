@@ -22,6 +22,9 @@ function EditListings() {
     const dispatch = useDispatch()
     const { data, loading, error, filters } = useSelector(state => state.listings)
 
+    console.log(data);
+
+
     const uid = getCookie('uid');
     const lid = sessionStorage.getItem('listingFilter');
 
@@ -31,8 +34,13 @@ function EditListings() {
         } else {
             dispatch(fetchListning({ uid: uid }));
         }
-    }, [dispatch, uid, lid]);
+    }, [dispatch]);
 
+    useEffect(() => {
+        if (!data) {
+            navigate('/show-listings');
+        }
+    }, [data])
 
     const [fields, setFields] = useState({
         title: ['', '', ''],
@@ -49,8 +57,6 @@ function EditListings() {
 
     useEffect(() => {
         if (!loading && data) {
-            console.log(data);
-
             if (data.length > 0) {
                 const newFields = {
                     title: [data[0].title || '', '', ''],
@@ -191,8 +197,6 @@ function EditListings() {
         if (fields.confirm?.[0].toLowerCase() === "confirm") {
             dispatch(deleteListing(lid));
             setshowDeleteConfirm(false);
-            navigate('/show-listings');
-            dispatch(fetchListning({ userId: uid }));
         } else {
             setFields((prevFields) => ({
                 ...prevFields,

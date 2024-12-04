@@ -12,10 +12,10 @@ import { Link } from "react-router-dom"
 function WorkerListing() {
   const [search, setsearch] = useState('')
   const dispatch = useDispatch()
-  const { data, loading, error } = useSelector(state => state.listings)
+  const { data, loading, error,filters } = useSelector(state => state.listings)
   useEffect(() => {
-    dispatch(fetchListning({ userId: getCookie('uid') }))
-  }, [dispatch])
+    dispatch(fetchListning({ userId: getCookie('uid') }));
+  }, [dispatch,filters])
 
   const sercheddata = data?.filter(val => {
     return val.title === null || val.title === undefined || val.title === '' || (val.title && val.title.toLowerCase().includes(search.toLowerCase()));
