@@ -17,8 +17,7 @@ function WorkerListing() {
     dispatch(fetchListning({ userId: getCookie('uid') }));
   }, [dispatch, filters])
 
-  const sercheddata = data
-    ?.filter((val) => {
+  const sercheddata = data?.filter((val) => {
       return (
         val.title === null ||
         val.title === undefined ||

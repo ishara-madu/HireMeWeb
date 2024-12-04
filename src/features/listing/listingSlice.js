@@ -1,13 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createListing, deleteListing, fetchListning, updateListing } from "./listingThunk";
+import {  deleteListing, fetchListning, updateListing } from "./listingThunk";
 
 const listingSlice = createSlice({
     name: 'listings',
     initialState: {
         data: [],
+        upadate_data: [],
         filters: {},
         error: null,
         loading: true,
+        upadate_loading: false,
+        upadate_error: null,
     },
     reducers: {
         setFilters: (state, action) => {
@@ -37,20 +40,18 @@ const listingSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            // Create Listing
-            .addCase(createListing.fulfilled, (state, action) => {
-                state.listings.push(action.payload);
-            })
-            .addCase(createListing.rejected, (state, action) => {
-                state.error = action.payload;
-            })
             // Update Listing
+            .addCase(updateListing.pending, (state) => {
+                state.upadate_loading = true;
+                state.upadate_error = null;
+            })
             .addCase(updateListing.fulfilled, (state, action) => {
-                const index = state.listings.findIndex((item) => item.id === action.payload.id);
-                if (index !== -1) state.listings[index] = action.payload;
+                state.upadate_loading = false;
+                state.upadate_data = action.payload;
             })
             .addCase(updateListing.rejected, (state, action) => {
-                state.error = action.payload;
+                state.upadate_loading = false;
+                state.upadate_error = action.payload;
             })
             // Delete Listing
             .addCase(deleteListing.fulfilled, (state, action) => {

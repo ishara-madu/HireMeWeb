@@ -11,16 +11,17 @@ import { PiPath, PiPathBold } from "react-icons/pi"
 import { FaBusinessTime } from "react-icons/fa6"
 import { useDispatch, useSelector } from "react-redux"
 import getCookie from "../util/getCookie"
-import { createListing, deleteListing, fetchListning } from "../features/listing/listingThunk"
+import { deleteListing, fetchListning, updateListing } from "../features/listing/listingThunk"
 import { processFilters, setFilters } from "../features/listing/listingSlice"
-import { Link, useNavigate, useNavigation } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 
 function EditListings() {
     const navigate = useNavigate()
     const [showDeleteConfirm, setshowDeleteConfirm] = useState(false)
     const dispatch = useDispatch()
-    const { data, loading, error, filters } = useSelector(state => state.listings)
+    const [showTopLoading, setshowTopLoading] = useState(false)
+    const { data, loading, error, upadate_loading, upadate_error } = useSelector(state => state.listings)
 
 
     const uid = getCookie('uid');
@@ -34,11 +35,22 @@ function EditListings() {
         }
     }, [dispatch]);
 
+
     useEffect(() => {
-        if (!data) {
+        if (data == lid) {
             navigate('/show-listings');
         }
     }, [data])
+
+    useEffect(() => {
+        if (!upadate_loading && !upadate_error) {
+            setshowTopLoading(true);
+            const timer = setTimeout(() => {
+                setshowTopLoading(false);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [upadate_loading, data, upadate_error]);
 
     const [fields, setFields] = useState({
         title: ['', '', ''],
@@ -48,9 +60,9 @@ function EditListings() {
         keypoints: ['', '', ''],
         confirm: ['', '', ''],
         tag: ['', '', ''],
-        avilability: ['', '', ''],
-        experienceObj: ['', '', ''],
-        categoryObj: ['', '', ''],
+        availability: ['', '', ''],
+        experienceLevel: ['', '', ''],
+        category: ['', '', ''],
     });
 
     useEffect(() => {
@@ -63,9 +75,9 @@ function EditListings() {
                     img: [data[0].image || '', '', ''],
                     tag: [data[0].tag || '', '', ''],
                     confirm: ['', '', ''],
-                    avilability: [data[0].options && data[0].options.availability || '', '', ''],
-                    experienceObj: [data[0].options && data[0].options.experienceLevel || '', '', ''],
-                    categoryObj: [data[0].category || '', '', ''],
+                    availability: [data[0].options && data[0].options.availability || '', '', ''],
+                    experienceLevel: [data[0].options && data[0].options.experienceLevel || '', '', ''],
+                    category: [data[0].category || '', '', ''],
                 };
                 setFields(newFields);
                 const mapMoreValues = (values, name) => {
@@ -74,7 +86,8 @@ function EditListings() {
                             setFields((prev) => ({ ...prev, [name + uuidv4()]: [val, '', ''] }))
                         ))
                 }
-                mapMoreValues(data[0].description && data[0].description.keypoints, 'keypoints');
+                data[0].description ? mapMoreValues(data[0].description && data[0].description.keypoints, 'keypoints') : mapMoreValues([""], 'keypoints');
+
                 mapMoreValues(data[0].tags && data[0].tags.tagList, 'tags');
             }
         }
@@ -94,13 +107,13 @@ function EditListings() {
     const categoryTypes = ["Programming,Front-End Web", "Programming,Back-End Web", "Programming,Mobile App Development", "Programming,Game Development", "Design,UI/UX Design", "Design,Graphic Design", "Design,Product Design", "Design,Web Design", "Marketing,Digital Marketing", "Marketing,Content Writing", "Marketing,SEO Optimization", "Marketing,Social Media Marketing", "Marketing,Email Marketing", "Marketing,Influencer Marketing", "Marketing,Affiliate Marketing", "Marketing,Brand Strategy", "Data Science,Data Analysis", "Data Science,Machine Learning", "Data Science,Artificial Intelligence", "Data Science,Deep Learning", "Data Science,Big Data", "Data Science,Data Visualization", "Data Science,Data Engineering", "Data Science,Statistical Analysis", "Media,Video Editing", "Media,Photography", "Media,3D Modeling", "Media,Animation", "Media,Sound Editing", "Media,Podcasting", "Media,Film Production", "Media,Motion Graphics", "Cybersecurity,Ethical Hacking", "Cybersecurity,Network Security", "Cybersecurity,Penetration Testing", "Cybersecurity,Data Privacy", "Cybersecurity,Cloud Security", "Cybersecurity,Incident Response", "Cybersecurity,Security Auditing", "Cybersecurity,Vulnerability Assessment", "Cloud Computing,Cloud Infrastructure", "Cloud Computing,Cloud Architecture", "Cloud Computing,Cloud Security", "Cloud Computing,Cloud Services", "Cloud Computing,DevOps", "Cloud Computing,AWS", "Cloud Computing,Azure", "Cloud Computing,Google Cloud", "IT,IT Support", "IT,System Administration", "IT,Network Administration", "IT,Cloud Administration", "Business,Project Management", "Business,Product Management", "Business,Operations Management", "Business,Supply Chain Management", "Business,Change Management", "Business,Strategy Consulting", "Business,Human Resources", "Business,Recruitment", "Business,Financial Management", "Business,Accounting", "Business,Tax Consulting", "Business,Marketing Strategy", "Business,Customer Service", "Business,Sales Management", "Business,Business Development", "Business,Negotiation", "Finance,Investment Banking", "Finance,Corporate Finance", "Finance,Personal Finance", "Finance,Financial Analysis", "Finance,Wealth Management", "Finance,Financial Planning", "Finance,Insurance", "Finance,Accounting", "Law,Corporate Law", "Law,Criminal Law", "Law,Civil Law", "Law,Family Law", "Law,Intellectual Property Law", "Law,Employment Law", "Law,Environmental Law", "Law,Immigration Law", "Education,Instructional Design", "Education,Educational Consulting", "Education,Online Teaching", "Education,Tutoring", "Education,Course Development", "Education,School Administration", "Education,Special Education", "Education,Teacher Training", "Healthcare,Medical Research", "Healthcare,Nursing", "Healthcare,Physician", "Healthcare,Pharmacy", "Healthcare,Physical Therapy", "Healthcare,Public Health", "Healthcare,Healthcare Administration", "Healthcare,Healthcare Consulting", "Construction,Project Management", "Construction,Construction Design", "Construction,Construction Engineering", "Construction,Architecture", "Engineering,Civil Engineering", "Engineering,Mechanical Engineering", "Engineering,Chemical Engineering", "Engineering,Electrical Engineering", "Engineering,Software Engineering", "Engineering,Aerospace Engineering", "Engineering,Automotive Engineering", "Engineering,Environmental Engineering", "Art,Illustration", "Art,Painting", "Art,Sculpture", "Art,Photography", "Art,Calligraphy", "Art,Printmaking", "Art,Graphic Design", "Art,Animation", "Entertainment,Music Production", "Entertainment,Songwriting", "Entertainment,Event Planning", "Entertainment,Theater", "Entertainment,Film Production", "Entertainment,Radio", "Entertainment,Stand-Up Comedy", "Entertainment,Writing", "Sales,Sales Management", "Sales,Account Management", "Sales,B2B Sales", "Sales,B2C Sales", "Sales,Inside Sales", "Sales,Field Sales", "Sales,Sales Operations", "Sales,Sales Strategy"];
 
     const available = availabilityTypes.filter((availa) =>
-        availa.toLowerCase().includes(fields.avilability[0]?.toLowerCase() || "")
+        availa.toLowerCase().includes(fields.availability[0]?.toLowerCase() || "")
     );
     const experienceSuggesions = expericenceTypes.filter((val) =>
-        val.toLowerCase().includes(fields.experienceObj[0]?.toLowerCase() || "")
+        val.toLowerCase().includes(fields.experienceLevel[0]?.toLowerCase() || "")
     );
     const categorySuggesions = categoryTypes.filter((val) =>
-        val.toLowerCase().includes(fields.categoryObj[0]?.toLowerCase() || "")
+        val.toLowerCase().includes(fields.category[0]?.toLowerCase() || "")
     );
 
     const allKeys = Object.keys(fields);
@@ -188,7 +201,31 @@ function EditListings() {
             ...prevFields,
             [name]: [value, length, error],
         }));
-
+        if (["title", "image", "category"].includes(name)) {
+            dispatch(updateListing({ id: { uid: uid, lid: lid }, updates: { [name]: value } }));
+        } else if (["short", "long"].includes(name)) {
+            dispatch(updateListing({
+                id: { uid: uid, lid: lid },
+                updates: {
+                    description: {
+                        ...data?.[0].description,
+                        [name]: value
+                    }
+                }
+            }));            
+        }else if (["availability", "experienceLevel"].includes(name)) {
+            dispatch(updateListing({
+                id: { uid: uid, lid: lid },
+                updates: {
+                    options: {
+                        ...data?.[0].options,
+                        [name]: value
+                    }
+                }
+            }));            
+        }
+        console.log(data);
+        
     };
 
     const handleClickConfirm = () => {
@@ -209,7 +246,7 @@ function EditListings() {
             {
                 error ?
                     <div className="flex h-auto min-h-lvh justify-center items-center">
-                        Some error found please try again later
+                        Some error found please try again later{error}
                     </div>
                     :
                     <div onClick={() => { setShowAvailability(false); setshowExperience(false); setshowCategory(false); setshowDeleteConfirm(false) }} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
@@ -383,22 +420,22 @@ function EditListings() {
                                             <div className="flex text-sm opacity-80">
                                                 Choose a category that best fits your work. This helps others quickly understand what type of work you specialize in.
                                             </div>
-                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.categoryObj[2] ? 'border-red-500' : ''}`}>
-                                                <input ref={categoryRef} name={'categoryObj'} maxLength={101}
+                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.category[2] ? 'border-red-500' : ''}`}>
+                                                <input ref={categoryRef} name={'category'} maxLength={101}
                                                     placeholder="Select a category (e.g., Design, Writing, Development, Marketing)..."
                                                     onChange={(e) => { handleInputChange(e, 100); setshowCategory(true) }}
                                                     onClick={(e) => { e.stopPropagation(); setshowCategory(true); setShowAvailability(false); setshowExperience(false); }}
-                                                    value={fields.categoryObj[0] || ''}
+                                                    value={fields.category[0] || ''}
                                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {100 - fields.categoryObj[1] || 0}
+                                                    {100 - fields.category[1] || 0}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col relative">
                                                 {
-                                                    fields.categoryObj[2] &&
+                                                    fields.category[2] &&
                                                     <div className="flex text-xs text-red-500 mb-1">
-                                                        {fields.categoryObj[2]}
+                                                        {fields.category[2]}
                                                     </div>
                                                 }
                                                 {
@@ -408,7 +445,7 @@ function EditListings() {
                                                             {
                                                                 categorySuggesions.map((suggession, index) => (
                                                                     <div key={index} onClick={() => {
-                                                                        availbilityRef.current.value = suggession; handleInputChange(categoryRef, 100);
+                                                                        categoryRef.current.value = suggession; handleInputChange(categoryRef, 100);
                                                                     }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
                                                                         <MdBusinessCenter size={17} />
                                                                         <div className="flex text-sm font-semibold">{suggession}</div>
@@ -428,22 +465,22 @@ function EditListings() {
                                             <div className="flex text-sm opacity-80">
                                                 Let others know when you’re available to work. Are you looking for full-time, part-time, freelance, or project-based opportunities?
                                             </div>
-                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.avilability && fields.avilability[2] ? 'border-red-500' : ''}`}>
-                                                <input ref={availbilityRef} name={'avilability'} maxLength={21}
+                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.availability && fields.availability[2] ? 'border-red-500' : ''}`}>
+                                                <input ref={availbilityRef} name={'availability'} maxLength={21}
                                                     placeholder="Select your availability (e.g., Full-Time, Part-Time, Freelance)..."
                                                     onChange={(e) => { handleInputChange(e, 20); setShowAvailability(true) }}
                                                     onClick={(e) => { e.stopPropagation(); setShowAvailability(true); setshowExperience(false); setshowCategory(false) }}
-                                                    value={fields.avilability ? fields.avilability[0] : ''}
+                                                    value={fields.availability ? fields.availability[0] : ''}
                                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {fields.avilability ? 20 - fields.avilability[1] : 0}
+                                                    {fields.availability ? 20 - fields.availability[1] : 0}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col relative">
                                                 {
-                                                    fields.avilability[2] &&
+                                                    fields.availability[2] &&
                                                     <div className="flex text-xs text-red-500 mb-1">
-                                                        {fields.avilability ? fields.avilability[2] : ''}
+                                                        {fields.availability ? fields.availability[2] : ''}
                                                     </div>
                                                 }
                                                 {
@@ -473,22 +510,22 @@ function EditListings() {
                                             <div className="flex text-sm opacity-80">
                                                 Let others know how experienced you are in your field. Whether you’re just starting out or a seasoned professional, this helps set expectations.
                                             </div>
-                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.experienceObj[2] ? 'border-red-500' : ''}`}>
-                                                <input ref={experienceRef} name={'experienceObj'} maxLength={21}
+                                            <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.experienceLevel[2] ? 'border-red-500' : ''}`}>
+                                                <input ref={experienceRef} name={'experienceLevel'} maxLength={21}
                                                     placeholder="Select your experience level (e.g., Beginner, Intermediate, Expert)..."
                                                     onChange={(e) => { handleInputChange(e, 20); setshowExperience(true) }}
                                                     onClick={(e) => { e.stopPropagation(); setshowExperience(true); setShowAvailability(false); setshowCategory(false) }}
-                                                    value={fields.experienceObj[0] || ''}
+                                                    value={fields.experienceLevel[0] || ''}
                                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {20 - fields.experienceObj[1] || 0}
+                                                    {20 - fields.experienceLevel[1] || 0}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col relative">
                                                 {
-                                                    fields.experienceObj[2] &&
+                                                    fields.experienceLevel[2] &&
                                                     <div className="flex text-xs text-red-500 mb-1">
-                                                        {fields.experienceObj[2]}
+                                                        {fields.experienceLevel[2]}
                                                     </div>
                                                 }
                                                 {
@@ -549,24 +586,33 @@ function EditListings() {
                             }
                         </div>
                         <Footer />
-                        {/* <div className="flex fixed text-green-600 top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-green-400 justify-center items-center rounded-sm">
-                <div className="flex text-sm opacity-60">
-                Updated
-                </div>
-                <IoCloudDone size={18}/>
-            </div> */}
-                        {/* <div className="flex fixed text-red-600 top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-red-400 justify-center items-center rounded-sm">
-                <div className="flex text-sm opacity-60">
-                    Not connected
-                </div>
-                <MdError size={18} />
-            </div> */}
-                        {/* <div className="flex fixed top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-green-400 justify-center items-center rounded-sm">
-                <div className="flex text-sm opacity-60">
-                Updating
-                </div>
-                <LoadingSpinner val={10}/>
-            </div> */}
+                        {
+                            showTopLoading &&
+                            <div className="flex fixed text-green-600 top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-green-400 justify-center items-center rounded-sm">
+                                <div className="flex text-sm opacity-60">
+                                    Updated
+                                </div>
+                                <IoCloudDone size={18} />
+                            </div>
+                        }
+                        {
+                            upadate_error &&
+                            <div className="flex fixed text-red-600 top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-red-400 justify-center items-center rounded-sm">
+                                <div className="flex text-sm opacity-60">
+                                    Not connected
+                                </div>
+                                <MdError size={18} />
+                            </div>
+                        }
+                        {
+                            upadate_loading &&
+                            <div className="flex fixed top-3 right-3 gap-x-3 w-40 h-12 bg-zinc-200 border border-green-400 justify-center items-center rounded-sm">
+                                <div className="flex text-sm opacity-60">
+                                    Updating
+                                </div>
+                                <LoadingSpinner val={10} />
+                            </div>
+                        }
                     </div>
             }
 
