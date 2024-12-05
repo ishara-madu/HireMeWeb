@@ -2,14 +2,17 @@
 import { useEffect, useState } from "react";
 import { CiLocationArrow1, CiLocationOn } from "react-icons/ci"
 import { getCoordinatesFromLocation, getSuggestions } from "../../util/getLocation";
-import { useDispatch } from "react-redux";
-import { updateProfile } from "../../features/profile/profileThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProfile, updateProfile } from "../../features/profile/profileThunk";
+import { fetchBasedOnRating } from "../../features/basedOnRating/basedOnRatingThunk";
 
-function EditLocation({ showPupup, ...props }) {
+function EditLocation({ showPupup }) {
     const dispatch = useDispatch()
     const [suggessions, setSuggessions] = useState([]);
     const [errorMassage, seterrorMassage] = useState('')
-    const [input, setInput] = useState(props.location.locationName);
+    const { data, error } = useSelector((state) => state.profile)
+
+    const [input, setInput] = useState(data?.[0]?.locationName);
     useEffect(() => {
         const fetchLocation = async () => {
             const values = await getSuggestions(input);
@@ -18,19 +21,25 @@ function EditLocation({ showPupup, ...props }) {
         fetchLocation();
     }, [input]);
 
+
     const handleSubmit = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' || e.type === 'click') {
             const fetchLocation = async () => {
-                const values = await getCoordinatesFromLocation(input);
-                dispatch(updateProfile({
-                    locationName: values?.location,
-                    latitude: values?.coordinates?.lat,
-                    longitude: values?.coordinates?.lng,
-                }))
-                console.log(values?.coordinates?.lat);
+                const values = await getCoordinatesFromLocation(input);                
+                if (values?.error) {
+                    seterrorMassage('Please enter a valid location')
+                } else {
+                    await dispatch(updateProfile({
+                        locationName: values?.location,
+                        latitude: values?.coordinates?.lat,
+                        longitude: values?.coordinates?.lng,
+                    }))
+                    await dispatch(fetchProfile())
+                    await dispatch(fetchBasedOnRating())
+                }
             };
             fetchLocation();
-            // showPupup(false)
+            showPupup(false)
         }
     }
     return (
@@ -48,11 +57,11 @@ function EditLocation({ showPupup, ...props }) {
             <div className="flex-1 px-2 overflow-y-auto w-full flex-col items-center">
                 {
                     suggessions.map((val, id) => (
-                        <div key={id} className="flex items-center gap-x-3 h-12 w-full border-b border-[#c5c5c5]">
+                        <div key={id} onClick={(e) => {setInput(`${val}`);handleSubmit(e)}} className="flex items-center gap-x-3 h-12 w-full border-b border-[#c5c5c5]">
                             <div className="flex">
                                 <CiLocationArrow1 size={20} color="#aeadad" />
                             </div>
-                            <div onClick={() => (setInput(`${val}`))} className="flex text-sm opacity-60 cursor-pointer">
+                            <div className="flex text-sm opacity-60 cursor-pointer">
                                 {val != undefined ? `${val}` : "default"}
                             </div>
                         </div>

@@ -22,7 +22,7 @@ export const getCoordinatesFromLocation = async (location) => {
       }
     };
   } else {
-    throw new Error('Location not found');
+    return {error: true}
   }
 }
 

@@ -57,7 +57,6 @@ function HomeSlider() {
                         <LazyLoad key={index} once placeholder={<div>Loading...</div>} className="flex relative">
                             <img
                                 src={image?.image}
-                                srcSet={`${image?.image}?w=400 400w, ${image?.image}?w=800 800w`}
                                 sizes="(max-width: 768px) 100vw, 50vw"
                                 alt="Slide"
                                 className="w-full h-full object-cover rounded-md"

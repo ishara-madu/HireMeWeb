@@ -8,6 +8,7 @@ export const fetchProfile = createAsyncThunk(
         try {
             const { data, error } = await supabase.from('users').select('*').eq('id', getCookie('uid'));
             if (error) throw error;
+            
             return data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -24,7 +25,7 @@ export const updateProfile = createAsyncThunk(
                 .update({ ...updates })
                 .eq('id', getCookie('uid'));
             if (error) throw error;
-            return data;
+            
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }
