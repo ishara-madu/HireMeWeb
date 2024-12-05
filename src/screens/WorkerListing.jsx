@@ -46,8 +46,6 @@ function WorkerListing() {
 
     return `${percentage}%`;
   };
-
-  console.log(unsubmitted);
   
 
   const handleDate = (isoString) => {
@@ -127,10 +125,10 @@ function WorkerListing() {
                 <div className="grid grid-cols-4 place-content-center gap-y-8 place-items-center pb-5">
                   {
                     submitted?.map((data, index) => (
-                      <div key={index} className="flex h-auto flex-col group mx-5 gap-y-2 justify-start items-center min-h-72 shadow-2xl shadow-black my-2 rounded-sm overflow-hidden relative cursor-pointer">
+                      <Link to={`/show-listings/manage`} onClick={() => handleManageResults(data.id)} key={index} className="flex h-auto flex-col group mx-5 gap-y-2 justify-start items-center min-h-72 shadow-2xl shadow-black my-2 rounded-sm overflow-hidden relative cursor-pointer">
                         <div className="w-64 h-44 flex items-start justify-center overflow-hidden group-hover:opacity-5 duration-300">
                           <LazyLoad height={176} offset={100} once className='w-full h-full'>
-                            <img src={data.image || placeholder} alt={data.title} className="flex w-full h-full bg-zinc-200 object-contain" />
+                            <img src={data?.image?.publicUrl || placeholder} alt={data.title} className="flex w-full h-full bg-zinc-200 object-contain" />
                           </LazyLoad>
                         </div>
                         <div className='flex flex-col w-64 gap-y-1 p-1 px-2 group-hover:opacity-5 duration-300'>
@@ -138,7 +136,7 @@ function WorkerListing() {
                           <p className='text-xs opacity-60'>{data.description.short}</p>
                         </div>
                         <div className="flex w-full h-full absolute top-0 left-0 bg-opacity-0 opacity-0 group-hover:opacity-100 group-hover:text-green-600 duration-300 z-50 justify-center items-center font-bold">Edit/Manage listing</div>
-                      </div>
+                      </Link>
                     ))
 
                   }

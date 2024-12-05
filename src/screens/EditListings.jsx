@@ -1,18 +1,15 @@
 import Footer from "../components/footer/Footer"
 import LeftNav from "../components/leftNav/LeftNav"
 import { useEffect, useRef, useState } from "react"
-import { MdBusinessCenter, MdDeleteOutline, MdError, MdOutlineBusinessCenter } from "react-icons/md"
+import { MdBusinessCenter, MdDeleteOutline, MdError } from "react-icons/md"
 import placeholder from '../assets/placeholder.svg'
-import addimage from '../assets/add-image.svg'
 import LoadingSpinner from "../components/LoadingSpinner"
 import { IoCloudDone } from "react-icons/io5"
 import { v4 as uuidv4 } from "uuid";
-import { PiPath, PiPathBold } from "react-icons/pi"
 import { FaBusinessTime } from "react-icons/fa6"
 import { useDispatch, useSelector } from "react-redux"
 import getCookie from "../util/getCookie"
 import { deleteListing, fetchListning, updateListing, updateListingWithImage } from "../features/listing/listingThunk"
-import { processFilters, setFilters } from "../features/listing/listingSlice"
 import { useNavigate } from "react-router-dom"
 
 

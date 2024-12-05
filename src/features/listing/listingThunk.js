@@ -38,6 +38,7 @@ export const updateListing = createAsyncThunk(
     "listings/update",
     async ({ id, updates }, thunkAPI) => {
         try {
+            // eslint-disable-next-line no-unused-vars
             const { data, error } = await supabase
                 .from("listings")
                 .update({ ...updates, updated_at: new Date() })
