@@ -19,7 +19,6 @@ function EditListings() {
     const dispatch = useDispatch()
     const [showTopLoading, setshowTopLoading] = useState(false)
     const { data, loading, error, upadate_loading, upadate_error, upadate_data } = useSelector(state => state.listings)
-    const [imageUrl, setimageUrl] = useState('')
 
     const uid = getCookie('uid');
     const lid = sessionStorage.getItem('listingFilter');
@@ -86,7 +85,6 @@ function EditListings() {
                 data[0]?.description ? Array.isArray(data[0]?.description.keypoints) ? mapMoreValues(data[0]?.description && data[0]?.description.keypoints, 'keypoints') : mapMoreValues([data[0]?.description.keypoints], 'keypoints') : mapMoreValues([""], 'keypoints');
 
                 mapMoreValues(data[0]?.tags && data[0].tags.tagList, 'tagLists');
-                setimageUrl(data[0]?.image?.publicUrl || '')
                 sessionStorage.getItem('imageSize')
             }
         }
@@ -296,12 +294,24 @@ function EditListings() {
 
 
     const handleSubmit = () => {
-        dispatch(updateListing({
-            id: { uid: uid, lid: lid },
-            updates: {
-                
-            }
-        }));
+        if(data?.[0]?.submission){
+            dispatch(updateListing({
+                id: { uid: uid, lid: lid },
+                updates: {
+                    submission: false
+                }
+            }));
+        }else{
+            dispatch(updateListing({
+                id: { uid: uid, lid: lid },
+                updates: {
+                    submission: true
+                }
+            })).then(
+
+                navigate('/show-listings');
+            )
+        }
     }
 
 
@@ -335,7 +345,7 @@ function EditListings() {
                                                     <div className="absolute flex flex-col w-72 h-auto p-4 shadow-2xl justify-center gap-y-5 items-center shadow-black z-50 left-0 rounded-sm border border-zinc-300 top-0 bg-[#eceaea]">
                                                         <div className="text-black text-sm">Are you sure you want to delete this listing? Please type <b className="text-red-500"> &quot;CONFIRM&quot; </b> in the box below to proceed. This action cannot be undone.</div>
                                                         <div className="flex w-full h-auto flex-col">
-                                                            <div className={`flex w-full rounded-sm overflow-hidden h-10 text-black font-normal border ${fields.confirm?.[2] ? 'border-red-500' : 'border-zinc-400'}`}>
+                                                            <div className={`flex w-full rounded-sm overflow-hidden h-10 text-black font-normal border ${fields?.confirm?.[2] ? 'border-red-500' : 'border-zinc-400'}`}>
                                                                 <input name='confirm' maxLength={7} onChange={(e) => { handleInputChange(e, 7) }} value={fields?.confirm?.[0]} type="text" className="w-full px-2 bg-transparent outline-none h-full" placeholder="Enter &quot;CONFIRM&quot; here" />
                                                             </div>
                                                             <div className="flex text-xs text-red-500 font-normal">{fields?.confirm?.[2]}</div>
@@ -347,7 +357,7 @@ function EditListings() {
                                                     </div>
                                                 }
                                             </div>
-                                            <div className="flex w-auto text-sm font-bold px-10 text-[#fff] hover:bg-green-600 cursor-pointer border border-zinc-300 rounded-sm bg-green-500 h-10 items-center">Submit</div>
+                                            <div onClick={handleSubmit} className={`flex w-auto text-sm font-bold px-10 text-[#fff]  cursor-pointer border border-zinc-300 rounded-sm ${data?.[0]?.submission ? "bg-red-500 hover:bg-red-600":"bg-green-500 hover:bg-green-600"} h-10 items-center`}>{data?.[0]?.submission ? "Unsubmit":"Submit"}</div>
                                         </div>
                                     </div>
                                     <div className="flex w-full flex-col gap-y-8 mb-10">
