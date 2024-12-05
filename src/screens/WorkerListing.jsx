@@ -106,7 +106,7 @@ function WorkerListing() {
                             <div className="flex text-sm font-normal opacity-70">{data?.description?.short}</div>
                           </div>
                           <div className="flex flex-col">
-                            <div className="flex text-xs opacity-60">{`${data.updated_at ? 'Updated on ':'Created on '}${handleDate(data.updated_at || data.created_at)}`}</div>
+                            <div className="flex text-xs opacity-60">{`${data?.updated_at ? 'Updated on ':'Created on '}${handleDate(data.updated_at || data.created_at)}`}</div>
                             <div className="flex text-xs opacity-60">{`Draft : unpublished`}</div>
                           </div>
                         </div>
@@ -132,8 +132,8 @@ function WorkerListing() {
                           </LazyLoad>
                         </div>
                         <div className='flex flex-col w-64 gap-y-1 p-1 px-2 group-hover:opacity-5 duration-300'>
-                          <p className={`flex-wrap text-sm font-bold`}>{data.title}</p>
-                          <p className='text-xs opacity-60'>{data.description.short}</p>
+                          <p className={`flex-wrap text-sm font-bold`}>{data?.title}</p>
+                          <p className='text-xs opacity-60'>{data?.description?.short}</p>
                         </div>
                         <div className="flex w-full h-full absolute top-0 left-0 bg-opacity-0 opacity-0 group-hover:opacity-100 group-hover:text-green-600 duration-300 z-50 justify-center items-center font-bold">Edit/Manage listing</div>
                       </Link>

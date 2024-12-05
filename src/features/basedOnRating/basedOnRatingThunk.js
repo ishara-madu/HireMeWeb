@@ -24,6 +24,11 @@ export const fetchBasedOnRating = createAsyncThunk(
                 .select('*,users(*)')
                 .eq('submission', true);
 
+                const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+                const allVal = allListings.data.map(val=>val.id);
+                const updatedFav = favorites.filter(item => allVal.includes(item));
+                localStorage.setItem("favorites", JSON.stringify(updatedFav))
+                
             const notSortedData = allListings?.data.filter(row => !matchData?.some(match => match?.id === row?.id));
             const unmatchData = notSortedData?.sort((a, b) => b.rating?.perc - a.rating?.perc);
             const allData = [...matchData, ...unmatchData];
