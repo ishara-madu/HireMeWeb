@@ -47,6 +47,8 @@ function WorkerListing() {
     return `${percentage}%`;
   };
 
+  console.log(unsubmitted);
+  
 
   const handleDate = (isoString) => {
     const date = new Date(isoString);
@@ -97,7 +99,7 @@ function WorkerListing() {
                   unsubmitted?.map((data, index) => (
                     <Link to={`/show-listings/manage`} onClick={() => handleManageResults(data.id)} key={index} className="flex w-full h-auto  border border-zinc-400 gap-x-3 rounded-sm group relative cursor-pointer">
                       <LazyLoad>
-                        <img src={data.image || placeholder} alt="Placeholder" className="w-44 h-32 bg-zinc-200 object-contain" />
+                        <img src={data?.image?.publicUrl || placeholder} alt="Placeholder" className="w-44 h-32 bg-zinc-200 object-contain" />
                       </LazyLoad>
                       <div className="flex flex-1 group-hover:opacity-5 duration-300">
                         <div className="flex w-[40%] h-full py-2 flex-col justify-between font-semibold">

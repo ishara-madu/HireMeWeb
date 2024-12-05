@@ -56,34 +56,32 @@ export const updateListingWithImage = createAsyncThunk(
     "listings/updateWithImage",
     async ({ id, oldImagePath, newImageFile }, thunkAPI) => {
         try {
-            // if (oldImagePath) {
-            //     const { error: deleteError } = await supabase.storage
-            //         .from('listings') 
-            //         .remove([oldImagePath]);
+            if (oldImagePath) {
+                const { error: deleteError } = await supabase.storage
+                    .from('listings_bucket') 
+                    .remove([oldImagePath]);
 
-            //     if (deleteError) throw deleteError;
-            // }
+                if (deleteError) throw deleteError;
+            }
 
-            // const { data: uploadData, error: uploadError } = await supabase.storage
-            //     .from('listings') 
-            //     .upload(`images/${newImageFile.name}`, newImageFile);
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('listings_bucket') 
+                .upload(`images/${newImageFile.name}`, newImageFile);
 
-            // if (uploadError) throw uploadError;
+            if (uploadError) throw uploadError;
+            const { data:publicURL, error: urlError } = supabase.storage.from('listings_bucket').getPublicUrl(uploadData.path);
 
-            const { publicURL, error: urlError } = supabase.storage.from('listings').getPublicUrl("images/employee.jpg");
-            console.log(publicURL);
-
-            // if (urlError) throw urlError;
+            if (urlError) throw urlError;
 
             
             
-            // await supabase
-            //     .from("listings")
-            //     .update({ image:publicURL.toString(), updated_at: new Date() })
-            //     .eq("id", id.lid)
-            //     .eq("uid", id.uid);
+            await supabase
+                .from("listings")
+                .update({ image:publicURL, updated_at: new Date() })
+                .eq("id", id.lid)
+                .eq("uid", id.uid);
                 
-            // return { id, publicURL };
+            return { id, publicURL };
 
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);

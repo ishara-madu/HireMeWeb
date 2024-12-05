@@ -69,15 +69,15 @@ function EditListings() {
         if (!loading && data) {
             if (data.length > 0) {
                 const newFields = {
-                    title: [data[0].title || '', '', ''],
+                    title: [data[0]?.title || '', '', ''],
                     short: [data[0]?.description?.short || '', '', ''],
                     long: [data[0]?.description?.long || '', '', ''],
-                    img: [data[0].image || '', '', ''],
+                    img: [data[0]?.image?.publicUrl || '', '', ''],
                     tagList: ['', '', ''],
                     confirm: ['', '', ''],
                     availability: [data[0]?.options?.availability || '', '', ''],
                     experienceLevel: [data[0]?.options?.experienceLevel || '', '', ''],
-                    category: [data[0].category || '', '', ''],
+                    category: [data[0]?.category || '', '', ''],
                 };
                 setFields(newFields);
                 const mapMoreValues = (values, name) => {
@@ -89,7 +89,7 @@ function EditListings() {
                 data[0]?.description ? Array.isArray(data[0]?.description.keypoints) ? mapMoreValues(data[0]?.description && data[0]?.description.keypoints, 'keypoints') : mapMoreValues([data[0]?.description.keypoints], 'keypoints') : mapMoreValues([""], 'keypoints');
 
                 mapMoreValues(data[0]?.tags && data[0].tags.tagList, 'tagLists');
-                setimageUrl(data[0]?.image || '')
+                setimageUrl(data[0]?.image?.publicUrl || '')
             }
         }
     }, [data, loading]);
@@ -225,13 +225,10 @@ function EditListings() {
                 value = null;
             } else {
                 error = '';
-                // console.log(files[0].name);
-                const newImageFile = files[0]; 
-        const oldImagePath = imageUrl;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            dispatch(updateListingWithImage({ id: {lid:lid,uid:uid}, oldImagePath,newImageFile}));
-            setFields((prevFields) => ({
+                dispatch(updateListingWithImage({ id: {lid:lid,uid:uid}, oldImagePath: imageUrl,newImageFile: files[0]}));
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    setFields((prevFields) => ({
                         ...prevFields,
                         [name]: [e.target.result, length, error],
                     }));
