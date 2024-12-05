@@ -25,7 +25,7 @@ function EditLocation({ showPupup }) {
     const handleSubmit = (e) => {
         if (e.key === 'Enter' || e.type === 'click') {
             const fetchLocation = async () => {
-                const values = await getCoordinatesFromLocation(input);                
+                const values = await getCoordinatesFromLocation(input);
                 if (values?.error) {
                     seterrorMassage('Please enter a valid location')
                 } else {
@@ -57,7 +57,7 @@ function EditLocation({ showPupup }) {
             <div className="flex-1 px-2 overflow-y-auto w-full flex-col items-center">
                 {
                     suggessions.map((val, id) => (
-                        <div key={id} onClick={(e) => {setInput(`${val}`);handleSubmit(e)}} className="flex items-center gap-x-3 h-12 w-full border-b border-[#c5c5c5]">
+                        <div key={id} onClick={(e) => { setInput(`${val}`); handleSubmit(e) }} className="flex items-center gap-x-3 h-12 w-full border-b border-[#c5c5c5]">
                             <div className="flex">
                                 <CiLocationArrow1 size={20} color="#aeadad" />
                             </div>

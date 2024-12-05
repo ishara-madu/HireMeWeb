@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "../../config/supabaseClient";
+import getCookie from "../../util/getCookie";
+import { getDistance } from 'geolib';
 
 const history = JSON.parse(sessionStorage.getItem("history")) || [""];
 console.log(history);
@@ -8,6 +10,8 @@ export const fetchBasedOnRating = createAsyncThunk(
     'users/basedOnRating',
     async (_, thunkAPI) => {
         try {
+            const {data:userLocation} = await supabase.from('users').select('latitude,longitude').eq('id', getCookie('uid'));
+
             let query = supabase.from('listings')
                 .select('*,users(*)')
                 .eq('submission', true)
@@ -34,7 +38,16 @@ export const fetchBasedOnRating = createAsyncThunk(
             const notSortedData = allListings?.data.filter(row => !matchData?.some(match => match?.id === row?.id));
             const unmatchData = notSortedData?.sort((a, b) => b.rating?.perc - a.rating?.perc);
             const allData = [...matchData, ...unmatchData];
-            return allData;
+
+            const usersWithDistance = allData?.map((user) => ({
+                ...user,
+                distance: getDistance(
+                    { latitude: userLocation?.[0].latitude, longitude: userLocation?.[0].longitude },
+                    { latitude: user.latitude, longitude: user.longitude }
+                ),
+            }));
+            const sortedUsers = usersWithDistance.sort((a, b) => a.distance - b.distance);
+            return sortedUsers;
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
         }
