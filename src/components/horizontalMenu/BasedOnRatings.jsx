@@ -13,10 +13,10 @@ import placeholder from '../../assets/placeholder.svg'
 function BasedOnRatings() {
     const [mouseOver, setMouseOver] = useState(null);
     const dispatch = useDispatch();
-    const [fevId,setFavId] = useState([]);
+    const [fevId, setFavId] = useState([]);
     const navigate = useNavigate();
 
-    const { data: basedOnRating, loading } = useSelector((state) => state.basedOnRating);
+    const { data: basedOnRating, loading, error } = useSelector((state) => state.basedOnRating);
 
 
     useEffect(() => {
@@ -55,9 +55,9 @@ function BasedOnRatings() {
     }
 
 
-    const handleListClick = (data)=>{
+    const handleListClick = (data) => {
         dispatch(setFilters({ id: data }));
-        sessionStorage.setItem("listingFilter", JSON.stringify({id:data}));
+        sessionStorage.setItem("listingFilter", JSON.stringify({ id: data }));
         navigate(`/listing`)
         window.scrollTo({
             top: 0,
@@ -72,20 +72,20 @@ function BasedOnRatings() {
                 <div className="flex w-full overflow-x-scroll justify-start">
                     {
                         !loading ? (
-                            basedOnRating.map((data, index) => {
+                            basedOnRating?.map((data, index) => {
                                 return (
                                     <div key={index} onMouseOver={() => { setMouseOver(index) }} onMouseLeave={() => { setMouseOver(null) }} className='flex h-[350px] justify-center items-start relative'>
                                         <div className="flex h-auto flex-col mx-5 gap-y-2 justify-center items-center shadow-sm shadow-black my-2 rounded-sm overflow-hidden">
                                             <div className="w-64 h-44 flex items-center justify-center overflow-hidden">
                                                 <LazyLoad height={176} offset={100} once className='w-full h-full'>
-                                                    <img src={data.image || placeholder} alt={data.title} className="flex w-full h-full object-contain" />
+                                                    <img src={data?.image?.publicUrl || placeholder} alt={data.title} className="flex w-full h-full object-contain" />
                                                 </LazyLoad>
                                             </div>
                                             <div className='flex flex-col w-64 gap-y-1 p-1'>
-                                                <p className={`flex-wrap text-sm font-bold`}>{data.title}</p>
-                                                <p className='text-xs opacity-60'>{data.users.name}</p>
+                                                <p className={`flex-wrap text-sm font-bold`}>{data?.title}</p>
+                                                <p className='text-xs opacity-60'>{data?.users?.name}</p>
                                                 <div className='flex items-center gap-x-1'>
-                                                    <p className='font-semibold text-sm'>{data.rating.perc}</p>
+                                                    <p className='font-semibold text-sm'>{data?.rating?.perc}</p>
                                                     <div className='flex items-center'>
                                                         <StarIcons value={data.rating.perc} size={15} />
                                                     </div>
@@ -95,27 +95,27 @@ function BasedOnRatings() {
                                         </div>
                                         {
                                             mouseOver === index && (
-                                                <div onClick={()=>(handleListClick(data.id))} className='flex flex-col items-center justify-between h-auto min-h-72 w-[290px] absolute bg-[#ececec] border border-[#b1b0b0] rounded-md shadow-2xl z-20 p-3'>
+                                                <div onClick={() => (handleListClick(data?.id))} className='flex flex-col items-center justify-between h-auto min-h-72 w-[290px] absolute bg-[#ececec] border border-[#b1b0b0] rounded-md shadow-2xl z-20 p-3'>
                                                     <div className='w-full'>
                                                         <div className='flex flex-col mb-1 gap-y-0.5'>
-                                                            <div className='text-lg font-bold leading-5'>{data.title}</div>
-                                                            <div className='text-xs opacity-60'>{data.tags.tagList.map(element => `${element},`)}</div>
-                                                            <p className='text-sm'>{data.description.short}</p>
+                                                            <div className='text-lg font-bold leading-5'>{data?.title}</div>
+                                                            <div className='text-xs opacity-60'>{data?.tags?.tagList?.map(element => `${element},`)}</div>
+                                                            <p className='text-sm'>{data?.description?.short}</p>
                                                         </div>
                                                         <div className='flex flex-col gap-y-2'>
-                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data.description.keypoints[0]}</p>
-                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data.description.keypoints[1]}</p>
-                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data.description.keypoints[2]}</p>
+                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints[0]}</p>
+                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints[1]}</p>
+                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints[2]}</p>
                                                         </div>
                                                     </div>
                                                     <div className='flex w-full justify-evenly items-center mt-4'>
-                                                        <a href={`tel:${data.users.contact.phone}}`} onClick={(e) => {e.stopPropagation(); navigator.clipboard.writeText(data.users.contact.phone).then(alert('Mobile number copy to clipboard')) }} className='flex h-12 w-52 bg-green-600 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
+                                                        <a href={`tel:${data?.users?.contact?.phone}}`} onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(data?.users?.contact?.phone).then(alert('Mobile number copy to clipboard')) }} className='flex h-12 w-52 bg-green-600 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
                                                         <div onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleFavorites(data.id)
+                                                            handleFavorites(data?.id)
                                                         }} className='p-[10px] border border-black hover:bg-[#e0e1e1] rounded-full'>
                                                             {
-                                                                (fev.includes(data.id) || fevId.includes(data.id)) ? (
+                                                                (fev?.includes(data?.id) || fevId?.includes(data?.id)) ? (
                                                                     <IoHeart size={24} color="red" />
                                                                 ) : (
                                                                     <IoHeartOutline size={24} color="black" />

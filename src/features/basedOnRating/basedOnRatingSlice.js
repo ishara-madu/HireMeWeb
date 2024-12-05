@@ -20,7 +20,7 @@ const basedOnRatingSlice = createSlice({
             state.data = action.payload;
         })
         .addCase(fetchBasedOnRating.rejected, (state, action) => {
-            state.loading = true;
+            state.loading = false;
             state.error = action.payload;
         });
     },
