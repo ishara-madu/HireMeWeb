@@ -11,7 +11,7 @@ import { PiPath, PiPathBold } from "react-icons/pi"
 import { FaBusinessTime } from "react-icons/fa6"
 import { useDispatch, useSelector } from "react-redux"
 import getCookie from "../util/getCookie"
-import { deleteListing, fetchListning, updateListing } from "../features/listing/listingThunk"
+import { deleteListing, fetchListning, updateListing, updateListingWithImage } from "../features/listing/listingThunk"
 import { processFilters, setFilters } from "../features/listing/listingSlice"
 import { useNavigate } from "react-router-dom"
 
@@ -154,8 +154,8 @@ function EditListings() {
                 id: { uid: uid, lid: lid },
                 updates: {
                     description: {
-                        short:fields.short[0],
-                        long:fields.long[0],
+                        short: fields.short[0],
+                        long: fields.long[0],
                         keypoints: [...updatedFields]
                     }
                 }
@@ -225,9 +225,13 @@ function EditListings() {
                 value = null;
             } else {
                 error = '';
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    setFields((prevFields) => ({
+                // console.log(files[0].name);
+                const newImageFile = files[0]; 
+        const oldImagePath = imageUrl;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            dispatch(updateListingWithImage({ id: {lid:lid,uid:uid}, oldImagePath,newImageFile}));
+            setFields((prevFields) => ({
                         ...prevFields,
                         [name]: [e.target.result, length, error],
                     }));
@@ -271,8 +275,8 @@ function EditListings() {
                 id: { uid: uid, lid: lid },
                 updates: {
                     description: {
-                        short:fields.short[0],
-                        long:fields.long[0],
+                        short: fields.short[0],
+                        long: fields.long[0],
                         keypoints: [...tagListValues]
                     }
                 }

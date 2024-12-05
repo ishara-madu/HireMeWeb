@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {  deleteListing, fetchListning, updateListing } from "./listingThunk";
+import {  deleteListing, fetchListning, updateListing, updateListingWithImage } from "./listingThunk";
 
 const listingSlice = createSlice({
     name: 'listings',
@@ -50,6 +50,18 @@ const listingSlice = createSlice({
                 state.upadate_data = action.payload;
             })
             .addCase(updateListing.rejected, (state, action) => {
+                state.upadate_loading = false;
+                state.upadate_error = action.payload;
+            })
+            .addCase(updateListingWithImage.pending, (state) => {
+                state.upadate_loading = true;
+                state.upadate_error = null;
+            })
+            .addCase(updateListingWithImage.fulfilled, (state, action) => {
+                state.upadate_loading = false;
+                state.upadate_data = action.payload;
+            })
+            .addCase(updateListingWithImage.rejected, (state, action) => {
                 state.upadate_loading = false;
                 state.upadate_error = action.payload;
             })

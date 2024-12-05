@@ -16,9 +16,9 @@ export const fetchListning = createAsyncThunk(
             if (filters?.uid || filters?.lid) {
                 if (!filters?.lid && filters?.uid) {
                     const tempid = v4();
-                    sessionStorage.setItem('listingFilter',tempid);
-                    await supabase.from("listings").insert([{id:tempid,uid:filters.uid}]);
-                    query = query.eq('uid', filters.uid).eq('id', tempid);                    
+                    sessionStorage.setItem('listingFilter', tempid);
+                    await supabase.from("listings").insert([{ id: tempid, uid: filters.uid }]);
+                    query = query.eq('uid', filters.uid).eq('id', tempid);
                 } else {
                     query = query.eq('uid', filters.uid).eq('id', filters.lid);
                 }
@@ -40,12 +40,51 @@ export const updateListing = createAsyncThunk(
         try {
             const { data, error } = await supabase
                 .from("listings")
-                .update({...updates,updated_at: new Date()})
+                .update({ ...updates, updated_at: new Date() })
                 .eq("id", id.lid)
                 .eq("uid", id.uid);
             if (error) throw error;
-            const { data:now } = await supabase.from('listings').select('*,users!inner(*)').eq('id', id.lid).eq("uid", id.uid);
+            const { data: now } = await supabase.from('listings').select('*,users!inner(*)').eq('id', id.lid).eq("uid", id.uid);
             return now;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+
+export const updateListingWithImage = createAsyncThunk(
+    "listings/updateWithImage",
+    async ({ id, oldImagePath, newImageFile }, thunkAPI) => {
+        try {
+            // if (oldImagePath) {
+            //     const { error: deleteError } = await supabase.storage
+            //         .from('listings') 
+            //         .remove([oldImagePath]);
+
+            //     if (deleteError) throw deleteError;
+            // }
+
+            // const { data: uploadData, error: uploadError } = await supabase.storage
+            //     .from('listings') 
+            //     .upload(`images/${newImageFile.name}`, newImageFile);
+
+            // if (uploadError) throw uploadError;
+
+            const { publicURL, error: urlError } = supabase.storage.from('listings').getPublicUrl("images/employee.jpg");
+            console.log(publicURL);
+
+            // if (urlError) throw urlError;
+
+            
+            
+            // await supabase
+            //     .from("listings")
+            //     .update({ image:publicURL.toString(), updated_at: new Date() })
+            //     .eq("id", id.lid)
+            //     .eq("uid", id.uid);
+                
+            // return { id, publicURL };
+
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }
@@ -56,9 +95,9 @@ export const deleteListing = createAsyncThunk(
     "listings/delete",
     async (id, thunkAPI) => {
         try {
-            const { data, error } = await supabase.from("listings").delete().eq("id",id);
+            const { data, error } = await supabase.from("listings").delete().eq("id", id);
             if (error) throw error;
-            
+
             return data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
