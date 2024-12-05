@@ -4,7 +4,7 @@ export const getSuggestions = async (query) => {
   const url = `https://api.opencagedata.com/geocode/v1/json?key=${apiKey}&q=${query}&limit=6`;
   const response = await fetch(url);
   const data = await response.json();
-  return data.results;  // Returns the location suggestions
+  return data.results; 
 }
 
 export const getCoordinatesFromLocation = async (location) => {

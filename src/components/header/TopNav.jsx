@@ -47,7 +47,7 @@ function TopNav() {
                     <input type="text" value={searchText} onChange={(e) => { setSearchText(e.target.value) }} className="text-sm w-full h-12 rounded-full px-10 flex font-normal outline-none border border-black" placeholder="Search for anything" />
                 </div>
                 {
-                    profile.map(profile => (
+                    profile?.map(profile => (
                         <div key={profile} className="flex flex-row gap-x-5 justify-between items-center">
                             <div onMouseOver={() => { setShowFavorites(true) }} onMouseLeave={() => { setShowFavorites(false) }} className="flex justify-center items-center p-2 cursor-pointer"><IoHeartOutline size={24} />
                                 {
@@ -73,7 +73,7 @@ function TopNav() {
                             </div>
                             <div onMouseOver={() => { setShowProfile(true) }} onMouseLeave={() => { setShowProfile(false) }} className="flex w-10 h-10 justify-center items-center rounded-full overflow-hidden cursor-pointer">
                                 <LazyLoad height={40} once>
-                                    <img src={profile.image} alt="profile image" className="h-full w-full object-cover" />
+                                    <img src={profile?.image} alt="profile image" className="h-full w-full object-cover" />
                                 </LazyLoad>
                                 {
                                     showProfile && (

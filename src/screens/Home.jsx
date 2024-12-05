@@ -42,15 +42,15 @@ function Home() {
                     <TopNav />
                     <TopCategory />
                     {
-                        profile.map((profile, id) => (
+                        profile?.map((profile, id) => (
                             <div key={id} className="flex w-full h-24 flex-row justify-center">
                                 <div className="flex w-11/12 h-full items-center gap-x-5">
                                     <div className="flex h-14 w-14 items-center rounded-full overflow-hidden">
-                                        <img src={profile.image} alt="" className="object-cover w-full h-full" />
+                                        <img src={profile?.image} alt="" className="object-cover w-full h-full" />
                                     </div>
                                     <div className="flex flex-col gap-y-2 relative">
-                                        <h2 className="text-2xl font-bold">Welcome back, {profile.name}</h2>
-                                        <div className="text-sm flex items-center">{profile.locationName} <div onClick={(e) => (e.stopPropagation(), setShowLocation(true))} className="text-green-700 text-xs font-bold underline ml-3">Edit location temparary for better result</div></div>
+                                        <h2 className="text-2xl font-bold">Welcome back, {profile?.name}</h2>
+                                        <div className="text-sm flex items-center">{profile?.locationName} <div onClick={(e) => (e.stopPropagation(), setShowLocation(true))} className="text-green-700 text-xs font-bold underline ml-3">Edit location temparary for better result</div></div>
                                         {
                                             showLocation &&
                                             <EditLocation location={profile} showPupup={handleSubmit} />

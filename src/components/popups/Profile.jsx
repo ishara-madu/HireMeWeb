@@ -18,12 +18,12 @@ function Profile({ profile }) {
                 <div className="flex w-full h-auto py-5 gap-x-3 items-center border-b border-[#c5c5c5]">
                     <div className="flex items-center">
                         <LazyLoad height={56} once>
-                            <img src={profile.image} alt="" className="w-14 h-14 rounded-full object-cover" />
+                            <img src={profile?.image} alt="" className="w-14 h-14 rounded-full object-cover" />
                         </LazyLoad>
                     </div>
                     <div className="flex flex-col">
-                        <p className="text-base font-bold">{profile.name}</p>
-                        <p className="text-xs opacity-60">{profile.contact.Email}</p>
+                        <p className="text-base font-bold">{profile?.name}</p>
+                        <p className="text-xs opacity-60">{profile?.contact?.Email}</p>
                     </div>
                 </div>
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
