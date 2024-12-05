@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom"
 function EditListings() {
     const navigate = useNavigate()
     const [showDeleteConfirm, setshowDeleteConfirm] = useState(false)
+    const [CofirmValue, setCofirmValue] = useState(["", "", ""])
+    const [submitError, setsubmitError] = useState('')
     const dispatch = useDispatch()
     const [showTopLoading, setshowTopLoading] = useState(false)
     const { data, loading, error, upadate_loading, upadate_error, upadate_data } = useSelector(state => state.listings)
@@ -54,7 +56,6 @@ function EditListings() {
         long: ['', '', ''],
         img: [null, '', ''],
         keypoints: ['', '', ''],
-        confirm: ['', '', ''],
         tagList: ['', '', ''],
         availability: ['', '', ''],
         experienceLevel: ['', '', ''],
@@ -70,7 +71,6 @@ function EditListings() {
                     long: [data[0]?.description?.long || '', '', ''],
                     img: [data[0]?.image?.publicUrl || '', '', ''],
                     tagList: ['', '', ''],
-                    confirm: ['', '', ''],
                     availability: [data[0]?.options?.availability || '', '', ''],
                     experienceLevel: [data[0]?.options?.experienceLevel || '', '', ''],
                     category: [data[0]?.category || '', '', ''],
@@ -116,6 +116,10 @@ function EditListings() {
     const allKeys = Object.keys(fields);
     const keypointFields = allKeys.filter((key) => key.startsWith("keypoints"))
     const tagsFields = allKeys.filter((key) => key.startsWith("tagLists"))
+
+    const arrCheck = Object.values(fields).map(value => value[0]?.length > 0);
+
+
 
     const handleAddField = (key) => {
         setFields((prevFields) => {
@@ -192,6 +196,12 @@ function EditListings() {
         }
 
     }
+
+    function evaluateArray(arr) {
+        const falseCount = arr.filter(value => value === false).length;
+        return falseCount === 1;
+    }
+
     const handleInputChange = (e, maxlength) => {
         let name, value, files;
         if (e.target) {
@@ -221,7 +231,7 @@ function EditListings() {
                 value = null;
             } else {
                 error = '';
-                const oldImage = sessionStorage.getItem('old_image') || data?.[0]?.image?.oldImage;
+                const oldImage = sessionStorage.getItem('old_image') || upadate_data?.[0]?.image?.oldImage || data?.[0]?.image?.oldImage;
                 dispatch(updateListingWithImage({ id: { lid: lid, uid: uid }, oldImagePath: oldImage, newImageFile: files[0] }));
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -276,41 +286,71 @@ function EditListings() {
                 }
             }));
         }
-
-
+        evaluateArray(arrCheck) === true && setsubmitError('')
     };
 
     const handleClickConfirm = () => {
-        if (fields.confirm?.[0].toLowerCase() === "confirm") {
-            dispatch(deleteListing(lid));
+        if (CofirmValue[0].toLowerCase() === "confirm") {
+            const oldImage = sessionStorage.getItem('old_image') || upadate_data?.[0]?.image?.oldImage || data?.[0]?.image?.oldImage;
+            dispatch(deleteListing({ id: { lid: lid, uid: uid }, oldImagePath: oldImage }));
             setshowDeleteConfirm(false);
         } else {
-            setFields((prevFields) => ({
-                ...prevFields,
-                confirm: [fields.confirm?.[0], fields.confirm?.[1], 'Deletion failed. Please ensure you type "CONFIRM" correctly to proceed.'],
-            }));
+            setCofirmValue(() => (
+                [CofirmValue[0], CofirmValue[1], 'Deletion failed. Please ensure you type "CONFIRM" correctly to proceed.']
+            ));
         }
     }
 
 
-    const handleSubmit = () => {
-        if(data?.[0]?.submission){
-            dispatch(updateListing({
-                id: { uid: uid, lid: lid },
-                updates: {
-                    submission: false
-                }
-            }));
-        }else{
-            dispatch(updateListing({
-                id: { uid: uid, lid: lid },
-                updates: {
-                    submission: true
-                }
-            })).then(
 
+
+
+    const handleSubmit = async () => {
+        if (data?.[0]?.submission) {
+            try {
+                await dispatch(updateListing({
+                    id: { uid: uid, lid: lid },
+                    updates: {
+                        submission: false
+                    }
+                }));
                 navigate('/show-listings');
-            )
+            } catch (error) {
+                console.error('Failed to update listing:', error);
+            }
+        } else {
+            if (evaluateArray(arrCheck) === true) {
+
+                try {
+                    await dispatch(updateListing({
+                        id: { uid: uid, lid: lid },
+                        updates: {
+                            submission: true
+                        }
+                    }));
+                    navigate('/show-listings');
+                } catch (error) {
+                    console.error('Failed to update listing:', error);
+                }
+            } else {
+                Object.keys(fields).forEach((val) => {
+                    if (fields[val][0] === '' && val !== "tagList") {
+                        setFields((prevFields) => ({
+                            ...prevFields,
+                            [val]: [fields[val][0], fields[val][1], 'This field is required. Please fill it out.'],
+                        }));
+                    }
+                });
+                if (!Object.keys(fields).some((key) => key.startsWith("tagLists"))) {
+                    setFields((prevFields) => ({
+                        ...prevFields,
+                        tagList: [fields.tagList[0], fields.tagList[1], 'This field is required. Please fill it out.'],
+                    }));
+                }
+
+                setsubmitError('Please complete all fields before submitting and try again.')
+            }
+
         }
     }
 
@@ -345,10 +385,10 @@ function EditListings() {
                                                     <div className="absolute flex flex-col w-72 h-auto p-4 shadow-2xl justify-center gap-y-5 items-center shadow-black z-50 left-0 rounded-sm border border-zinc-300 top-0 bg-[#eceaea]">
                                                         <div className="text-black text-sm">Are you sure you want to delete this listing? Please type <b className="text-red-500"> &quot;CONFIRM&quot; </b> in the box below to proceed. This action cannot be undone.</div>
                                                         <div className="flex w-full h-auto flex-col">
-                                                            <div className={`flex w-full rounded-sm overflow-hidden h-10 text-black font-normal border ${fields?.confirm?.[2] ? 'border-red-500' : 'border-zinc-400'}`}>
-                                                                <input name='confirm' maxLength={7} onChange={(e) => { handleInputChange(e, 7) }} value={fields?.confirm?.[0]} type="text" className="w-full px-2 bg-transparent outline-none h-full" placeholder="Enter &quot;CONFIRM&quot; here" />
+                                                            <div className={`flex w-full rounded-sm overflow-hidden h-10 text-black font-normal border ${CofirmValue[2] ? 'border-red-500' : 'border-zinc-400'}`}>
+                                                                <input name='confirm' maxLength={7} onChange={(e) => { setCofirmValue(() => [e.target.value, '', '']) }} value={CofirmValue[0]} type="text" className="w-full px-2 bg-transparent outline-none h-full" placeholder="Enter &quot;CONFIRM&quot; here" />
                                                             </div>
-                                                            <div className="flex text-xs text-red-500 font-normal">{fields?.confirm?.[2]}</div>
+                                                            <div className="flex text-xs text-red-500 font-normal">{CofirmValue[2]}</div>
                                                         </div>
                                                         <div onClick={(e) => { e.stopPropagation() }} className="flex w-full justify-end gap-x-2 text-[#ebebeb]">
                                                             <div onClick={() => { setshowDeleteConfirm(false) }} className="flex w-16 rounded-sm h-8 bg-zinc-500 items-center justify-center cursor-pointer">Cancel</div>
@@ -357,9 +397,13 @@ function EditListings() {
                                                     </div>
                                                 }
                                             </div>
-                                            <div onClick={handleSubmit} className={`flex w-auto text-sm font-bold px-10 text-[#fff]  cursor-pointer border border-zinc-300 rounded-sm ${data?.[0]?.submission ? "bg-red-500 hover:bg-red-600":"bg-green-500 hover:bg-green-600"} h-10 items-center`}>{data?.[0]?.submission ? "Unsubmit":"Submit"}</div>
+                                            <div onClick={handleSubmit} className={`flex w-auto text-sm font-bold px-10 text-[#fff]  cursor-pointer border border-zinc-300 rounded-sm ${data?.[0]?.submission ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"} h-10 items-center`}>{data?.[0]?.submission ? "Unsubmit" : "Submit"}</div>
                                         </div>
                                     </div>
+                                    {
+                                        submitError &&
+                                        <div className="flex text-red-500 text-sm">{submitError}</div>
+                                    }
                                     <div className="flex w-full flex-col gap-y-8 mb-10">
                                         <div className="flex flex-col gap-y-2 w-full">
                                             <div className="flex text-lg font-bold">What’s Your Work About?</div>
@@ -642,7 +686,12 @@ function EditListings() {
                                                     {
                                                         fields.img[0] &&
                                                         <div className="flex">
-                                                            <div onClick={() => { setFields((prev) => ({ ...prev, img: ['', '', ''] })); imageInputRef.current.value = null }} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                                            <div onClick={() => {
+                                                                setFields((prev) => ({ ...prev, img: ['', '', ''] }));
+                                                                imageInputRef.current.value = null;
+                                                                const oldImage = sessionStorage.getItem('old_image') || upadate_data?.[0]?.image?.oldImage || data?.[0]?.image?.oldImage;
+                                                                dispatch(updateListingWithImage({ id: { lid: lid, uid: uid }, oldImagePath: oldImage }))
+                                                            }} className="flex w-12 justify-center hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
                                                             <div className="flex w-10 justify-center items-center opacity-70 text-sm">
                                                                 {fields.img[1]}
                                                             </div>

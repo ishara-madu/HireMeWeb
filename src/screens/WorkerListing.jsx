@@ -125,7 +125,7 @@ function WorkerListing() {
                 <div className="grid grid-cols-4 place-content-center gap-y-8 place-items-center pb-5">
                   {
                     submitted?.map((data, index) => (
-                      <Link to={`/show-listings/manage`} onClick={() => handleManageResults(data.id)} key={index} className="flex h-auto flex-col group mx-5 gap-y-2 justify-start items-center min-h-72 shadow-2xl shadow-black my-2 rounded-sm overflow-hidden relative cursor-pointer">
+                      <Link to={`/show-listings/manage`} onClick={() => handleManageResults(data.id)} key={index} className="flex h-auto flex-col group mx-5 gap-y-2 justify-start items-center min-h-72 shadow-sm shadow-black my-2 rounded-sm overflow-hidden relative cursor-pointer">
                         <div className="w-64 h-44 flex items-start justify-center overflow-hidden group-hover:opacity-5 duration-300">
                           <LazyLoad height={176} offset={100} once className='w-full h-full'>
                             <img src={data?.image?.publicUrl || placeholder} alt={data.title} className="flex w-full h-full bg-zinc-200 object-contain" />

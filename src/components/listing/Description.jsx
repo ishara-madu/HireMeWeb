@@ -10,7 +10,7 @@ function Description({data}) {
                 <div className={`flex w-7/12 ${showAllDescription ? 'h-28' : 'h-auto'} gap-y-3 overflow-hidden flex-col rounded-sm relative`}>
                     <div className="flex text-xl font-bold">Description</div>
                     <div className="flex text-sm">
-                        {data.description.long}
+                        {data?.description?.long}
                     </div>
                     {
                         showAllDescription ?

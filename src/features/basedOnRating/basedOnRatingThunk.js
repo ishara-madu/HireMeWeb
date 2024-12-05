@@ -10,14 +10,20 @@ export const fetchBasedOnRating = createAsyncThunk(
         try {
             const query = supabase.from('listings')
                 .select('*,users(*)')
-                // .or(
-                //     history.map(val => `description ->> long.ilike.%${val}%,description ->> short.ilike.%${val}%,description ->> keypoints.ilike.%${val}%,title.ilike.%${val}%,image.ilike.%${val}%,tags ->> tagList.ilike.%${val}%`)
-                // )
+                .eq('submission', true)
+                .or(
+                    history?.map(val => `description ->> long.ilike.%${val}%,description ->> short.ilike.%${val}%,description ->> keypoints.ilike.%${val}%,title.ilike.%${val}%,tags ->> tagList.ilike.%${val}%`)
+                )
                 .order('rating->>perc', { ascending: false })
             const { data: matchData, error } = await query;
 
             if (error) throw error;
-            const allListings = await supabase.from('listings').select('*,users(*)');
+
+            const allListings = await supabase
+                .from('listings')
+                .select('*,users(*)')
+                .eq('submission', true);
+
             const notSortedData = allListings?.data.filter(row => !matchData?.some(match => match?.id === row?.id));
             const unmatchData = notSortedData?.sort((a, b) => b.rating?.perc - a.rating?.perc);
             const allData = [...matchData, ...unmatchData];

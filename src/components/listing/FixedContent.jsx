@@ -27,12 +27,12 @@ function FixedContent({ data }) {
         <div className="flex w-80 absolute z-20 top-0">
             <div className="flex w-full flex-col h-auto items-center rounded-md overflow-hidden gap-y-5 justify-center bg-[#ebebeb] shadow-md shadow-black">
                 <div className="flex w-full h-52">
-                    <img src={data?.image?.publicUrl || placeholder} alt={data.title} className="w-full h-full object-contain" />
+                    <img src={data?.image?.publicUrl || placeholder} alt={data?.title} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex w-11/12 flex-col gap-y-2">
                     <div className="flex items-center opacity-60 text-sm gap-x-2">
                         <CiLocationOn size={15} />
-                        {data.users.locationName}
+                        {data?.users?.locationName}
                     </div>
                     <div className="flex gap-x-2 font-semibold items-center">
                         <BiCategory size={15} />
@@ -51,22 +51,22 @@ function FixedContent({ data }) {
                         <FaBusinessTime />
                         <div className="flex gap-x-1">
                             experience
-                            <div className="flex font-bold">{data.users.userQuality.years}+ years</div>
+                            <div className="flex font-bold">{data?.users?.userQuality?.years}+ years</div>
                         </div>
                     </div>
                     <ul className="flex flex-col opacity-60 gap-y-2 text-xs ml-1 w-full">
-                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data.users.userQuality.first}</li>
-                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data.users.userQuality.second}</li>
-                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data.users.userQuality.third}</li>
+                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data?.users?.userQuality?.first}</li>
+                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data?.users?.userQuality?.second}</li>
+                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data?.users?.userQuality?.third}</li>
                     </ul>
                 </div>
                 <div className='flex gap-x-3 my-4'>
-                    <a href={`tel:${data.users.contact.phone}}`} onClick={() => { navigator.clipboard.writeText(data.users.contact.phone).then(alert(`Mobile number ${data.users.contact.phone} copy to clipboard`)) }} className='flex h-12 w-52 bg-purple-500 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
+                    <a href={`tel:${data?.users?.contact?.phone}}`} onClick={() => { navigator.clipboard.writeText(data?.users?.contact?.phone).then(alert(`Mobile number ${data.users.contact.phone} copy to clipboard`)) }} className='flex h-12 w-52 bg-purple-500 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
                     <div onClick={() => {
-                        handleFavorites(data.id)
+                        handleFavorites(data?.id)
                     }} className='p-[10px] border border-black hover:bg-[#e0e1e1] rounded-full'>
                         {
-                            (fev.includes(data.id) || fevId.includes(data.id)) ? (
+                            (fev.includes(data?.id) || fevId.includes(data?.id)) ? (
                                 <IoHeart size={24} color="red" />
                             ) : (
                                 <IoHeartOutline size={24} color="black" />

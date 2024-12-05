@@ -56,37 +56,49 @@ export const updateListing = createAsyncThunk(
 export const updateListingWithImage = createAsyncThunk(
     "listings/updateWithImage",
     async ({ id, oldImagePath, newImageFile }, thunkAPI) => {
-        const path = `${v4()}${newImageFile.name}`;
+        const path = `${id.lid}${id.uid}`;
+        const newpath = `${id.lid}${id.uid}${v4()}`
         try {
-            if (oldImagePath) {
+            if (oldImagePath && oldImagePath.startsWith(`images/${path}`)) {
                 const { error: deleteError } = await supabase.storage
-                    .from('listings_bucket') 
+                    .from('listings_bucket')
                     .remove([oldImagePath]);
 
                 if (deleteError) throw deleteError;
             }
 
-            const { data: uploadData, error: uploadError } = await supabase.storage
-                .from('listings_bucket') 
-                .upload(`images/${path}`, newImageFile);
+            if (newImageFile) {
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from('listings_bucket')
+                    .upload(`images/${newpath}`, newImageFile);
 
-                sessionStorage.setItem('old_image',`images/${path}`)
+                sessionStorage.setItem('old_image', `images/${newpath}`)
 
-                
-            if (uploadError) throw uploadError;
-            const { data:publicURL, error: urlError } = supabase.storage.from('listings_bucket').getPublicUrl(uploadData.path);
 
-            if (urlError) throw urlError;
+                if (uploadError) throw uploadError;
+                const { data: publicURL, error: urlError } = supabase.storage.from('listings_bucket').getPublicUrl(uploadData.path);
 
-            
-            
-            await supabase
-                .from("listings")
-                .update({ image:{...publicURL,oldImage:`images/${path}`}, updated_at: new Date() })
-                .eq("id", id.lid)
-                .eq("uid", id.uid);
-                
-            return { id, publicURL };
+                if (urlError) throw urlError;
+
+
+
+                await supabase
+                    .from("listings")
+                    .update({ image: { ...publicURL, oldImage: `images/${newpath}` }, updated_at: new Date() })
+                    .eq("id", id.lid)
+                    .eq("uid", id.uid);
+
+                return { id, publicURL };
+
+            }else{
+                await supabase
+                    .from("listings")
+                    .update({ image:  null , updated_at: new Date() })
+                    .eq("id", id.lid)
+                    .eq("uid", id.uid);
+
+                return { id };
+            }
 
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -96,9 +108,17 @@ export const updateListingWithImage = createAsyncThunk(
 
 export const deleteListing = createAsyncThunk(
     "listings/delete",
-    async (id, thunkAPI) => {
+    async ({ id, oldImagePath }, thunkAPI) => {
+        const path = `${id.lid}${id.uid}`;
         try {
-            const { data, error } = await supabase.from("listings").delete().eq("id", id);
+            if (oldImagePath && oldImagePath.startsWith(`images/${path}`)) {
+                const { error: deleteError } = await supabase.storage
+                    .from('listings_bucket')
+                    .remove([oldImagePath]);
+
+                if (deleteError) throw deleteError;
+            }
+            const { data, error } = await supabase.from("listings").delete().eq("id", id.lid);
             if (error) throw error;
 
             return data;

@@ -36,12 +36,12 @@ function Favorites() {
                                                         </LazyLoad>
                                                     </div>
                                                     <div className="flex h-full flex-col justify-center items-start">
-                                                        <div className="flex justify-center items-center text-base  font-semibold">{val.title}</div>
-                                                        <div className="flex justify-center items-center text-xs opacity-60">{val.users.name}</div>
+                                                        <div className="flex justify-center items-center text-base  font-semibold">{val?.title}</div>
+                                                        <div className="flex justify-center items-center text-xs opacity-60">{val?.users?.name}</div>
                                                     </div>
                                                 </div>
                                                 <div className="flex h-12 w-full justify-center items-center">
-                                                    <a href={`tel:${val.users.contact.phone}}`} onClick={() => { navigator.clipboard.writeText(val.users.contact.phone).then(alert('Mobile number copy to clipboard')) }} className="flex w-[95%] h-[70%] text-sm justify-center font-semibold items-center border border-black rounded-sm">
+                                                    <a href={`tel:${val?.users?.contact?.phone}}`} onClick={() => { navigator.clipboard.writeText(val?.users?.contact?.phone).then(alert('Mobile number copy to clipboard')) }} className="flex w-[95%] h-[70%] text-sm justify-center font-semibold items-center border border-black rounded-sm">
                                                         Ring mobile
                                                     </a>
                                                 </div>

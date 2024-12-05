@@ -32,11 +32,11 @@ function Listing() {
                         }
                     </div>
                     :
-                    data.length >! 0 ? 
+                    data?.length >! 0 ? 
                     <div className="flex h-full min-h-svh item-center justify-center w-full flex-col bg-[#ebebeb]">
                                 <div className="flex text-black justify-center items-center">{'Something wrong try again'}</div>
                     </div>:
-                    data.map((data, index) => (
+                    data?.map((data, index) => (
                         <div key={index} className="flex h-full min-h-svh item-center justify-center w-full flex-col bg-[#ebebeb]">
                             <TopNav />
                             <TopBar data={data} />

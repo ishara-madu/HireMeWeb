@@ -9,7 +9,7 @@ import Favorites from "../popups/Favorites";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../features/profile/profileThunk";
 import { useLocation, useNavigate } from "react-router-dom";
-import profileImage from '../../assets/logo.png'
+import profileImage from '../../assets/logo_black.png'
 
 function TopNav() {
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ function TopNav() {
         <div id="nav" className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
             <form onSubmit={handleSearch} className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
                 <div onClick={()=>{navigate('/',{replace:true})}} className="cursor-pointer flex justify-center items-center h-full w-48">
-                    <LazyLoad height={50} once>
+                    <LazyLoad height={50} once className="flex justify-center items-center w-full h-full">
                         <img src={profileImage} alt="logo" className="flex justify-center items-center h-full w-full object-contain" />
                     </LazyLoad>
                 </div>
