@@ -56,6 +56,7 @@ export const updateListing = createAsyncThunk(
 export const updateListingWithImage = createAsyncThunk(
     "listings/updateWithImage",
     async ({ id, oldImagePath, newImageFile }, thunkAPI) => {
+        const path = `${v4()}${newImageFile.name}`;
         try {
             if (oldImagePath) {
                 const { error: deleteError } = await supabase.storage
@@ -67,8 +68,11 @@ export const updateListingWithImage = createAsyncThunk(
 
             const { data: uploadData, error: uploadError } = await supabase.storage
                 .from('listings_bucket') 
-                .upload(`images/${newImageFile.name}`, newImageFile);
+                .upload(`images/${path}`, newImageFile);
 
+                sessionStorage.setItem('old_image',`images/${path}`)
+
+                
             if (uploadError) throw uploadError;
             const { data:publicURL, error: urlError } = supabase.storage.from('listings_bucket').getPublicUrl(uploadData.path);
 
@@ -78,7 +82,7 @@ export const updateListingWithImage = createAsyncThunk(
             
             await supabase
                 .from("listings")
-                .update({ image:publicURL, updated_at: new Date() })
+                .update({ image:{...publicURL,oldImage:`images/${path}`}, updated_at: new Date() })
                 .eq("id", id.lid)
                 .eq("uid", id.uid);
                 

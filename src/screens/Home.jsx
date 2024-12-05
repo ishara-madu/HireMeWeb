@@ -37,7 +37,7 @@ function Home() {
 
         }
             {
-                (!error) &&
+                !error &&
                 <div onClick={() => (setShowLocation(false))} className="flex w-full flex-col bg-[#ebebeb]">
                     <TopNav />
                     <TopCategory />

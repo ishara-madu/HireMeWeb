@@ -87,6 +87,7 @@ function EditListings() {
 
                 mapMoreValues(data[0]?.tags && data[0].tags.tagList, 'tagLists');
                 setimageUrl(data[0]?.image?.publicUrl || '')
+                sessionStorage.getItem('imageSize')
             }
         }
     }, [data, loading]);
@@ -222,7 +223,8 @@ function EditListings() {
                 value = null;
             } else {
                 error = '';
-                dispatch(updateListingWithImage({ id: {lid:lid,uid:uid}, oldImagePath: imageUrl,newImageFile: files[0]}));
+                const oldImage = sessionStorage.getItem('old_image') || data?.[0]?.image?.oldImage;
+                dispatch(updateListingWithImage({ id: { lid: lid, uid: uid }, oldImagePath: oldImage, newImageFile: files[0] }));
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     setFields((prevFields) => ({
@@ -290,6 +292,16 @@ function EditListings() {
                 confirm: [fields.confirm?.[0], fields.confirm?.[1], 'Deletion failed. Please ensure you type "CONFIRM" correctly to proceed.'],
             }));
         }
+    }
+
+
+    const handleSubmit = () => {
+        dispatch(updateListing({
+            id: { uid: uid, lid: lid },
+            updates: {
+                
+            }
+        }));
     }
 
 
