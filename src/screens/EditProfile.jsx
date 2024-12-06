@@ -9,6 +9,8 @@ import { languagesData } from "../features/languages/languagesThunk"
 import { v4 } from "uuid"
 import { fetchProfile, updateProfile, updateProfileWithImage } from '../features/profile/profileThunk';
 import LoadingSpinner from '../components/LoadingSpinner';
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 function EditProfile() {
     const dispatch = useDispatch();
     const { data } = useSelector((state) => state.languages)
@@ -22,9 +24,16 @@ function EditProfile() {
         bio: ['', '', ''],
         languages: ['', '', ''],
     })
+    const [workerProfileValues, setWorkerProfileValues] = useState({
+        phone: ['', '', ''],
+        web: ['', '', ''],
+        facebook: ['', '', ''],
+        linkedin: ['', '', ''],
+        youtube: ['', '', ''],
+        experience: ['', '', '']
+    })
+
     const imageInputRef = useRef()
-
-
     useEffect(() => {
         dispatch(languagesData())
         dispatch(fetchProfile())
@@ -42,6 +51,8 @@ function EditProfile() {
     }, [profile])
 
 
+    const allKeys = Object.keys(workerProfileValues);
+    const experienceFields = allKeys.filter((key) => key.startsWith("experience"))
 
     const arrCheck = Object.values(userProfileValues).map(value => value[0]?.length > 0);
 
@@ -87,29 +98,45 @@ function EditProfile() {
                 reader.readAsDataURL(files[0]);
             }
         }
+        length = maxlength - length;
         if (profile === "user") {
-            length = maxlength - length;
             setuserProfileValues((prevFields) => ({
                 ...prevFields,
                 [name]: [value, length, error, null],
             }));
         }
         else {
-            setuserProfileValues((prevFields) => ({
+            setWorkerProfileValues((prevFields) => ({
                 ...prevFields,
                 [name]: [value, length, error, null],
             }));
         }
     }
 
+    const validateURL = (url) => {
+        try {
+            new URL(url);
+            return true;
+            // eslint-disable-next-line no-unused-vars
+        } catch (e) {
+            return false;
+        }
+    };
+
 
     const handleAddField = (key) => {
-        setuserProfileValues((prevFields) => {
+        setWorkerProfileValues((prevFields) => {
             const updatedFields = { ...prevFields };
             updatedFields[`${key}${v4()}`] = ['', '', ''];
             return updatedFields;
         });
-
+    }
+    const handleDelete = (key) => {
+        setWorkerProfileValues((prevFields) => {
+            const updatedFields = { ...prevFields };
+            delete updatedFields[key];
+            return updatedFields;
+        });
     }
 
     function evaluateArray(arr) {
@@ -137,15 +164,16 @@ function EditProfile() {
                             newImageFile: userProfileValues?.image?.[3]
                         }
                     ));
+                    await dispatch(fetchProfile());
                 } catch (error) {
                     console.error('Failed to update listing:', error);
                 }
-            }else{
+            } else {
                 setsubmitError('Please ensure that all fields are filled out in the correct format.')
                 setuserProfileValues((prevFields) => ({
-                        ...prevFields,
-                        languages: [userProfileValues?.languages?.[0], userProfileValues?.languages?.[1], 'You can only select one of the given languages from the dropdown list.'],
-                    }));
+                    ...prevFields,
+                    languages: [userProfileValues?.languages?.[0], userProfileValues?.languages?.[1], 'You can only select one of the given languages from the dropdown list.'],
+                }));
             }
         }
         else {
@@ -218,7 +246,7 @@ function EditProfile() {
                                                 <div className="flex opacity-80 text-black text-xs">Minimum 200x200 pixels, Maximum 6000x6000 pixels</div>
                                                 <input type="file"
                                                     name={'image'} accept="image/*" ref={imageInputRef}
-                                                    onChange={(e) => { handleInputChange(e, 1), "profile" }}
+                                                    onChange={(e) => { handleInputChange(e, 2, "user"), "profile" }}
                                                     className="bg-transparent outline-none justify-start" />
                                                 <div className="flex items-end gap-x-2 hover:text-red-500 text-xs">
                                                     <div onClick={() => {
@@ -286,18 +314,25 @@ function EditProfile() {
                             <div className={`${userProfile ? 'opacity-40' : 'opacity-100'} flex flex-col w-full h-auto gap-y-8 relative`}>
                                 {
                                     userProfile &&
-                                    <div className="absolute flex w-full h-full"></div>
+                                    <div className="absolute flex w-full h-full z-50"></div>
                                 }
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Mobile number</div>
-                                    <div className="flex w-full h-12 border border-zinc-400 rounded-sm overflow-hidden">
-                                        <input type="tel" placeholder="Enter your mobile number" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                    <div className="flex w-full h-12 border border-zinc-400 rounded-sm relative">
+                                        <PhoneInput
+                                            country={"lk"}
+                                            // value={''}
+                                            onChange={(e) => console.log(e)}
+                                            placeholder="Enter phone number"
+                                            inputProps={{ className: 'w-full h-full pl-14 outline-none bg-transparent' }}
+                                        />
                                     </div>
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Website</div>
                                     <div className="flex w-full h-12 border border-zinc-400 rounded-sm overflow-hidden">
-                                        <input type="url" placeholder="Url" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <input name="web" value={workerProfileValues?.web?.[0]} maxLength={10000} onChange={(e)=>{handleInputChange(e,10000,"worker")}} type="url" placeholder="Url" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <div className="flex text-sm opacity-60 p-4">{workerProfileValues?.web?.[1]}</div>
                                     </div>
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
@@ -309,6 +344,7 @@ function EditProfile() {
                                             </div>
                                         </div>
                                         <input placeholder="Username" type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <div className="flex text-sm opacity-60 p-4">{workerProfileValues?.web?.[1]}</div>
                                     </div>
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
@@ -335,10 +371,17 @@ function EditProfile() {
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Work experience</div>
-                                    <div className="flex w-full h-12 border border-zinc-400 rounded-sm overflow-hidden">
-                                        <input placeholder="Enter your work experience description" type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
-                                    </div>
-                                    <div className="flex w-full h-auto text-green-500 text-sm font-bold cursor-pointer">+ Add new exprience field</div>
+                                    {
+                                        experienceFields.map((value, index) => (
+                                            <div key={index} className="flex w-full h-12 border group border-zinc-400 rounded-sm overflow-hidden">
+                                                <input placeholder="Enter your work experience description" type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                                <div
+                                                    onClick={() => handleDelete(value)}
+                                                    className="flex w-10 justify-center opacity-0 group-hover:opacity-100 hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                            </div>
+                                        ))
+                                    }
+                                    <div onClick={() => { handleAddField("experience") }} className="flex w-full h-auto text-green-500 text-sm font-bold cursor-pointer">+ Add new exprience field</div>
                                 </div>
                             </div>
 

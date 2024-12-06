@@ -1761,6 +1761,14 @@ video {
   padding-bottom: 15rem;
 }
 
+.pl-14 {
+  padding-left: 3.5rem;
+}
+
+.pl-12 {
+  padding-left: 3rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -2147,6 +2155,10 @@ video {
 
 .group:hover .group-hover\:opacity-5 {
   opacity: 0.05;
+}
+
+.peer:hover ~ .peer-hover\:opacity-100 {
+  opacity: 1;
 }
 
 @media (min-width: 640px) {
