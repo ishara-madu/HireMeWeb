@@ -2,6 +2,8 @@ import LazyLoad from 'react-lazyload'
 import Footer from '../components/footer/Footer'
 import LeftNav from '../components/leftNav/LeftNav'
 import { CiSearch } from 'react-icons/ci'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function Notifications() {
   return (

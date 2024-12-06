@@ -7,6 +7,7 @@ import basedOnRatingReducer from '../features/basedOnRating/basedOnRatingSlice'
 import favoritesReducer from '../features/favorites/favoritesSlice'
 import searchReducer from '../features/search/searchSlice'
 import listingReducer from '../features/listing/listingSlice'
+import languagesReducer from '../features/languages/languagesSlice'
 
 export const store = configureStore({
     reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
         basedOnRating:basedOnRatingReducer,
         favorites: favoritesReducer,
         search:searchReducer,
-        listings:listingReducer
+        listings:listingReducer,
+        languages:languagesReducer
 
     },
 });

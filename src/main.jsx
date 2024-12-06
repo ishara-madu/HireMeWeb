@@ -13,6 +13,7 @@ import EditProfile from "./screens/EditProfile.jsx";
 import AccountSettings from "./screens/AccountSettings.jsx";
 import Documentations from "./screens/Documentations.jsx";
 import EditListings from "./screens/EditListings.jsx";
+import ComingSoon from "./screens/ComingSoon.jsx";
 
 const root = document.getElementById("root");
 
@@ -25,11 +26,12 @@ ReactDOM.createRoot(root).render(
         <Route path="listing" element={<Listing />} />
         <Route path="show-listings" element={<WorkerListing />} />
         <Route path="show-listings/manage" element={<EditListings />} />
-        <Route path="notifications" element={<Notifications />} />
+        <Route path="notifications" element={<ComingSoon />} />
         <Route path="favorites" element={<Favorites />} />
         <Route path="edit-profile" element={<EditProfile />} />
-        <Route path="account-settings" element={<AccountSettings />} />
-        <Route path="documentations" element={<Documentations />} />
+        <Route path="account-settings" element={<ComingSoon />} />
+        <Route path="documentations" element={<ComingSoon />} />
+        <Route path="comingsoon" element={<ComingSoon />} />
 
       </Routes>
     </BrowserRouter>
