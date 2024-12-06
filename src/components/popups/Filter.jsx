@@ -46,6 +46,7 @@ function Filter({ showFilter }) {
 
         dispatch(setFilters({ ...filters, language: value }));
     }
+    
 
     // eslint-disable-next-line react/prop-types, no-unused-vars
     const StarIcons = ({ value, size,color }) => {

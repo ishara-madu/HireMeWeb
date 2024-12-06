@@ -4,7 +4,6 @@ import getCookie from "../../util/getCookie";
 import { getDistance } from 'geolib';
 
 const history = JSON.parse(sessionStorage.getItem("history")) || [""];
-console.log(history);
 
 export const fetchBasedOnRating = createAsyncThunk(
     'users/basedOnRating',

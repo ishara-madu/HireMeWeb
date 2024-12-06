@@ -7,9 +7,10 @@ import Profile from "../popups/profile";
 import Notifications from "../popups/Notifications";
 import Favorites from "../popups/Favorites";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile } from "../../features/profile/profileThunk";
+import { fetchProfile, updateProfile } from "../../features/profile/profileThunk";
 import { useLocation, useNavigate } from "react-router-dom";
 import profileImage from '../../assets/logo_black.png'
+import { fetchResult } from "../../features/search/searchThunk";
 
 function TopNav() {
     const navigate = useNavigate();
@@ -24,12 +25,26 @@ function TopNav() {
 
     const profile = useSelector((state) => state.profile.data);
 
+    // console.log(profile?.[0]?.searchHistory?.history);
+    
     useEffect(() => {
         dispatch(fetchProfile());
+        dispatch(fetchResult({ searchResult: searchText }));
+        console.log(`top nav ${searchText}`);
+        
     }, [dispatch]);
-
-    const handleSearch = (e) => {
+    
+    const handleSearch = async (e) => {
         e.preventDefault(); 
+        const oldvalues = profile?.[0]?.searchHistory?.history || '';
+        await dispatch(updateProfile(
+            {
+                searchHistory:{
+                    history:[...oldvalues,searchText]
+                }
+            }
+        ));
+        await dispatch(fetchProfile());
         if (searchText.trim()) {
             navigate(`/search?query=${encodeURIComponent(searchText)}`);
         }

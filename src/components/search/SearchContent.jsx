@@ -5,7 +5,7 @@ import { FaAngleDown } from "react-icons/fa"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { setFilters, sortReviewed, sortRated, sortNewest, clearSorting } from "../../features/search/searchSlice"
+import { setFilters, sortReviewed, sortRated, sortNewest, clearSorting, clearFilters } from "../../features/search/searchSlice"
 import { fetchResult } from "../../features/search/searchThunk"
 
 function SearchContent() {
@@ -21,11 +21,10 @@ function SearchContent() {
 
 
     useEffect(() => {
-        dispatch(fetchResult(filters));        
-    }, [dispatch,filters]);
-    useEffect(() => {
-        dispatch(setFilters({ ...filters, searchResult: query }));
-    }, [query, dispatch])
+        dispatch(fetchResult(query));     
+        console.log(`searc content${query}`);
+           
+    }, [dispatch,query]);
 
     useEffect(() => {
         if (currentSortValue === 'Most Relevent') {
@@ -46,10 +45,10 @@ function SearchContent() {
             <div className="flex w-full justify-center">
                 <div className="flex w-11/12 flex-col">
                     <div className="w-full text-3xl font-bold">
-                        {results.length.toLocaleString()} results for “{query}”
+                        {results?.length.toLocaleString()} results for “{query}”
                     </div>
                     <div className="flex w-full justify-between items-center">
-                        <div onClick={(e) => e.stopPropagation()} className="flex gap-x-2 mt-5">
+                        <div onClick={(e) => e.stopPropagation()} className="flex gap-x-2 mt-5 items-center">
                             <div onClick={() => { setShowFilter(prev => !prev); }} className="flex cursor-pointer w-20 h-12 border border-black justify-center text-sm items-center font-semibold">
                                 <MdFilterList size={20} />&nbsp;Filter
                             </div>
@@ -82,8 +81,9 @@ function SearchContent() {
                                 }
 
                             </div>
+                            <div onClick={()=>{dispatch(clearFilters())}} className="flex text-green-600 text-sm font-bold items-center cursor-pointer">Clear Filters</div>
                         </div>
-                        <div className="flex text-sm opacity-60 font-semibold">{results.length.toLocaleString()} results</div>
+                        <div className="flex text-sm opacity-60 font-semibold">{results?.length.toLocaleString()} results</div>
                     </div>
                 </div>
             </div>

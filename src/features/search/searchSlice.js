@@ -16,7 +16,12 @@ const searchSlice = createSlice(
                 state.filters = action.payload;
             },
             clearFilters: (state) => {
-                state.filters = {};
+                state.filters = Object.keys(state.filters).reduce((newFilters, key) => {
+                    if (key === "searchResult") {
+                        newFilters[key] = state.filters[key]; 
+                    }
+                    return newFilters;
+                }, {});
             },
             sortReviewed: (state) => {
                 const sortedReviewed = [...state.results].sort((a, b) => {
@@ -32,19 +37,19 @@ const searchSlice = createSlice(
                 });
                 state.results = sortedReviewed;
             },
-            sortRated : (state)=>{
+            sortRated: (state) => {
                 const sortedRated = [...state.results].sort((a, b) => {
                     return b.users.rating.perc - a.users.rating.perc;
                 });
                 state.results = sortedRated;
             },
-            sortNewest:(state)=>{
+            sortNewest: (state) => {
                 const sortedNewest = [...state.results].sort((a, b) => {
                     return new Date(b.created_at) - new Date(a.created_at);
                 });
                 state.results = sortedNewest;
             },
-            clearSorting:(state)=>{
+            clearSorting: (state) => {
                 state.results = [...state.unsorted];
             }
         },
@@ -66,5 +71,5 @@ const searchSlice = createSlice(
         }
     }
 )
-export const { setFilters, clearFilters, sortReviewed,sortRated,sortNewest,clearSorting } = searchSlice.actions;
+export const { setFilters, clearFilters, sortReviewed, sortRated, sortNewest, clearSorting } = searchSlice.actions;
 export default searchSlice.reducer;

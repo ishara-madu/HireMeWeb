@@ -9,7 +9,7 @@ export const fetchResult = createAsyncThunk(
 
             if (filters.searchResult) {
                 query = query.or(
-                    `description ->> long.ilike.%${filters.searchResult}%,description ->> short.ilike.%${filters.searchResult}%,description ->> keypoints.ilike.%${filters.searchResult}%,title.ilike.%${filters.searchResult}%,image.ilike.%${filters.searchResult}%,tags ->> tagList.ilike.%${filters.searchResult}%`
+                    `description ->> long.ilike.%${filters.searchResult}%,description ->> short.ilike.%${filters.searchResult}%,description ->> keypoints.ilike.%${filters.searchResult}%,title.ilike.%${filters.searchResult}%,tags ->> tagList.ilike.%${filters.searchResult}%`
                 );
             }
             if (filters.location) {

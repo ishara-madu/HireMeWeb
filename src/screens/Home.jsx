@@ -20,10 +20,7 @@ function Home() {
         dispatch(fetchProfile());
     }, [dispatch]);
 
-    
-    useEffect(() => {
-        sessionStorage.setItem('history', JSON.stringify((profile?.map(history => history?.searchHistory?.history).flat())));
-    }, [profile]);
+
 
     const handleSubmit = (bool) => {
         setShowLocation(bool);
