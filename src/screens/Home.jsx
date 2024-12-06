@@ -14,7 +14,7 @@ function Home() {
     const [showLocation, setShowLocation] = useState(false);
     const dispatch = useDispatch();
 
-    const { data: profile, error } = useSelector((state) => state.profile);
+    const { data: profile, error, loading } = useSelector((state) => state.profile);
 
     useEffect(() => {
         dispatch(fetchProfile());
@@ -27,13 +27,13 @@ function Home() {
     }
     return (
         <>
-        {
-            error && 
-            <div className="flex flex-1 justify-center items-center min-h-lvh w-full flex-col bg-[#ebebeb]">
-                {error}
-            </div>
+            {
+                error &&
+                <div className="flex flex-1 justify-center items-center min-h-lvh w-full flex-col bg-[#ebebeb]">
+                    {error}
+                </div>
 
-        }
+            }
             {
                 !error &&
                 <div onClick={() => (setShowLocation(false))} className="flex w-full flex-col bg-[#ebebeb]">
@@ -48,7 +48,16 @@ function Home() {
                                     </div>
                                     <div className="flex flex-col gap-y-2 relative">
                                         <h2 className="text-2xl font-bold">Welcome back, {profile?.name}</h2>
-                                        <div className="text-sm flex items-center">{profile?.locationName} <div onClick={(e) => (e.stopPropagation(), setShowLocation(true))} className="text-green-700 text-xs font-bold underline ml-3">Edit location</div></div>
+                                        <div className="text-sm flex items-center">
+                                            <div className="flex">
+                                                {loading ?
+                                                    "Loading..."
+                                                    :
+                                                    profile?.locationName
+                                                }
+                                            </div>
+                                            <div onClick={(e) => (e.stopPropagation(), setShowLocation(true))} className="text-green-700 text-xs font-bold underline ml-3 cursor-pointer">Edit location</div>
+                                        </div>
                                         {
                                             showLocation &&
                                             <EditLocation showPupup={handleSubmit} />

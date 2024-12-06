@@ -74,7 +74,7 @@ function BasedOnRatings() {
                         !loading ? (
                             basedOnRating?.map((data, index) => {
                                 return (
-                                    <div key={index} onMouseOver={() => { setMouseOver(index) }} onMouseLeave={() => { setMouseOver(null) }} className='flex h-[350px] justify-center items-start relative'>
+                                    <div key={index} onMouseOver={() => { setMouseOver(index) }} onMouseLeave={() => { setMouseOver(null) }} className='flex h-[370px] justify-center items-start relative'>
                                         <div className="flex h-auto flex-col mx-5 gap-y-2 justify-center items-center shadow-sm shadow-black my-2 rounded-sm overflow-hidden">
                                             <div className="w-64 h-44 flex items-center justify-center overflow-hidden">
                                                 <LazyLoad height={176} offset={100} once className='w-full h-full'>
@@ -83,7 +83,8 @@ function BasedOnRatings() {
                                             </div>
                                             <div className='flex flex-col w-64 gap-y-1 p-1'>
                                                 <p className={`flex-wrap text-sm font-bold`}>{data?.title}</p>
-                                                <p className='text-xs opacity-60'>{data?.users?.name}</p>
+                                                <p className='text-xs opacity-60'>{data?.users?.locationName}</p>
+                                                <p className='text-xs opacity-80 font-bold'>{data?.users?.name}</p>
                                                 <div className='flex items-center gap-x-1'>
                                                     <p className='font-semibold text-sm'>{data?.rating?.perc}</p>
                                                     <div className='flex items-center'>
@@ -99,7 +100,7 @@ function BasedOnRatings() {
                                                     <div className='w-full'>
                                                         <div className='flex flex-col mb-1 gap-y-0.5'>
                                                             <div className='text-lg font-bold leading-5'>{data?.title}</div>
-                                                            <div className='text-xs opacity-60'>{data?.tags?.tagList?.map(element => `${element},`)}</div>
+                                                            <div className='text-xs opacity-60'>{data?.tags?.tagList?.join(',')}</div>
                                                             <p className='text-sm'>{data?.description?.short}</p>
                                                         </div>
                                                         <div className='flex flex-col gap-y-2'>
