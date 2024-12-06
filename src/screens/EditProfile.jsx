@@ -7,17 +7,18 @@ import { MdDeleteOutline } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
 import { languagesData } from "../features/languages/languagesThunk"
 import { v4 } from "uuid"
-import { fetchProfile } from '../features/profile/profileThunk';
+import { fetchProfile, updateProfile, updateProfileWithImage } from '../features/profile/profileThunk';
 import LoadingSpinner from '../components/LoadingSpinner';
 function EditProfile() {
     const dispatch = useDispatch();
     const { data } = useSelector((state) => state.languages)
-    const { data: profile, error, loading } = useSelector((state) => state.profile);
+    const { data: profile, error, loading, image_update_loading } = useSelector((state) => state.profile);
     const [userProfile, setUserProfile] = useState(true)
     const [languagesPopup, setLanguagesPopup] = useState(false)
+    const [submitError, setsubmitError] = useState('')
     const [userProfileValues, setuserProfileValues] = useState({
         name: ['', '', ''],
-        image: ['', '', ''],
+        image: ['', '', '', '', 0],
         bio: ['', '', ''],
         languages: ['', '', ''],
     })
@@ -33,7 +34,7 @@ function EditProfile() {
         if (profile?.length === 1) {
             setuserProfileValues({
                 name: [profile[0].name],
-                image: [profile[0].image],
+                image: [JSON.parse(profile?.[0]?.image)?.publicUrl, '', '', '', JSON.parse(profile?.[0]?.image)?.oldImage],
                 bio: [profile[0].bio],
                 languages: [profile[0].languages],
             })
@@ -42,7 +43,11 @@ function EditProfile() {
 
 
 
+    const arrCheck = Object.values(userProfileValues).map(value => value[0]?.length > 0);
+
+
     const handleInputChange = (e, maxlength, profile) => {
+        setsubmitError('')
         let name, value, files;
         if (e.target) {
             name = e.target.name;
@@ -62,8 +67,6 @@ function EditProfile() {
             error = `Text exceeds the maximum limit of ${maxlength} characters.`;
         }
         if (files) {
-            console.log("image");
-
             const maxSizeInMB = maxlength;
             const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
             length = `${(files[0].size / 1024).toFixed(0)}KB`;
@@ -75,10 +78,10 @@ function EditProfile() {
             } else {
                 error = '';
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = async (e) => {
                     setuserProfileValues((prevFields) => ({
                         ...prevFields,
-                        [name]: [e.target.result, length, error],
+                        [name]: [e.target.result, length, error, files[0]],
                     }));
                 };
                 reader.readAsDataURL(files[0]);
@@ -88,13 +91,13 @@ function EditProfile() {
             length = maxlength - length;
             setuserProfileValues((prevFields) => ({
                 ...prevFields,
-                [name]: [value, length, error],
+                [name]: [value, length, error, null],
             }));
         }
         else {
             setuserProfileValues((prevFields) => ({
                 ...prevFields,
-                [name]: [value, length, error],
+                [name]: [value, length, error, null],
             }));
         }
     }
@@ -109,10 +112,58 @@ function EditProfile() {
 
     }
 
-    
+    function evaluateArray(arr) {
+        const falseCount = arr.filter(value => value === false).length;
+        return falseCount === 0;
+    }
 
 
-    const language = data.filter(val => val.language.toLowerCase().includes(userProfileValues.languages?.[0].toLowerCase()));
+    const handleSubmit = async () => {
+        if (evaluateArray(arrCheck) === true) {
+            const val = data.filter(val => val.language == userProfileValues.languages?.[0])
+            if (val.length === 1) {
+                try {
+                    const oldPath = sessionStorage.getItem('old_profile_image') || userProfileValues?.image?.[4];
+                    await dispatch(updateProfile(
+                        {
+                            name: userProfileValues?.name?.[0],
+                            bio: userProfileValues?.bio?.[0],
+                            languages: userProfileValues?.languages?.[0]
+                        }
+                    ));
+                    await dispatch(updateProfileWithImage(
+                        {
+                            oldImagePath: oldPath,
+                            newImageFile: userProfileValues?.image?.[3]
+                        }
+                    ));
+                } catch (error) {
+                    console.error('Failed to update listing:', error);
+                }
+            }else{
+                setsubmitError('Please ensure that all fields are filled out in the correct format.')
+                setuserProfileValues((prevFields) => ({
+                        ...prevFields,
+                        languages: [userProfileValues?.languages?.[0], userProfileValues?.languages?.[1], 'You can only select one of the given languages from the dropdown list.'],
+                    }));
+            }
+        }
+        else {
+            Object.keys(userProfileValues).forEach((val) => {
+                if (userProfileValues[val][0] === '') {
+                    setuserProfileValues((prevFields) => ({
+                        ...prevFields,
+                        [val]: [userProfileValues?.[val]?.[0], userProfileValues?.[val]?.[1], 'This field is required. Please fill it out.'],
+                    }));
+                }
+            });
+            setsubmitError('Please complete all fields before submitting and try again.')
+        }
+
+    }
+
+
+    const language = data?.filter(val => val.language.toLowerCase().includes(userProfileValues.languages?.[0].toLowerCase()));
 
 
 
@@ -121,7 +172,7 @@ function EditProfile() {
             {
                 loading &&
                 <div className="fixed flex justify-center items-center h-full w-full bg-[#6362623d] z-[999999]">
-                    <LoadingSpinner/>
+                    <LoadingSpinner />
                 </div>
             }
             <div className="flex h-full flex-1 items-start justify-center w-full">
@@ -142,9 +193,9 @@ function EditProfile() {
                                 }
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Full name</div>
-                                    <div className="flex w-full h-12 border border-zinc-400 rounded-sm overflow-hidden items-center">
+                                    <div className={`flex w-full h-12 border ${userProfileValues?.name?.[2] ? 'border-red-400' : 'border-zinc-400'} rounded-sm overflow-hidden items-center`}>
                                         <input name="name" placeholder="Enter your name here" value={userProfileValues.name?.[0]} maxLength={100} onChange={(e) => { handleInputChange(e, 100, "user") }} type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
-                                        <div className="flex text-sm opacity-60 p-4">{userProfileValues?.name?.[1] || 100}</div>
+                                        <div className="flex text-sm opacity-60 p-4">{userProfileValues?.name?.[1]}</div>
                                     </div>
                                     {
                                         userProfileValues?.name?.[2] &&
@@ -153,8 +204,15 @@ function EditProfile() {
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Image</div>
-                                    <div className="flex w-full h-60 border items-center border-zinc-400 rounded-sm overflow-hidden">
-                                        <img src={userProfileValues?.image?.[0] || placeholder} alt="" className="h-60 w-60 object-contain bg-zinc-200" onClick={() => (imageInputRef.current.click())} />
+                                    <div className={`flex w-full h-60 border ${userProfileValues?.image?.[2] ? 'border-red-400' : 'border-zinc-400'} rounded-sm overflow-hidden items-center`}>
+                                        {
+                                            image_update_loading ?
+                                                <div className="flex h-60 w-60 justify-center items-center">
+                                                    <LoadingSpinner val={35} />
+                                                </div>
+                                                :
+                                                <img src={userProfileValues?.image?.[0] || placeholder} alt="" className="h-60 w-60 object-contain bg-zinc-200" onClick={() => (imageInputRef.current.click())} />
+                                        }
                                         <div className="pl-5">
                                             <div className="flex flex-col justify-around h-full gap-y-5">
                                                 <div className="flex opacity-80 text-black text-xs">Minimum 200x200 pixels, Maximum 6000x6000 pixels</div>
@@ -181,9 +239,9 @@ function EditProfile() {
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Bio</div>
-                                    <div className="flex w-full h-auto border border-zinc-400 rounded-sm overflow-hidden items-end">
+                                    <div className={`flex w-full h-auto border ${userProfileValues?.bio?.[2] ? 'border-red-400' : 'border-zinc-400'} rounded-sm overflow-hidden items-end`}>
                                         <textarea name="bio" placeholder="Enter your biography here" value={userProfileValues.bio?.[0]} maxLength={500} minLength={50} onChange={(e) => { handleInputChange(e, 500, "user") }} rows={6} type="text" className="w-full h-full pl-3 bg-transparent px-5 py-2 outline-none" />
-                                        <div className="flex text-sm opacity-60 p-4">{userProfileValues?.bio?.[1] || 500}</div>
+                                        <div className="flex text-sm opacity-60 p-4">{userProfileValues?.bio?.[1]}</div>
                                     </div>
                                     {
                                         userProfileValues?.bio?.[2] &&
@@ -193,7 +251,7 @@ function EditProfile() {
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Language</div>
-                                    <div onClick={(e) => (e.stopPropagation(), setLanguagesPopup(true))} className="flex w-full h-12 border border-zinc-400 rounded-sm">
+                                    <div onClick={(e) => (e.stopPropagation(), setLanguagesPopup(true))} className={`flex w-full h-12 border ${userProfileValues?.languages?.[2] ? 'border-red-400' : 'border-zinc-400'} rounded-sm`}>
                                         <input value={userProfileValues?.languages?.[0]} name="languages" maxLength={15} onChange={(e) => { handleInputChange(e, 15, "profile") }} type="text" className="w-full h-full pl-3 bg-transparent outline-none" placeholder="Select language" />
                                         <div className="flex h-full items-center justify-center w-12">
                                             {
@@ -217,7 +275,7 @@ function EditProfile() {
                                             languagesPopup &&
                                             <div className="absolute top-0 w-full h-auto max-h-60 bg-[#f1f0f0] border border-zinc-400 rounded-sm shadow-xl overflow-y-auto">
                                                 {language?.map((language, index) => (
-                                                    <div onClick={() => (setuserProfileValues((prev) => ({ ...prev, languages: [language?.language, userProfileValues?.languages?.[1], userProfileValues?.languages?.[2]] })), setLanguagesPopup(false))} key={index} className="flex w-full h-12 items-center pl-3 hover:bg-zinc-300">{language?.language}</div>
+                                                    <div onClick={() => (setuserProfileValues((prev) => ({ ...prev, languages: [language?.language, userProfileValues?.languages?.[1], ''] })), setLanguagesPopup(false), setsubmitError(''))} key={index} className="flex w-full h-12 items-center pl-3 hover:bg-zinc-300">{language?.language}</div>
                                                 ))}
                                             </div>
                                         }
@@ -285,7 +343,11 @@ function EditProfile() {
                             </div>
 
                         </div>
-                        <div className="flex w-28 justify-center items-center font-bold text-white rounded-sm h-12 bg-green-700">Save</div>
+                        <button disabled={submitError ? true : false} onClick={handleSubmit} className="flex disabled:bg-zinc-500 w-28 justify-center items-center font-bold text-white rounded-sm h-12 bg-green-700">Save</button>
+                        {
+                            submitError &&
+                            <div className={`flex text-xs text-red-500 ${submitError && 'block'}`}>{submitError}</div>
+                        }
                     </div>
                 </div>
             </div>

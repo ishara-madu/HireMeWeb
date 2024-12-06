@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "../../config/supabaseClient";
 import getCookie from '../../util/getCookie';
+import { v4 } from "uuid";
 
 export const fetchProfile = createAsyncThunk(
     'users/fetchProfile',
@@ -32,3 +33,46 @@ export const updateProfile = createAsyncThunk(
     }
 
 )
+
+export const updateProfileWithImage = createAsyncThunk(
+    "users/updateWithImage",
+    async ({ oldImagePath, newImageFile }, thunkAPI) => {
+        const newpath = `${getCookie('uid')}${v4()}`
+        try {
+            if (oldImagePath && oldImagePath !== 0) {
+                
+                const { error: deleteError } = await supabase.storage
+                    .from('profile_bucket')
+                    .remove([oldImagePath]);
+
+                if (deleteError) throw deleteError;
+            }
+
+            if (newImageFile ) {
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from('profile_bucket')
+                    .upload(`images/${newpath}`, newImageFile);
+
+                sessionStorage.setItem('old_profile_image', `images/${newpath}`)
+
+                if (uploadError) throw uploadError;
+                const { data: publicURL, error: urlError } = supabase.storage.from('profile_bucket').getPublicUrl(uploadData.path);
+
+                if (urlError) throw urlError;
+
+
+
+                await supabase
+                    .from("users")
+                    .update({ image: { ...publicURL, oldImage: `images/${newpath}` } })
+                    .eq("id", getCookie('uid'))
+
+                return { publicURL };
+
+            }
+
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);

@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProfile, updateProfile } from "./profileThunk";
+import { fetchProfile, updateProfile, updateProfileWithImage } from "./profileThunk";
 
 const profileSlice = createSlice({
     name: 'profile',
     initialState: {
         data: [],
         error: null,
-        
+        loading: false,
+        image_update_loading: false,
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -25,6 +26,15 @@ const profileSlice = createSlice({
             })
             .addCase(updateProfile.pending, (state) => {
                 state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateProfileWithImage.pending, (state) => {
+                state.image_update_loading = true;
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(updateProfileWithImage.fulfilled, (state) => {
+                state.image_update_loading = false;
                 state.error = null;
             })
     },
