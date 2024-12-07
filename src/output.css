@@ -638,6 +638,10 @@ video {
   z-index: 999999;
 }
 
+.z-\[9999999\] {
+  z-index: 9999999;
+}
+
 .mx-5 {
   margin-left: 1.25rem;
   margin-right: 1.25rem;
@@ -820,10 +824,6 @@ video {
   height: 15rem;
 }
 
-.h-72 {
-  height: 18rem;
-}
-
 .h-8 {
   height: 2rem;
 }
@@ -858,6 +858,14 @@ video {
 
 .h-full {
   height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.h-lvh {
+  height: 100lvh;
 }
 
 .max-h-36 {
@@ -1049,6 +1057,17 @@ video {
 
 .animate-spin {
   animation: spin 1s linear infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 .cursor-pointer {
@@ -1244,6 +1263,10 @@ video {
   border-width: 2px;
 }
 
+.border-0 {
+  border-width: 0px;
+}
+
 .border-b {
   border-bottom-width: 1px;
 }
@@ -1268,8 +1291,16 @@ video {
   border-top-width: 2px;
 }
 
+.border-t-4 {
+  border-top-width: 4px;
+}
+
 .border-solid {
   border-style: solid;
+}
+
+.border-none {
+  border-style: none;
 }
 
 .border-\[\#171717\] {
@@ -1453,6 +1484,47 @@ video {
 .bg-zinc-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(113 113 122 / var(--tw-bg-opacity, 1));
+}
+
+.bg-\[\#d2d2d253\] {
+  background-color: #d2d2d253;
+}
+
+.bg-\[\#ffffff53\] {
+  background-color: #ffffff53;
+}
+
+.bg-\[\#6b696953\] {
+  background-color: #6b696953;
+}
+
+.bg-violet-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(91 33 182 / var(--tw-bg-opacity, 1));
+}
+
+.bg-\[\#2d2d2d48\] {
+  background-color: #2d2d2d48;
+}
+
+.bg-\[\#1b1b1b16\] {
+  background-color: #1b1b1b16;
+}
+
+.bg-\[\#1b1b1b51\] {
+  background-color: #1b1b1b51;
+}
+
+.bg-\[\#0000004b\] {
+  background-color: #0000004b;
+}
+
+.bg-\[\#000000e4\] {
+  background-color: #000000e4;
+}
+
+.bg-\[\#4e4c4c31\] {
+  background-color: #4e4c4c31;
 }
 
 .bg-opacity-0 {
@@ -1848,6 +1920,12 @@ video {
 .shadow-xl {
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-none {
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 

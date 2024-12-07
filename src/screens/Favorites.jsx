@@ -82,7 +82,7 @@ function Favorites() {
         <LeftNav />
         <div className="flex justify-start gap-y-5 flex-col items-start w-11/12">
           <div className="flex w-full mt-10 text-3xl font-bold">Favorite Picks</div>
-          <div className="flex w-full flex-col gap-y-5 relative">
+          <div className="flex w-full flex-col gap-y-5">
             <div className="flex w-full justify-between">
               <div className="flex w-96 h-12 border rounded-sm border-zinc-400 relative items-center justify-start">
                 <div className="flex opacity-60 w-12 h-12 justify-center items-center">
@@ -92,7 +92,16 @@ function Favorites() {
               </div>
             </div>
             {
-              (favorites.length !== 0 && !loading) ?
+              loading &&
+              (
+                <div className="fixed top-0 left-0 flex justify-center items-center h-lvh w-full flex-col bg-[#4e4c4c31] z-[999999]">
+                  <LoadingSpinner />
+                </div>
+              )
+            }
+            
+            {
+              (favorites.length !== 0) ?
                 <div className="grid grid-cols-4 place-content-center gap-y-8 place-items-center pb-5">
                   {
                     filteredValues?.map((data, index) => (
@@ -154,12 +163,6 @@ function Favorites() {
                   }
                 </div>
                 :
-                loading ?
-                  (
-                    <div className="flex w-full justify-center items-center h-auto min-h-80">
-                      <LoadingSpinner />
-                    </div>
-                  ) :
                   (<div className="flex w-full h-auto min-h-80 items-center justify-center">
                     <div className="flex w-full h-full justify-center items-center text-sm text-gray-600">Your favorite is empty.</div>
                   </div>

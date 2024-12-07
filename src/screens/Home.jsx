@@ -8,6 +8,7 @@ import { fetchProfile } from "../features/profile/profileThunk";
 import EditLocation from "../components/popups/EditLocation";
 import Footer from '../components/footer/Footer'
 import placeholder from '../assets/placeholder.svg'
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function Home() {
     document.cookie = "uid=08d4f45c-d25f-45ea-a2b7-8765ac430cf6; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
@@ -33,6 +34,12 @@ function Home() {
                     {error}
                 </div>
 
+            }
+            {
+                loading && 
+                <div className="fixed flex justify-center items-center h-lvh w-full flex-col bg-[#1b1b1b51] z-[999999]">
+                    <LoadingSpinner/>
+                </div>
             }
             {
                 !error &&

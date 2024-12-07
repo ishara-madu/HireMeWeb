@@ -17,7 +17,7 @@ import 'react-quill/dist/quill.snow.css';
 function EditProfile() {
     const dispatch = useDispatch();
     const { data } = useSelector((state) => state.languages)
-    const { data: profile, error, loading, image_update_loading } = useSelector((state) => state.profile);
+    const { data: profile, loading, image_update_loading } = useSelector((state) => state.profile);
     const [userProfile, setUserProfile] = useState(true)
     const [languagesPopup, setLanguagesPopup] = useState(false)
     const [submitError, setsubmitError] = useState('')
@@ -82,7 +82,7 @@ function EditProfile() {
             name = "phone";
             value = e;
 
-        }else if(phone === "bio"){
+        } else if (phone === "bio") {
             name = "bio";
             value = e;
         } else {
@@ -97,7 +97,7 @@ function EditProfile() {
                 files = e.current.files;
             }
         }
-        let length = value.length;        
+        let length = value.length;
         let error;
         if (length <= maxlength) {
             error = ''
@@ -141,6 +141,7 @@ function EditProfile() {
     }
 
     const validateURL = (url) => {
+        // eslint-disable-next-line no-useless-escape
         const regex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)([\w\-\._~:\/?#[\]@!$&'()*+,;=]*)$/;
         return regex.test(url);
     };
@@ -268,7 +269,7 @@ function EditProfile() {
         <div onClick={() => (setLanguagesPopup(false))} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
             {
                 loading &&
-                <div className="fixed flex justify-center items-center h-full w-full bg-[#00000053] z-[999999]">
+                <div className="fixed flex justify-center items-center h-full w-full bg-[#6b696953] z-[999999]">
                     <LoadingSpinner />
                 </div>
             }
@@ -341,10 +342,10 @@ function EditProfile() {
                                             modules={modules}
                                             formats={formats}
                                             value={userProfileValues.bio?.[0]}
-                                            theme="snow" 
-                                            className="w-full h-72 bg-transparent outline-none"
-                                            placeholder="Enter your biography here" 
-                                            onChange={(change)=>( handleInputChange(change, 9999999999, "user", "bio"))}
+                                            theme="snow"
+                                            className="w-full min-h-72 max-h-[500px] overflow-y-auto bg-transparent outline-none"
+                                            placeholder="Enter your biography here"
+                                            onChange={(change) => (handleInputChange(change, 9999999999, "user", "bio"))}
                                         />
                                     </div>
                                     {

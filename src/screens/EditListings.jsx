@@ -11,7 +11,8 @@ import { useDispatch, useSelector } from "react-redux"
 import getCookie from "../util/getCookie"
 import { deleteListing, fetchListning, updateListing, updateListingWithImage } from "../features/listing/listingThunk"
 import { useNavigate } from "react-router-dom"
-
+import ReactQuill from "react-quill"
+import 'react-quill/dist/quill.snow.css';
 
 function EditListings() {
     const navigate = useNavigate()
@@ -202,17 +203,22 @@ function EditListings() {
         return falseCount === 1;
     }
 
-    const handleInputChange = (e, maxlength) => {
+    const handleInputChange = (e, maxlength,custom) => {
         let name, value, files;
-        if (e.target) {
-            name = e.target.name;
-            value = e.target.value;
-            files = e.target.files;
-        }
-        if (e.current) {
-            name = e.current.name;
-            value = e.current.value;
-            files = e.current.files;
+        if (custom === "long") {
+            name = "long";
+            value = e;
+        } else {
+            if (e.target) {
+                name = e.target.name;
+                value = e.target.value;
+                files = e.target.files;
+            }
+            if (e.current) {
+                name = e.current.name;
+                value = e.current.value;
+                files = e.current.files;
+            }
         }
         let length = value.length;
         let error;
@@ -354,6 +360,27 @@ function EditListings() {
         }
     }
 
+    const modules = {
+        toolbar: [
+            [{ font: [] }],                        // Font family
+            [{ header: [1, 2, 3, 4, 5, 6, false] }], // Headers
+            ["bold", "italic", "underline", "strike"], // Text formatting
+            [{ color: [] }, { background: [] }],  // Text color and background
+            [{ script: "sub" }, { script: "super" }], // Subscript/Superscript
+            [{ list: "ordered" }, { list: "bullet" }], // Lists
+            [{ indent: "-1" }, { indent: "+1" }], // Indentation
+            [{ align: [] }],                      // Alignment
+            ["link", "image"],           // Media
+            ["blockquote", "code-block"],         // Blockquote and Code block
+            ["clean"],                            // Remove formatting
+        ],
+    };
+
+    const formats = [
+        "font", "header", "bold", "italic", "underline", "strike",
+        "color", "background", "script", "list", "bullet", "indent",
+        "align", "link", "image", "video", "blockquote", "code-block"
+    ];
 
     return (
         <>
@@ -445,14 +472,23 @@ function EditListings() {
                                                 Here’s your chance to dive deep and share all the details about your work. Explain what you’ve done, how you did it, and why it’s special. Don’t hold back—this is your moment to shine!
                                             </div>
                                             <div className={`flex h-auto w-full border border-zinc-400 rounded-sm overflow-hidden items-end ${fields.long[2] ? 'border-red-500' : ''}`}>
-                                                <textarea name={'long'} maxLength={160} rows={10}
+                                                {/* <textarea name={'long'} maxLength={160} rows={10}
                                                     placeholder="Go into detail about your work—share everything that makes it amazing!"
                                                     onChange={(e) => { handleInputChange(e, 10) }}
                                                     value={fields.long[0] || ''}
-                                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 py-3 font-light outline-none" />
-                                                <div className="flex w-10 h-full pb-3 justify-center items-center opacity-70 text-sm">
+                                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 py-3 font-light outline-none" /> */}
+                                                <ReactQuill
+                                                    modules={modules}
+                                                    formats={formats}
+                                                    value={fields.long[0] || ''}
+                                                    theme="snow"
+                                                    className="w-full min-h-40 border-none shadow-none max-h-[500px] overflow-y-auto bg-transparent outline-none"
+                                                    placeholder="Go into detail about your work—share everything that makes it amazing!"
+                                                onChange={(change)=>( handleInputChange(change,300000,"long"))}
+                                                />
+                                                {/* <div className="flex w-10 h-full pb-3 justify-center items-center opacity-70 text-sm">
                                                     {10 - fields.long[1] || 0}
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className="flex text-xs text-red-500">
                                                 {fields.long[2] || ''}
