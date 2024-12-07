@@ -11,6 +11,7 @@ import { fetchProfile, updateProfile } from "../../features/profile/profileThunk
 import { useLocation, useNavigate } from "react-router-dom";
 import profileImage from '../../assets/logo_black.png'
 import { fetchResult } from "../../features/search/searchThunk";
+import placeholder from '../../assets/placeholder.svg'
 
 function TopNav() {
     const navigate = useNavigate();
@@ -88,7 +89,7 @@ function TopNav() {
                             </div>
                             <div onMouseOver={() => { setShowProfile(true) }} onMouseLeave={() => { setShowProfile(false) }} className="flex w-10 h-10 justify-center items-center rounded-full overflow-hidden cursor-pointer">
                                 <LazyLoad height={40} once>
-                                    <img src={profile?.image} alt="profile image" className="h-full w-full object-cover" />
+                                    <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="profile image" className="h-full w-full object-contain" />
                                 </LazyLoad>
                                 {
                                     showProfile && (

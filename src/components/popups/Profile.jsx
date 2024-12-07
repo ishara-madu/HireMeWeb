@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import LazyLoad from 'react-lazyload'
 import { Link } from 'react-router-dom';
-
+import placeholder from '../../assets/placeholder.svg'
 function Profile({ profile }) {
     const numberofFavorites = () => {
         const fevIds = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -18,7 +18,7 @@ function Profile({ profile }) {
                 <div className="flex w-full h-auto py-5 gap-x-3 items-center border-b border-[#c5c5c5]">
                     <div className="flex items-center">
                         <LazyLoad height={56} once>
-                            <img src={profile?.image} alt="" className="w-14 h-14 rounded-full object-cover" />
+                            <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="" className="w-14 h-14 rounded-full object-contain" />
                         </LazyLoad>
                     </div>
                     <div className="flex flex-col">
