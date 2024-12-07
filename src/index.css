@@ -5,3 +5,20 @@
 .flex.w-full::-webkit-scrollbar {
     display: none;
 }
+.ql-toolbar {
+    @apply bg-white border border-gray-300 rounded-md p-2 shadow;
+}
+.ql-editor h1 {
+    @apply text-2xl font-bold;
+}
+
+.ql-editor p {
+    @apply text-base;
+}
+
+.ql-editor a {
+    @apply text-blue-500 underline;
+}
+.ql-editor {
+    @apply max-w-full text-sm md:text-base lg:text-lg;
+}

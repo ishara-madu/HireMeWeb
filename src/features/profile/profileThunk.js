@@ -39,16 +39,14 @@ export const updateProfileWithImage = createAsyncThunk(
     async ({ oldImagePath, newImageFile }, thunkAPI) => {
         const newpath = `${getCookie('uid')}${v4()}`
         try {
-            if (oldImagePath && oldImagePath !== 0) {
+            if (oldImagePath && newImageFile) {
                 
                 const { error: deleteError } = await supabase.storage
                     .from('profile_bucket')
                     .remove([oldImagePath]);
 
                 if (deleteError) throw deleteError;
-            }
 
-            if (newImageFile ) {
                 const { data: uploadData, error: uploadError } = await supabase.storage
                     .from('profile_bucket')
                     .upload(`images/${newpath}`, newImageFile);

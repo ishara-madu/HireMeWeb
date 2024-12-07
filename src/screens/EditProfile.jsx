@@ -11,6 +11,9 @@ import { fetchProfile, updateProfile, updateProfileWithImage } from '../features
 import LoadingSpinner from '../components/LoadingSpinner';
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import ReactQuill from 'react-quill'; // Import React Quill
+import 'react-quill/dist/quill.snow.css';
+
 function EditProfile() {
     const dispatch = useDispatch();
     const { data } = useSelector((state) => state.languages)
@@ -20,7 +23,7 @@ function EditProfile() {
     const [submitError, setsubmitError] = useState('')
     const [userProfileValues, setuserProfileValues] = useState({
         name: ['', '', ''],
-        image: ['', '', '', '', 0],
+        image: ['', '', '', '', ''],
         bio: ['', '', ''],
         languages: ['', '', ''],
     })
@@ -43,7 +46,7 @@ function EditProfile() {
         if (profile?.length === 1) {
             setuserProfileValues({
                 name: [profile?.[0]?.name],
-                image: [JSON.parse(profile?.[0]?.image)?.publicUrl, '', '', '', JSON.parse(profile?.[0]?.image)?.oldImage],
+                image: [JSON?.parse(profile?.[0]?.image || "{}")?.publicUrl || '', '', '', '', JSON?.parse(profile?.[0]?.image || "{}")?.oldImage || ''],
                 bio: [profile?.[0]?.bio],
                 languages: [profile?.[0]?.languages],
             })
@@ -78,8 +81,10 @@ function EditProfile() {
         if (phone === "mobile") {
             name = "phone";
             value = e;
-            console.log("ff");
 
+        }else if(phone === "bio"){
+            name = "bio";
+            value = e;
         } else {
             if (e.target) {
                 name = e.target.name;
@@ -92,8 +97,7 @@ function EditProfile() {
                 files = e.current.files;
             }
         }
-
-        let length = value.length;
+        let length = value.length;        
         let error;
         if (length <= maxlength) {
             error = ''
@@ -238,13 +242,33 @@ function EditProfile() {
 
     const language = data?.filter(val => val.language.toLowerCase().includes(userProfileValues.languages?.[0].toLowerCase()));
 
+    const modules = {
+        toolbar: [
+            [{ font: [] }],                        // Font family
+            [{ header: [1, 2, 3, 4, 5, 6, false] }], // Headers
+            ["bold", "italic", "underline", "strike"], // Text formatting
+            [{ color: [] }, { background: [] }],  // Text color and background
+            [{ script: "sub" }, { script: "super" }], // Subscript/Superscript
+            [{ list: "ordered" }, { list: "bullet" }], // Lists
+            [{ indent: "-1" }, { indent: "+1" }], // Indentation
+            [{ align: [] }],                      // Alignment
+            ["link", "image"],           // Media
+            ["blockquote", "code-block"],         // Blockquote and Code block
+            ["clean"],                            // Remove formatting
+        ],
+    };
 
+    const formats = [
+        "font", "header", "bold", "italic", "underline", "strike",
+        "color", "background", "script", "list", "bullet", "indent",
+        "align", "link", "image", "video", "blockquote", "code-block"
+    ];
 
     return (
         <div onClick={() => (setLanguagesPopup(false))} className="flex h-full min-h-svh items-center justify-start w-full flex-col bg-[#ebebeb] relative">
             {
                 loading &&
-                <div className="fixed flex justify-center items-center h-full w-full bg-[#6362623d] z-[999999]">
+                <div className="fixed flex justify-center items-center h-full w-full bg-[#00000053] z-[999999]">
                     <LoadingSpinner />
                 </div>
             }
@@ -262,7 +286,7 @@ function EditProfile() {
                             <div className={`${userProfile ? 'opacity-100' : 'opacity-40'} flex flex-col w-full h-auto gap-y-8 relative`}>
                                 {
                                     !userProfile &&
-                                    <div onClick={()=>{setUserProfile(true)}} className="absolute flex w-full h-full"></div>
+                                    <div onClick={() => { setUserProfile(true) }} className="absolute flex w-full h-full"></div>
                                 }
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Full name</div>
@@ -312,9 +336,16 @@ function EditProfile() {
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Bio</div>
-                                    <div className={`flex w-full h-auto border ${userProfileValues?.bio?.[2] ? 'border-red-400' : 'border-zinc-400'} rounded-sm overflow-hidden items-end`}>
-                                        <textarea name="bio" placeholder="Enter your biography here" value={userProfileValues.bio?.[0]} maxLength={500} minLength={50} onChange={(e) => { handleInputChange(e, 500, "user") }} rows={6} type="text" className="w-full h-full pl-3 bg-transparent px-5 py-2 outline-none" />
-                                        <div className="flex text-sm opacity-60 p-4">{userProfileValues?.bio?.[1]}</div>
+                                    <div className={`flex w-full h-auto border ${userProfileValues?.bio?.[2] ? 'border-red-400' : 'border-zinc-400'} rounded-sm overflow-hidden items-end relative`}>
+                                        <ReactQuill
+                                            modules={modules}
+                                            formats={formats}
+                                            value={userProfileValues.bio?.[0]}
+                                            theme="snow" 
+                                            className="w-full h-72 bg-transparent outline-none"
+                                            placeholder="Enter your biography here" 
+                                            onChange={(change)=>( handleInputChange(change, 9999999999, "user", "bio"))}
+                                        />
                                     </div>
                                     {
                                         userProfileValues?.bio?.[2] &&
@@ -359,7 +390,7 @@ function EditProfile() {
                             <div className={`${userProfile ? 'opacity-40' : 'opacity-100'} flex flex-col w-full h-auto gap-y-8 relative`}>
                                 {
                                     userProfile &&
-                                    <div onClick={()=>{setUserProfile(false)}} className="absolute flex w-full h-full z-50"></div>
+                                    <div onClick={() => { setUserProfile(false) }} className="absolute flex w-full h-full z-50"></div>
                                 }
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Mobile number</div>

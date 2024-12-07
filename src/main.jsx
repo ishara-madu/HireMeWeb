@@ -15,6 +15,7 @@ import Documentations from "./screens/Documentations.jsx";
 import EditListings from "./screens/EditListings.jsx";
 import ComingSoon from "./screens/ComingSoon.jsx";
 
+
 const root = document.getElementById("root");
 
 ReactDOM.createRoot(root).render(
