@@ -57,19 +57,26 @@ function EditProfile() {
     const arrCheck = Object.values(userProfileValues).map(value => value[0]?.length > 0);
 
 
-    const handleInputChange = (e, maxlength, profile) => {
+    const handleInputChange = (e, maxlength, profile, phone) => {
         setsubmitError('')
+
         let name, value, files;
-        if (e.target) {
-            name = e.target.name;
-            value = e.target.value;
-            files = e.target.files;
+        if (phone) {
+            name = "phone";
+            value = e;
+        } else {
+            if (e.target) {
+                name = e.target.name;
+                value = e.target.value;
+                files = e.target.files;
+            }
+            if (e.current) {
+                name = e.current.name;
+                value = e.current.value;
+                files = e.current.files;
+            }
         }
-        if (e.current) {
-            name = e.current.name;
-            value = e.current.value;
-            files = e.current.files;
-        }
+
         let length = value.length;
         let error;
         if (length <= maxlength) {
@@ -114,13 +121,8 @@ function EditProfile() {
     }
 
     const validateURL = (url) => {
-        try {
-            new URL(url);
-            return true;
-            // eslint-disable-next-line no-unused-vars
-        } catch (e) {
-            return false;
-        }
+        const regex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)([\w\-\._~:\/?#[\]@!$&'()*+,;=]*)$/;
+        return regex.test(url);
     };
 
 
@@ -144,27 +146,33 @@ function EditProfile() {
         return falseCount === 0;
     }
 
+    console.log(validateURL(workerProfileValues?.web?.[0]));
+    
+    
 
     const handleSubmit = async () => {
         if (evaluateArray(arrCheck) === true) {
             const val = data.filter(val => val.language == userProfileValues.languages?.[0])
             if (val.length === 1) {
                 try {
-                    const oldPath = sessionStorage.getItem('old_profile_image') || userProfileValues?.image?.[4];
-                    await dispatch(updateProfile(
-                        {
-                            name: userProfileValues?.name?.[0],
-                            bio: userProfileValues?.bio?.[0],
-                            languages: userProfileValues?.languages?.[0]
-                        }
-                    ));
-                    await dispatch(updateProfileWithImage(
-                        {
-                            oldImagePath: oldPath,
-                            newImageFile: userProfileValues?.image?.[3]
-                        }
-                    ));
-                    await dispatch(fetchProfile());
+                    if (validateURL(workerProfileValues)) {
+                        const oldPath = sessionStorage.getItem('old_profile_image') || userProfileValues?.image?.[4];
+                        await dispatch(updateProfile(
+                            {
+                                name: userProfileValues?.name?.[0],
+                                bio: userProfileValues?.bio?.[0],
+                                languages: userProfileValues?.languages?.[0]
+                            }
+                        ));
+                        await dispatch(updateProfileWithImage(
+                            {
+                                oldImagePath: oldPath,
+                                newImageFile: userProfileValues?.image?.[3]
+                            }
+                        ));
+                        await dispatch(fetchProfile());
+                    }
+
                 } catch (error) {
                     console.error('Failed to update listing:', error);
                 }
@@ -246,7 +254,7 @@ function EditProfile() {
                                                 <div className="flex opacity-80 text-black text-xs">Minimum 200x200 pixels, Maximum 6000x6000 pixels</div>
                                                 <input type="file"
                                                     name={'image'} accept="image/*" ref={imageInputRef}
-                                                    onChange={(e) => { handleInputChange(e, 2, "user"), "profile" }}
+                                                    onChange={(e) => { handleInputChange(e, 2, "user", "profile") }}
                                                     className="bg-transparent outline-none justify-start" />
                                                 <div className="flex items-end gap-x-2 hover:text-red-500 text-xs">
                                                     <div onClick={() => {
@@ -280,7 +288,7 @@ function EditProfile() {
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Language</div>
                                     <div onClick={(e) => (e.stopPropagation(), setLanguagesPopup(true))} className={`flex w-full h-12 border ${userProfileValues?.languages?.[2] ? 'border-red-400' : 'border-zinc-400'} rounded-sm`}>
-                                        <input value={userProfileValues?.languages?.[0]} name="languages" maxLength={15} onChange={(e) => { handleInputChange(e, 15, "profile") }} type="text" className="w-full h-full pl-3 bg-transparent outline-none" placeholder="Select language" />
+                                        <input value={userProfileValues?.languages?.[0]} name="languages" maxLength={15} onChange={(e) => { handleInputChange(e, 15, "user") }} type="text" className="w-full h-full pl-3 bg-transparent outline-none" placeholder="Select language" />
                                         <div className="flex h-full items-center justify-center w-12">
                                             {
                                                 languagesPopup ?
@@ -321,19 +329,26 @@ function EditProfile() {
                                     <div className="flex w-full h-12 border border-zinc-400 rounded-sm relative">
                                         <PhoneInput
                                             country={"lk"}
-                                            // value={''}
-                                            onChange={(e) => console.log(e)}
+                                            value={workerProfileValues?.phone?.[0]} maxLength={20} onChange={(e) => { handleInputChange(e, 20, "worker", true) }}
                                             placeholder="Enter phone number"
                                             inputProps={{ className: 'w-full h-full pl-14 outline-none bg-transparent' }}
                                         />
                                     </div>
+                                    {
+                                        workerProfileValues?.phone?.[2] &&
+                                        <div className={`flex text-xs text-red-500 ${workerProfileValues?.phone?.[2] && 'block'}`}>{workerProfileValues?.phone?.[2]}</div>
+                                    }
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Website</div>
                                     <div className="flex w-full h-12 border border-zinc-400 rounded-sm overflow-hidden">
-                                        <input name="web" value={workerProfileValues?.web?.[0]} maxLength={10000} onChange={(e)=>{handleInputChange(e,10000,"worker")}} type="url" placeholder="Url" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <input name="web" value={workerProfileValues?.web?.[0]} maxLength={10000} onChange={(e) => { handleInputChange(e, 10000, "worker") }} type="url" placeholder="Url" className="w-full h-full pl-3 bg-transparent outline-none" />
                                         <div className="flex text-sm opacity-60 p-4">{workerProfileValues?.web?.[1]}</div>
                                     </div>
+                                    {
+                                        workerProfileValues?.web?.[2] &&
+                                        <div className={`flex text-xs text-red-500 ${workerProfileValues?.web?.[2] && 'block'}`}>{workerProfileValues?.web?.[2]}</div>
+                                    }
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Facebook</div>
@@ -343,9 +358,13 @@ function EditProfile() {
                                                 http://www.facebook.com/
                                             </div>
                                         </div>
-                                        <input placeholder="Username" type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
-                                        <div className="flex text-sm opacity-60 p-4">{workerProfileValues?.web?.[1]}</div>
+                                        <input name="facebook" value={workerProfileValues?.facebook?.[0]} maxLength={50} onChange={(e) => { handleInputChange(e, 50, "worker") }} placeholder="Username" type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <div className="flex text-sm opacity-60 p-4">{workerProfileValues?.facebook?.[1]}</div>
                                     </div>
+                                    {
+                                        workerProfileValues?.facebook?.[2] &&
+                                        <div className={`flex text-xs text-red-500 ${workerProfileValues?.facebook?.[2] && 'block'}`}>{workerProfileValues?.facebook?.[2]}</div>
+                                    }
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Linkedin</div>
@@ -355,8 +374,13 @@ function EditProfile() {
                                                 http://www.linkedin.com/
                                             </div>
                                         </div>
-                                        <input type="text" placeholder="Resource ID" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <input name="linkedin" value={workerProfileValues?.linkedin?.[0]} maxLength={50} onChange={(e) => { handleInputChange(e, 50, "worker") }} type="text" placeholder="Resource ID" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <div className="flex text-sm opacity-60 p-4">{workerProfileValues?.linkedin?.[1]}</div>
                                     </div>
+                                    {
+                                        workerProfileValues?.linkedin?.[2] &&
+                                        <div className={`flex text-xs text-red-500 ${workerProfileValues?.linkedin?.[2] && 'block'}`}>{workerProfileValues?.linkedin?.[2]}</div>
+                                    }
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Youtube</div>
@@ -366,18 +390,30 @@ function EditProfile() {
                                                 http://www.youtube.com/
                                             </div>
                                         </div>
-                                        <input type="text" placeholder="Username" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <input name="youtube" value={workerProfileValues?.youtube?.[0]} maxLength={50} onChange={(e) => { handleInputChange(e, 50, "worker") }} type="text" placeholder="Username" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                        <div className="flex text-sm opacity-60 p-4">{workerProfileValues?.youtube?.[1]}</div>
                                     </div>
+                                    {
+                                        workerProfileValues?.youtube?.[2] &&
+                                        <div className={`flex text-xs text-red-500 ${workerProfileValues?.youtube?.[2] && 'block'}`}>{workerProfileValues?.youtube?.[2]}</div>
+                                    }
                                 </div>
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Work experience</div>
                                     {
                                         experienceFields.map((value, index) => (
-                                            <div key={index} className="flex w-full h-12 border group border-zinc-400 rounded-sm overflow-hidden">
-                                                <input placeholder="Enter your work experience description" type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
-                                                <div
-                                                    onClick={() => handleDelete(value)}
-                                                    className="flex w-10 justify-center opacity-0 group-hover:opacity-100 hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                            <div key={index}>
+                                                <div className="flex w-full h-12 border border-zinc-400 rounded-sm overflow-hidden items-center">
+                                                    <input name={value} value={workerProfileValues?.[value]?.[0]} maxLength={50} onChange={(e) => { handleInputChange(e, 200, "worker") }} placeholder="Enter your work experience description" type="text" className="w-full h-full pl-3 bg-transparent outline-none" />
+                                                    <div className="flex pl-2 text-sm opacity-60">{workerProfileValues?.[value]?.[1]}</div>
+                                                    <div
+                                                        onClick={() => handleDelete(value)}
+                                                        className="w-10 justify-center flex hover:text-red-600 duration-150 items-center"><MdDeleteOutline size={25} /></div>
+                                                </div>
+                                                {
+                                                    workerProfileValues?.youtube?.[2] &&
+                                                    <div className={`flex text-xs text-red-500 ${workerProfileValues?.[value]?.[2] && 'block'}`}>{workerProfileValues?.[value]?.[2]}</div>
+                                                }
                                             </div>
                                         ))
                                     }
