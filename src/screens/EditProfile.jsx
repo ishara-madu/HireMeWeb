@@ -46,13 +46,21 @@ function EditProfile() {
                 image: [JSON.parse(profile?.[0]?.image)?.publicUrl, '', '', '', JSON.parse(profile?.[0]?.image)?.oldImage],
                 bio: [profile?.[0]?.bio],
                 languages: [profile?.[0]?.languages],
+            })
+            setWorkerProfileValues({
                 phone: [profile?.[0]?.contact?.phone, '', ''],
                 web: [profile?.[0]?.contact?.web, '', ''],
                 facebook: [profile?.[0]?.contact?.facebook, '', ''],
                 linkedin: [profile?.[0]?.contact?.linkedin, '', ''],
                 youtube: [profile?.[0]?.contact?.youtube, '', ''],
-                // experience: ['', '', '']
             })
+            const mapMoreValues = (values, name) => {
+                values &&
+                    values.map(val => (
+                        setWorkerProfileValues((prev) => ({ ...prev, [name + v4()]: [val, '', ''] }))
+                    ))
+            }
+            profile[0]?.userQuality ? Array.isArray(profile[0]?.userQuality?.experience) ? mapMoreValues(profile[0]?.userQuality && profile[0]?.userQuality?.experience, 'experience') : mapMoreValues([profile[0]?.userQuality?.experience], 'experience') : mapMoreValues([""], 'experience');
         }
     }, [profile])
 
@@ -156,7 +164,6 @@ function EditProfile() {
 
 
 
-
     const handleSubmit = async () => {
         if (evaluateArray(arrCheck) === true) {
             const val = data.filter(val => val.language == userProfileValues.languages?.[0])
@@ -165,6 +172,9 @@ function EditProfile() {
             if (val.length === 1 && urlError) {
                 try {
                     const oldPath = sessionStorage.getItem('old_profile_image') || userProfileValues?.image?.[4];
+                    const experience = Object.keys(workerProfileValues)
+                        .filter(key => key.startsWith('experience'))
+                        .map(key => workerProfileValues[key]).map(val => val[0]);
                     await dispatch(updateProfile(
                         {
                             name: userProfileValues?.name?.[0],
@@ -178,6 +188,10 @@ function EditProfile() {
                                 linkedin: workerProfileValues?.linkedin?.[0],
                                 youtube: workerProfileValues?.youtube?.[0]
                             },
+                            userQuality: {
+                                ...profile?.[0]?.userQuality,
+                                experience: experience
+                            }
                         }
                     ));
                     await dispatch(updateProfileWithImage(
@@ -193,6 +207,7 @@ function EditProfile() {
                 }
             } else {
                 if (!urlError) {
+                    setsubmitError('Please ensure that all fields are filled out in the correct format.')
                     setWorkerProfileValues((prevFields) => ({
                         ...prevFields,
                         web: [workerProfileValues?.web?.[0], workerProfileValues?.web?.[1], 'Please enter a valid URL'],
@@ -247,7 +262,7 @@ function EditProfile() {
                             <div className={`${userProfile ? 'opacity-100' : 'opacity-40'} flex flex-col w-full h-auto gap-y-8 relative`}>
                                 {
                                     !userProfile &&
-                                    <div className="absolute flex w-full h-full"></div>
+                                    <div onClick={()=>{setUserProfile(true)}} className="absolute flex w-full h-full"></div>
                                 }
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Full name</div>
@@ -344,7 +359,7 @@ function EditProfile() {
                             <div className={`${userProfile ? 'opacity-40' : 'opacity-100'} flex flex-col w-full h-auto gap-y-8 relative`}>
                                 {
                                     userProfile &&
-                                    <div className="absolute flex w-full h-full z-50"></div>
+                                    <div onClick={()=>{setUserProfile(false)}} className="absolute flex w-full h-full z-50"></div>
                                 }
                                 <div className="flex flex-col w-full h-auto gap-y-2">
                                     <div className="flex text-sm font-bold">Mobile number</div>
