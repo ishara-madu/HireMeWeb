@@ -42,10 +42,16 @@ function EditProfile() {
     useEffect(() => {
         if (profile?.length === 1) {
             setuserProfileValues({
-                name: [profile[0].name],
+                name: [profile?.[0]?.name],
                 image: [JSON.parse(profile?.[0]?.image)?.publicUrl, '', '', '', JSON.parse(profile?.[0]?.image)?.oldImage],
-                bio: [profile[0].bio],
-                languages: [profile[0].languages],
+                bio: [profile?.[0]?.bio],
+                languages: [profile?.[0]?.languages],
+                phone: [profile?.[0]?.contact?.phone, '', ''],
+                web: [profile?.[0]?.contact?.web, '', ''],
+                facebook: [profile?.[0]?.contact?.facebook, '', ''],
+                linkedin: [profile?.[0]?.contact?.linkedin, '', ''],
+                youtube: [profile?.[0]?.contact?.youtube, '', ''],
+                // experience: ['', '', '']
             })
         }
     }, [profile])
@@ -61,9 +67,11 @@ function EditProfile() {
         setsubmitError('')
 
         let name, value, files;
-        if (phone) {
+        if (phone === "mobile") {
             name = "phone";
             value = e;
+            console.log("ff");
+
         } else {
             if (e.target) {
                 name = e.target.name;
@@ -87,7 +95,6 @@ function EditProfile() {
         if (files) {
             const maxSizeInMB = maxlength;
             const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-            length = `${(files[0].size / 1024).toFixed(0)}KB`;
             if (files[0].size > maxSizeInBytes) {
                 error = `File size exceeds ${maxSizeInMB} MB. Please upload a smaller file.`;
                 imageInputRef.current.value = null;
@@ -97,6 +104,7 @@ function EditProfile() {
                 error = '';
                 const reader = new FileReader();
                 reader.onload = async (e) => {
+                    length = `${(files[0].size / 1024).toFixed(0)}KB`;
                     setuserProfileValues((prevFields) => ({
                         ...prevFields,
                         [name]: [e.target.result, length, error, files[0]],
@@ -146,42 +154,56 @@ function EditProfile() {
         return falseCount === 0;
     }
 
-    console.log(validateURL(workerProfileValues?.web?.[0]));
-    
-    
+
+
 
     const handleSubmit = async () => {
         if (evaluateArray(arrCheck) === true) {
             const val = data.filter(val => val.language == userProfileValues.languages?.[0])
-            if (val.length === 1) {
+            let urlError = true;
+            urlError = workerProfileValues?.web?.[0]?.length > 0 ? validateURL(workerProfileValues?.web?.[0]) : true;
+            if (val.length === 1 && urlError) {
                 try {
-                    if (validateURL(workerProfileValues)) {
-                        const oldPath = sessionStorage.getItem('old_profile_image') || userProfileValues?.image?.[4];
-                        await dispatch(updateProfile(
-                            {
-                                name: userProfileValues?.name?.[0],
-                                bio: userProfileValues?.bio?.[0],
-                                languages: userProfileValues?.languages?.[0]
-                            }
-                        ));
-                        await dispatch(updateProfileWithImage(
-                            {
-                                oldImagePath: oldPath,
-                                newImageFile: userProfileValues?.image?.[3]
-                            }
-                        ));
-                        await dispatch(fetchProfile());
-                    }
+                    const oldPath = sessionStorage.getItem('old_profile_image') || userProfileValues?.image?.[4];
+                    await dispatch(updateProfile(
+                        {
+                            name: userProfileValues?.name?.[0],
+                            bio: userProfileValues?.bio?.[0],
+                            languages: userProfileValues?.languages?.[0],
+                            contact: {
+                                ...profile?.[0]?.contact,
+                                phone: workerProfileValues?.phone?.[0],
+                                web: workerProfileValues?.web?.[0],
+                                facebook: workerProfileValues?.facebook?.[0],
+                                linkedin: workerProfileValues?.linkedin?.[0],
+                                youtube: workerProfileValues?.youtube?.[0]
+                            },
+                        }
+                    ));
+                    await dispatch(updateProfileWithImage(
+                        {
+                            oldImagePath: oldPath,
+                            newImageFile: userProfileValues?.image?.[3]
+                        }
+                    ));
+                    await dispatch(fetchProfile());
 
                 } catch (error) {
                     console.error('Failed to update listing:', error);
                 }
             } else {
-                setsubmitError('Please ensure that all fields are filled out in the correct format.')
-                setuserProfileValues((prevFields) => ({
-                    ...prevFields,
-                    languages: [userProfileValues?.languages?.[0], userProfileValues?.languages?.[1], 'You can only select one of the given languages from the dropdown list.'],
-                }));
+                if (!urlError) {
+                    setWorkerProfileValues((prevFields) => ({
+                        ...prevFields,
+                        web: [workerProfileValues?.web?.[0], workerProfileValues?.web?.[1], 'Please enter a valid URL'],
+                    }));
+                } else {
+                    setsubmitError('Please ensure that all fields are filled out in the correct format.')
+                    setuserProfileValues((prevFields) => ({
+                        ...prevFields,
+                        languages: [userProfileValues?.languages?.[0], userProfileValues?.languages?.[1], 'You can only select one of the given languages from the dropdown list.'],
+                    }));
+                }
             }
         }
         else {
@@ -254,7 +276,7 @@ function EditProfile() {
                                                 <div className="flex opacity-80 text-black text-xs">Minimum 200x200 pixels, Maximum 6000x6000 pixels</div>
                                                 <input type="file"
                                                     name={'image'} accept="image/*" ref={imageInputRef}
-                                                    onChange={(e) => { handleInputChange(e, 2, "user", "profile") }}
+                                                    onChange={(e) => { handleInputChange(e, 1, "user") }}
                                                     className="bg-transparent outline-none justify-start" />
                                                 <div className="flex items-end gap-x-2 hover:text-red-500 text-xs">
                                                     <div onClick={() => {
@@ -329,7 +351,7 @@ function EditProfile() {
                                     <div className="flex w-full h-12 border border-zinc-400 rounded-sm relative">
                                         <PhoneInput
                                             country={"lk"}
-                                            value={workerProfileValues?.phone?.[0]} maxLength={20} onChange={(e) => { handleInputChange(e, 20, "worker", true) }}
+                                            value={workerProfileValues?.phone?.[0]} maxLength={20} onChange={(e) => { handleInputChange(e, 20, "worker", "mobile") }}
                                             placeholder="Enter phone number"
                                             inputProps={{ className: 'w-full h-full pl-14 outline-none bg-transparent' }}
                                         />
