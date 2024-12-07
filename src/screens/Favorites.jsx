@@ -82,7 +82,7 @@ function Favorites() {
         <LeftNav />
         <div className="flex justify-start gap-y-5 flex-col items-start w-11/12">
           <div className="flex w-full mt-10 text-3xl font-bold">Favorite Picks</div>
-          <div className="flex w-full flex-col gap-y-5">
+          <div className="flex w-full flex-col gap-y-5 relative">
             <div className="flex w-full justify-between">
               <div className="flex w-96 h-12 border rounded-sm border-zinc-400 relative items-center justify-start">
                 <div className="flex opacity-60 w-12 h-12 justify-center items-center">

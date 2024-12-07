@@ -638,6 +638,10 @@ video {
   z-index: 999999;
 }
 
+.z-\[99999\] {
+  z-index: 99999;
+}
+
 .mx-5 {
   margin-left: 1.25rem;
   margin-right: 1.25rem;
@@ -943,6 +947,10 @@ video {
 
 .min-h-16 {
   min-height: 4rem;
+}
+
+.min-h-full {
+  min-height: 100%;
 }
 
 .w-0 {
@@ -1592,6 +1600,10 @@ video {
   background-color: #6362623d;
 }
 
+.bg-\[\#0000006e\] {
+  background-color: #0000006e;
+}
+
 .bg-opacity-0 {
   --tw-bg-opacity: 0;
 }
@@ -1978,6 +1990,10 @@ video {
 
 .opacity-20 {
   opacity: 0.2;
+}
+
+.opacity-25 {
+  opacity: 0.25;
 }
 
 .shadow-2xl {
