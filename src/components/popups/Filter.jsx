@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../features/profile/profileThunk";
 import { getSuggestions } from "../../util/getLocation";
 import { setFilters } from "../../features/search/searchSlice";
+import { languagesData } from "../../features/languages/languagesThunk";
+import { useLocation } from "react-router-dom";
+import { fetchResult } from "../../features/search/searchThunk";
 
 // eslint-disable-next-line react/prop-types
 function Filter({ showFilter }) {
@@ -15,12 +18,13 @@ function Filter({ showFilter }) {
     const [suggessions, setSuggessions] = useState([]);
     const dispatch = useDispatch();
     const filters = useSelector((state) => state.search.filters);
+    const languages = useSelector((state) => state.languages.data);
     const profile = useSelector((state) => state.profile.data);
-    const [input, setInput] = useState(sessionStorage.getItem('location') || "" || profile[0].locationName);
-    const languages = ["English", "Sinhala", "Mandarin", "Spanish", "Hindi", "Arabic", "Bengali", "Portuguese", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Korean", "French", "Turkish", "Vietnamese", "Telugu", "Marathi", "Tamil", "Urdu", "Italian", "Gujarati", "Polish", "Ukrainian", "Malayalam", "Romanian", "Dutch", "Greek", "Czech", "Hungarian", "Swahili", "Thai"];
+    const [input, setInput] = useState(sessionStorage.getItem('location') || "" || profile?.[0]?.locationName);
     const ratingsVal = ["4.5", "4.0","3.5","3.0"]
     useEffect(() => {
         dispatch(fetchProfile());
+        dispatch(languagesData());
     }, [dispatch]);
 
     useEffect(() => {
@@ -46,6 +50,7 @@ function Filter({ showFilter }) {
 
         dispatch(setFilters({ ...filters, language: value }));
     }
+    
     
 
     // eslint-disable-next-line react/prop-types, no-unused-vars
@@ -83,8 +88,8 @@ function Filter({ showFilter }) {
                             <div className="flex">
                                 <CiLocationArrow1 size={20} color="#aeadad" />
                             </div>
-                            <div onClick={() => {
-                                handleSubmitLocation();
+                            <div onClick={(e) => {
+                                handleSubmitLocation(e);
                                 setInput(
                                     val != undefined
                                         ? `${val._normalized_city || ''}${val._normalized_city && val.state ? ',' : ''}${val.state || ''}${(val.state || val._normalized_city) && val.country ? ',' : ''}${val.country || ''}`
@@ -134,9 +139,9 @@ function Filter({ showFilter }) {
                         {
                             languages.map((language, id) => (
                                 <div key={id} className="flex gap-x-2 items-center">
-                                    <input onChange={handleLanguageUncheck} type='radio' value={language} name="language" className="" />
+                                    <input onChange={handleLanguageUncheck} type='radio' value={language.language} name="language" className="" />
                                     <div className="flex items-center text-sm">
-                                        {language}
+                                        {language.language}
                                     </div>
                                 </div>
                             ))

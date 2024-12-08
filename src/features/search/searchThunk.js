@@ -12,21 +12,6 @@ export const fetchResult = createAsyncThunk(
                     `description ->> long.ilike.%${filters.searchResult}%,description ->> short.ilike.%${filters.searchResult}%,description ->> keypoints.ilike.%${filters.searchResult}%,title.ilike.%${filters.searchResult}%,tags ->> tagList.ilike.%${filters.searchResult}%`
                 );
             }
-            if (filters.location) {
-                query = query.ilike('users.locationName', `%${filters.location}%`);
-            }
-            if (filters.ratings) {
-                query = query.gt('users.rating ->> perc', filters.ratings);
-            }
-            if (filters.language) {
-                query = query.ilike(`users.languages`, filters.language);
-            }
-            
-            
-            if (filters.newest) {
-                query = query.order('created_at', { ascending: filters.newest });
-            }
-
             let { data } = await query;
 
 

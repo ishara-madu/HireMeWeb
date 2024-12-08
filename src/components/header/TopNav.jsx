@@ -15,13 +15,11 @@ import placeholder from '../../assets/placeholder.svg'
 
 function TopNav() {
     const navigate = useNavigate();
-    const path = useLocation();
-    const queryParams = new URLSearchParams(path.search);
-    const query = queryParams.get("query");
+
     const [showProfile, setShowProfile] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [showFavorites, setShowFavorites] = useState(false);
-    const [searchText, setSearchText] = useState(query || '');
+    const [searchText, setSearchText] = useState( '');
     const dispatch = useDispatch();
 
     const profile = useSelector((state) => state.profile.data);
@@ -30,8 +28,6 @@ function TopNav() {
     
     useEffect(() => {
         dispatch(fetchProfile());
-        dispatch(fetchResult({ searchResult: searchText }));
-        console.log(`top nav ${searchText}`);
         
     }, [dispatch]);
     

@@ -13,17 +13,9 @@ function SearchResult() {
     const [fevId, setFavId] = useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const filters = useSelector((state) => state.search.filters);
     const { results, loading, error } = useSelector((state) => state.search);
-    const path = useLocation();
-    const queryParams = new URLSearchParams(path.search);
-    const query = queryParams.get("query");
 
-    useEffect(() => {
-        dispatch(fetchResult(query));
-        console.log(`Search result: ${query}`);
-        
-    }, [dispatch, query]);
+   
 
     const fev = JSON.parse(localStorage.getItem("favorites")) || [];
     const handleFavorites = (favId) => {

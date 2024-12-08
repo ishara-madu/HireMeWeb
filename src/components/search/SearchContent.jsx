@@ -21,10 +21,8 @@ function SearchContent() {
 
 
     useEffect(() => {
-        dispatch(fetchResult(query));     
-        console.log(`searc content${query}`);
-           
-    }, [dispatch,query]);
+        dispatch(fetchResult(query));
+    }, [dispatch, query]);
 
     useEffect(() => {
         if (currentSortValue === 'Most Relevent') {
@@ -81,7 +79,7 @@ function SearchContent() {
                                 }
 
                             </div>
-                            <div onClick={()=>{dispatch(clearFilters())}} className="flex text-green-600 text-sm font-bold items-center cursor-pointer">Clear Filters</div>
+                            <div onClick={() => { dispatch(clearFilters()) }} className="flex text-green-600 text-sm font-bold items-center cursor-pointer">Clear Filters</div>
                         </div>
                         <div className="flex text-sm opacity-60 font-semibold">{results?.length.toLocaleString()} results</div>
                     </div>
