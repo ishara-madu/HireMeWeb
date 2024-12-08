@@ -135,9 +135,9 @@ function Favorites() {
                                   <p className='text-sm'>{data?.description?.short}</p>
                                 </div>
                                 <div className='flex flex-col gap-y-2'>
-                                  <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints[0]}</p>
-                                  <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints[1]}</p>
-                                  <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints[2]}</p>
+                                  <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints?.[0]}</p>
+                                  <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints?.[1]}</p>
+                                  <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints?.[2]}</p>
                                 </div>
                               </div>
                               <div className='flex w-full justify-evenly items-center mt-4'>

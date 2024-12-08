@@ -203,7 +203,7 @@ function EditListings() {
         return falseCount === 1;
     }
 
-    const handleInputChange = (e, maxlength,custom) => {
+    const handleInputChange = (e, maxlength, custom) => {
         let name, value, files;
         if (custom === "long") {
             name = "long";
@@ -472,11 +472,6 @@ function EditListings() {
                                                 Here’s your chance to dive deep and share all the details about your work. Explain what you’ve done, how you did it, and why it’s special. Don’t hold back—this is your moment to shine!
                                             </div>
                                             <div className={`flex h-auto w-full border border-zinc-400 rounded-sm overflow-hidden items-end ${fields.long[2] ? 'border-red-500' : ''}`}>
-                                                {/* <textarea name={'long'} maxLength={160} rows={10}
-                                                    placeholder="Go into detail about your work—share everything that makes it amazing!"
-                                                    onChange={(e) => { handleInputChange(e, 10) }}
-                                                    value={fields.long[0] || ''}
-                                                    type="text" className="flex flex-1 h-full bg-transparent pl-5 py-3 font-light outline-none" /> */}
                                                 <ReactQuill
                                                     modules={modules}
                                                     formats={formats}
@@ -484,11 +479,8 @@ function EditListings() {
                                                     theme="snow"
                                                     className="w-full min-h-40 border-none shadow-none max-h-[500px] overflow-y-auto bg-transparent outline-none"
                                                     placeholder="Go into detail about your work—share everything that makes it amazing!"
-                                                onChange={(change)=>( handleInputChange(change,300000,"long"))}
+                                                    onChange={(change) => (handleInputChange(change, 9999999999, "long"))}
                                                 />
-                                                {/* <div className="flex w-10 h-full pb-3 justify-center items-center opacity-70 text-sm">
-                                                    {10 - fields.long[1] || 0}
-                                                </div> */}
                                             </div>
                                             <div className="flex text-xs text-red-500">
                                                 {fields.long[2] || ''}
