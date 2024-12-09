@@ -11,7 +11,7 @@ import placeholder from '../assets/placeholder.svg'
 import LoadingSpinner from "../components/LoadingSpinner";
 
 function Home() {
-    document.cookie = "uid=08d4f45c-d25f-45ea-a2b7-8765ac430cf6; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
+    document.cookie = "uid=9e0c9fae-bd7d-4b59-8a92-801d1d18f053; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
     const [showLocation, setShowLocation] = useState(false);
     const dispatch = useDispatch();
 
@@ -51,7 +51,7 @@ function Home() {
                             <div key={id} className="flex w-full h-24 flex-row justify-center">
                                 <div className="flex w-11/12 h-full items-center gap-x-5">
                                     <div className="flex h-14 w-14 items-center rounded-full overflow-hidden">
-                                        <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="" className="object-contain w-full h-full" />
+                                        <img src={JSON?.parse?.(profile?.image)?.publicUrl || placeholder} alt="" className="object-contain w-full h-full" />
                                     </div>
                                     <div className="flex flex-col gap-y-2 relative">
                                         <h2 className="text-2xl font-bold">Welcome back, {profile?.name}</h2>

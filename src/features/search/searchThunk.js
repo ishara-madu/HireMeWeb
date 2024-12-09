@@ -12,6 +12,12 @@ export const fetchResult = createAsyncThunk(
                     `description ->> long.ilike.%${filters.searchResult}%,description ->> short.ilike.%${filters.searchResult}%,description ->> keypoints.ilike.%${filters.searchResult}%,title.ilike.%${filters.searchResult}%,tags ->> tagList.ilike.%${filters.searchResult}%`
                 );
             }
+            if(filters.rating){
+                query = query.gt('rating->>perc', filters.rating);
+            }
+            if(filters.language){
+                query = query.eq('users.languages', filters.language);
+            }
             let { data } = await query;
 
 

@@ -15,7 +15,7 @@ function SearchResult() {
     const navigate = useNavigate();
     const { results, loading, error } = useSelector((state) => state.search);
 
-   
+
 
     const fev = JSON.parse(localStorage.getItem("favorites")) || [];
     const handleFavorites = (favId) => {
@@ -32,7 +32,7 @@ function SearchResult() {
         }
     }
 
-    const handleListClick = (data)=>{
+    const handleListClick = (data) => {
         dispatch(setFilters({ id: data }));
         navigate(`/listing`)
         window.scrollTo({
@@ -58,14 +58,14 @@ function SearchResult() {
     };
 
     return (
-        <div className="flex flex-1 flex-col pl-4">
-            {loading && <LoadingSpinner/>}
+        <div className="flex flex-1 flex-col pl-4 min-h-full">
+            {loading && <div className="flex w-full h-full items-center justify-center"><LoadingSpinner /></div>}
             {error && <p className="flex justify-center items-center">Error: {error}</p>}
             {results?.length === 0 && !loading && <p className="flex justify-center items-center">No results found.</p>}
             {
                 !loading &&
                 results?.map((result, id) => (
-                    <div onClick={()=>(handleListClick(result?.id))} key={id} className="flex w-full gap-x-3 items-center py-3 h-48 max-h-auto border-b border-[#c5c5c5] relative">
+                    <div onClick={() => (handleListClick(result?.id))} key={id} className="flex w-full gap-x-3 items-center py-3 h-48 max-h-auto border-b border-[#c5c5c5] relative">
                         <div className="flex w-60 h-40 border border-[#c5c5c5] overflow-hidden rounded-md">
                             <img src={result?.image?.publicUrl || placeholder} alt="" className="w-full h-full object-contain" />
                         </div>
@@ -78,7 +78,7 @@ function SearchResult() {
                                 <div className='flex items-center'>
                                     <StarIcons value={result?.users?.rating?.perc} size={15} />
                                 </div>
-                                <p className='text-xs opacity-60'>{`(${(result.users.rating.rating)?.reduce((accumulator, currentValue) => accumulator + currentValue, 0)})`}</p>
+                                <p className='text-xs opacity-60'>{`(${(result?.users?.rating?.rating)?.reduce((accumulator, currentValue) => accumulator + currentValue, 0)})`}</p>
                             </div>
                             <div className="flex text-xs opacity-60 gap-x-1">
                                 <CiLocationOn size={15} />

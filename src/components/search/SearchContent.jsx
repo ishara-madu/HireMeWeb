@@ -5,7 +5,7 @@ import { FaAngleDown } from "react-icons/fa"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { setFilters, sortReviewed, sortRated, sortNewest, clearSorting, clearFilters } from "../../features/search/searchSlice"
+import { sortReviewed, sortRated, sortNewest, clearSorting, filterLocation, setFilters } from "../../features/search/searchSlice"
 import { fetchResult } from "../../features/search/searchThunk"
 
 function SearchContent() {
@@ -21,22 +21,25 @@ function SearchContent() {
 
 
     useEffect(() => {
-        dispatch(fetchResult(query));
-    }, [dispatch, query]);
-
-    useEffect(() => {
-        if (currentSortValue === 'Most Relevent') {
-            dispatch(clearSorting());
-        } else if (currentSortValue === 'Most Reviewed') {
-            dispatch(clearSorting());
-            dispatch(sortReviewed());
-        } else if (currentSortValue === 'Highest Rated') {
-            dispatch(clearSorting());
-            dispatch(sortRated());
-        } else if (currentSortValue === 'Newest') {
-            dispatch(clearSorting());
-            dispatch(sortNewest());
+        const sorting = async () => {
+            if (currentSortValue === 'Most Relevent') {
+                await dispatch(clearSorting());
+                await dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
+            } else if (currentSortValue === 'Most Reviewed') {
+                await dispatch(clearSorting());
+                dispatch(sortReviewed());
+                dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
+            } else if (currentSortValue === 'Highest Rated') {
+                await dispatch(clearSorting());
+                dispatch(sortRated());
+                dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
+            } else if (currentSortValue === 'Newest') {
+                await dispatch(clearSorting());
+                dispatch(sortNewest());
+                dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
+            }
         }
+        sorting();
     }, [currentSortValue, dispatch])
     return (
         <div onClick={() => setShowSort(false)} className="flex-1 flex-col flex items-center mt-10">
@@ -79,7 +82,14 @@ function SearchContent() {
                                 }
 
                             </div>
-                            <div onClick={() => { dispatch(clearFilters()) }} className="flex text-green-600 text-sm font-bold items-center cursor-pointer">Clear Filters</div>
+                            {
+                                (filters.rating || filters.language) &&
+                                <div onClick={async () => {
+                                    await dispatch(fetchResult({ ...filters, rating: null, language: null }));
+                                    dispatch(setFilters({ ...filters, rating: null, language: null }));
+                                    dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
+                                }} className="flex text-green-600 text-sm font-bold items-center cursor-pointer">Clear Filters</div>
+                            }
                         </div>
                         <div className="flex text-sm opacity-60 font-semibold">{results?.length.toLocaleString()} results</div>
                     </div>

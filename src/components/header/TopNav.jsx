@@ -12,32 +12,43 @@ import { useLocation, useNavigate } from "react-router-dom";
 import profileImage from '../../assets/logo_black.png'
 import { fetchResult } from "../../features/search/searchThunk";
 import placeholder from '../../assets/placeholder.svg'
+import { clearSorting, filterLocation, setFilters } from "../../features/search/searchSlice";
 
 function TopNav() {
     const navigate = useNavigate();
-
+    const path = useLocation();
+    const queryParams = new URLSearchParams(path.search);
+    const query = queryParams.get("query");
     const [showProfile, setShowProfile] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [showFavorites, setShowFavorites] = useState(false);
-    const [searchText, setSearchText] = useState( '');
+    const [searchText, setSearchText] = useState(query || '');
     const dispatch = useDispatch();
 
     const profile = useSelector((state) => state.profile.data);
 
-    // console.log(profile?.[0]?.searchHistory?.history);
-    
     useEffect(() => {
         dispatch(fetchProfile());
-        
     }, [dispatch]);
-    
+
+    useEffect(() => {
+        const result = async () => {
+            await dispatch(fetchResult({ searchResult: searchText }));
+            dispatch(setFilters({ searchResult: searchText }));
+            await dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
+        }
+        result();
+
+    }, [query]);
+
+
     const handleSearch = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         const oldvalues = profile?.[0]?.searchHistory?.history || '';
         await dispatch(updateProfile(
             {
-                searchHistory:{
-                    history:[...oldvalues,searchText]
+                searchHistory: {
+                    history: [...oldvalues, searchText]
                 }
             }
         ));
@@ -49,7 +60,7 @@ function TopNav() {
     return (
         <div id="nav" className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
             <form onSubmit={handleSearch} className="flex flex-row w-11/12 h-full justify-between items-center gap-x-10">
-                <div onClick={()=>{navigate('/',{replace:true})}} className="cursor-pointer flex justify-center items-center h-full w-48">
+                <div onClick={() => { navigate('/', { replace: true }) }} className="cursor-pointer flex justify-center items-center h-full w-48">
                     <LazyLoad height={50} once className="flex justify-center items-center w-full h-full">
                         <img src={profileImage} alt="logo" className="flex justify-center items-center h-full w-full object-contain" />
                     </LazyLoad>

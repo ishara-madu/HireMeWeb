@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchResult } from "./searchThunk";
+import { getDistance } from 'geolib';
 
 const searchSlice = createSlice(
     {
@@ -14,14 +15,6 @@ const searchSlice = createSlice(
         reducers: {
             setFilters: (state, action) => {
                 state.filters = action.payload;
-            },
-            clearFilters: (state) => {
-                state.filters = Object.keys(state.filters).reduce((newFilters, key) => {
-                    if (key === "searchResult") {
-                        newFilters[key] = state.filters[key]; 
-                    }
-                    return newFilters;
-                }, {});
             },
             sortReviewed: (state) => {
                 const sortedReviewed = [...state.results].sort((a, b) => {
@@ -51,7 +44,25 @@ const searchSlice = createSlice(
             },
             clearSorting: (state) => {
                 state.results = [...state.unsorted];
-            }
+            },
+            filterLocation: (state, action) => {
+                const userLocation = action.payload;
+
+                const usersWithDistance = [...state.results]?.map((list) => {
+
+                    return {
+                        ...list,
+                        distance: getDistance(
+                            { latitude: userLocation.lat, longitude: userLocation.lng },
+                            { latitude: list.users.latitude, longitude: list.users.longitude }
+                        ),
+                    };
+                });
+
+                const filteredLocation = usersWithDistance.sort((a, b) => (a.distance || 0) - (b.distance || 0));
+                state.results = filteredLocation;
+            },
+            
         },
         extraReducers: (builder) => {
             builder
@@ -71,5 +82,5 @@ const searchSlice = createSlice(
         }
     }
 )
-export const { setFilters, clearFilters, sortReviewed, sortRated, sortNewest, clearSorting } = searchSlice.actions;
+export const { sortReviewed, sortRated, sortNewest, clearSorting, filterLocation,filterRatings,setFilters } = searchSlice.actions;
 export default searchSlice.reducer;
