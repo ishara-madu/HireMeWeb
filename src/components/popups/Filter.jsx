@@ -64,14 +64,14 @@ function Filter({ showFilter }) {
 
     }
     const handleRatings = async (e) => {
-        await dispatch(fetchResult({ ...filters, rating: e.target.value }));
         dispatch(setFilters({ ...filters, rating: e.target.value }));
+        await dispatch(fetchResult({ ...filters, rating: e.target.value }));
         await dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
         
     }
     const handleLanguageUncheck = async(e) => {
-        await dispatch(fetchResult({ ...filters, language: e.target.value }));
         dispatch(setFilters({ ...filters, language: e.target.value }));
+        await dispatch(fetchResult({ ...filters, language: e.target.value }));
         await dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
 
     }
@@ -137,7 +137,7 @@ function Filter({ showFilter }) {
                 }
             </div>
             <div className="flex w-full px-2 flex-col border-t border-[#c5c5c5]">
-                <div onClick={() => setShowRatings((prev) => !prev)} className="flex w-full py-3 items-center justify-between">
+                <div onClick={() => setShowRatings((prev) => !prev)} className="flex w-full py-3 items-center justify-between cursor-pointer">
                     <div className="flex font-semibold">Ratings</div>
                     <div className={`flex ${showRatings ? 'rotate-180 duration-200' : 'duration-200'}`}><FaChevronDown size={15} /></div>
                 </div>
@@ -159,7 +159,7 @@ function Filter({ showFilter }) {
                 }
             </div>
             <div className="flex w-full px-2 flex-col border-t border-[#c5c5c5]">
-                <div onClick={() => setShowLanguage((prev) => !prev)} className="flex w-full py-3 items-center justify-between">
+                <div onClick={() => setShowLanguage((prev) => !prev)} className="flex w-full py-3 items-center cursor-pointer justify-between">
                     <div className="flex font-semibold">Language</div>
                     <div className={`flex ${showLanguage ? 'rotate-180 duration-200' : 'duration-200'}`}><FaChevronDown size={15} /></div>
                 </div>
@@ -176,18 +176,18 @@ function Filter({ showFilter }) {
                                 </label>
                             ))
                         }
-                        <div onClick={() => setShowAllLanguage(prev => !prev)} className={`flex text-sm font-semibold bg-gradient-to-t from-[#ebebeb] to-[#ebebeb62] w-full bottom-0 items-end text-purple-600 ${showAllLanguage ? "flex h-auto" : "absolute h-14"}`}>
-                            <div className="flex gap-x-3 items-center">
+                        <div onClick={() => setShowAllLanguage(prev => !prev)} className={`flex text-sm font-semibold bg-gradient-to-t from-[#ebebeb] to-[#ebebeb62] w-full bottom-0 items-end text-green-600 ${showAllLanguage ? "flex h-auto" : "absolute h-14"}`}>
+                            <div className="flex gap-x-3 text-green-600 items-center">
                                 {
                                     showAllLanguage ? (
                                         <>
                                             Show less
-                                            <div className={`flex rotate-180`}><FaChevronDown color="rgb(147 51 234)" size={12} /></div>
+                                            <div className={`flex rotate-180`}><FaChevronDown size={12} /></div>
                                         </>
                                     ) : (
                                         <>
                                             Show more
-                                            <div className={`flex`}><FaChevronDown color="rgb(147 51 234)" size={12} /></div>
+                                            <div className={`flex`}><FaChevronDown size={12} /></div>
                                         </>
                                     )
                                 }

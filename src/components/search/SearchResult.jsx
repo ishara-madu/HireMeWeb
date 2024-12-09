@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { MdOutlineStarHalf, MdOutlineStarOutline, MdOutlineStarPurple500 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchResult } from "../../features/search/searchThunk";
 import LoadingSpinner from "../LoadingSpinner";
 import { setFilters } from "../../features/listing/listingSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import placeholder from '../../assets/placeholder.svg'
 
 function SearchResult() {

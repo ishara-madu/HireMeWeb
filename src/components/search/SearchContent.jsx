@@ -40,7 +40,7 @@ function SearchContent() {
             }
         }
         sorting();
-    }, [currentSortValue, dispatch])
+    }, [currentSortValue, dispatch,filters])
     return (
         <div onClick={() => setShowSort(false)} className="flex-1 flex-col flex items-center mt-10">
             <div className="flex w-full justify-center">
@@ -85,8 +85,8 @@ function SearchContent() {
                             {
                                 (filters.rating || filters.language) &&
                                 <div onClick={async () => {
-                                    await dispatch(fetchResult({ ...filters, rating: null, language: null }));
                                     dispatch(setFilters({ ...filters, rating: null, language: null }));
+                                    await dispatch(fetchResult({ ...filters, rating: null, language: null }));
                                     dispatch(filterLocation(JSON?.parse?.(sessionStorage?.getItem?.('coordinates')) || { lat: '', lng: '' }));
                                 }} className="flex text-green-600 text-sm font-bold items-center cursor-pointer">Clear Filters</div>
                             }

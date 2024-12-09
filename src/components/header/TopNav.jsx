@@ -45,14 +45,14 @@ function TopNav() {
     const handleSearch = async (e) => {
         e.preventDefault();
         const oldvalues = profile?.[0]?.searchHistory?.history || '';
-        await dispatch(updateProfile(
+        dispatch(updateProfile(
             {
                 searchHistory: {
                     history: [...oldvalues, searchText]
                 }
             }
         ));
-        await dispatch(fetchProfile());
+        dispatch(fetchProfile());
         if (searchText.trim()) {
             navigate(`/search?query=${encodeURIComponent(searchText)}`);
         }
