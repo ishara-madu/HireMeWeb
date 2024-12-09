@@ -50,10 +50,10 @@ function SearchContent() {
                     </div>
                     <div className="flex w-full justify-between items-center">
                         <div onClick={(e) => e.stopPropagation()} className="flex gap-x-2 mt-5 items-center">
-                            <div onClick={() => { setShowFilter(prev => !prev); }} className="flex cursor-pointer w-20 h-12 border border-black justify-center text-sm items-center font-semibold">
+                            <div onClick={() => { setShowFilter(prev => !prev); }} className="flex cursor-pointer w-20 h-12 border hover:bg-zinc-300 border-black justify-center text-sm items-center font-semibold">
                                 <MdFilterList size={20} />&nbsp;Filter
                             </div>
-                            <div onClick={() => { setShowSort(prev => !prev) }} className="flex w-52 h-12 border border-black items-center justify-center relative cursor-pointer">
+                            <div onClick={() => { setShowSort(prev => !prev) }} className="flex w-52 h-12 border border-black hover:bg-zinc-300 items-center justify-center relative cursor-pointer">
                                 <div className="flex-1 flex flex-col items-center justify-center">
                                     <div className="flex text-xs w-11/12 opacity-60 justify-start">Sort by</div>
                                     <div className="flex flex-1 justify-center items-center">
