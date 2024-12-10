@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryData } from "../../features/category/categoryThunk";
-import { useNavigate } from "react-router-dom";
 
 
 function TopCategory() {
@@ -9,9 +8,9 @@ function TopCategory() {
     const [activeCategory, setActiveCategory] = useState(''); // Track the active category
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const category = useSelector((state) => state.category.items);
+
 
 
     useEffect(() => {
@@ -20,8 +19,8 @@ function TopCategory() {
     const uniqueCategory = [];
     const seenNames = new Set();
     category.forEach((user) => {
-        if (!seenNames.has(user.name)) {
-            seenNames.add(user.name);
+        if (!seenNames.has(user.category)) {
+            seenNames.add(user.category);
             uniqueCategory.push(user);
         }
     });
@@ -35,12 +34,14 @@ function TopCategory() {
         setSubCategory(false);
         setActiveCategory('');
     };
+    console.log(lastTenCategory);
 
-    const handleSearch = (e) => {        
-        if (e.target.innerText.trim()) {
-            navigate(`/search?query=${encodeURIComponent(e.target.innerText)}`);
-        }
-    };
+    const parts = (text, category) => {
+        const parts = text.split(",");
+        return category ? parts[0].trim() : parts[1].trim();
+
+    }
+
     return (
         <div className="h-auto ">
             <div className="flex w-full h-12 bg-[#ebebeb] justify-center items-center shadow-lg shadow-[#bcbcbc]">
@@ -48,10 +49,10 @@ function TopCategory() {
                     {
                         lastTenCategory.map(
                             (item, id) => (
-                                <div key={id} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative" onMouseOver={() => handleMouseOver(item.name)} onMouseLeave={handleMouseOut}>{item.name}
-                                    {(subcategory && (activeCategory == item.name)) &&
+                                <div key={id} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative">{parts(item.category,true)}
+                                    {/* {(subcategory && (activeCategory == item)) &&
                                         <div className="absolute bottom-0" style={{ width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '8px solid #373737' }}></div>
-                                    }
+                                    } */}
                                 </div>
                             )
                         )

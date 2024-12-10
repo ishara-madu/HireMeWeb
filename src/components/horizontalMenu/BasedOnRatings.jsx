@@ -96,17 +96,26 @@ function BasedOnRatings() {
                                         </div>
                                         {
                                             mouseOver === index && (
-                                                <div onClick={() => (handleListClick(data?.id))} className='flex flex-col items-center justify-between h-auto min-h-72 w-[290px] absolute bg-[#ececec] border border-[#b1b0b0] rounded-md shadow-2xl z-20 p-3'>
-                                                    <div className='w-full'>
+                                                <div onClick={() => (handleListClick(data?.id))} className='flex flex-col items-center justify-between h-auto min-h-80 w-[290px] absolute bg-[#ececec] border border-[#b1b0b0] rounded-md shadow-2xl z-20 p-3'>
+                                                    <div className='flex flex-col gap-y-1 flex-wrap text-wrap break-words w-full break-all'>
                                                         <div className='flex flex-col mb-1 gap-y-0.5'>
                                                             <div className='text-lg font-bold leading-5'>{data?.title}</div>
                                                             <div className='text-xs opacity-60'>{data?.tags?.tagList?.join(',')}</div>
                                                             <p className='text-sm'>{data?.description?.short}</p>
                                                         </div>
                                                         <div className='flex flex-col gap-y-2'>
-                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints?.[0]}</p>
-                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints?.[1]}</p>
-                                                            <p className='text-sm flex items-center'><CiBookmarkCheck size={20} />{data?.description?.keypoints?.[2]}</p>
+                                                            {
+                                                                data?.description?.keypoints?.[0] &&
+                                                                <p className='text-sm flex items-start'><div className="flex w-[20px] h-[20px]"><CiBookmarkCheck size={20} /></div>{data?.description?.keypoints?.[0]}</p>
+                                                            }
+                                                            {
+                                                                data?.description?.keypoints?.[1] &&
+                                                                <p className='text-sm flex items-start'><div className="flex w-[20px] h-[20px]"><CiBookmarkCheck size={20} /></div>{data?.description?.keypoints?.[1]}</p>
+                                                            }
+                                                            {
+                                                                data?.description?.keypoints?.[2] &&
+                                                                <p className='text-sm flex items-start'><div className="flex w-[20px] h-[20px]"><CiBookmarkCheck size={20} /></div>{data?.description?.keypoints?.[2]}</p>
+                                                            }
                                                         </div>
                                                     </div>
                                                     <div className='flex w-full justify-evenly items-center mt-4'>

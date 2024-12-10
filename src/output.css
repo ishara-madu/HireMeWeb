@@ -888,6 +888,10 @@ video {
   height: 100lvh;
 }
 
+.h-\[20px\] {
+  height: 20px;
+}
+
 .max-h-36 {
   max-height: 9rem;
 }
@@ -1066,6 +1070,10 @@ video {
 
 .w-2 {
   width: 0.5rem;
+}
+
+.w-\[20px\] {
+  width: 20px;
 }
 
 .flex-1 {
@@ -1267,8 +1275,20 @@ video {
   overflow-x: scroll;
 }
 
+.text-wrap {
+  text-wrap: wrap;
+}
+
 .text-nowrap {
   text-wrap: nowrap;
+}
+
+.break-words {
+  overflow-wrap: break-word;
+}
+
+.break-all {
+  word-break: break-all;
 }
 
 .rounded {

@@ -11,7 +11,7 @@ import placeholder from '../assets/placeholder.svg'
 import LoadingSpinner from "../components/LoadingSpinner";
 
 function Home() {
-    document.cookie = "uid=9e0c9fae-bd7d-4b59-8a92-801d1d18f053; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
+    // document.cookie = "uid=9e0c9fae-bd7d-4b59-8a92-801d1d18f053; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
     const [showLocation, setShowLocation] = useState(false);
     const dispatch = useDispatch();
 
