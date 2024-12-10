@@ -14,7 +14,7 @@ import { fetchResult } from "../../features/search/searchThunk";
 import placeholder from '../../assets/placeholder.svg'
 import { filterLocation, setFilters } from "../../features/search/searchSlice";
 import { useNetworkState } from "react-use";
-import { updateOnlineStatue } from "../../features/onlineStatue/onlineStatueThunk";
+import { fetchOnlineStatue, updateOnlineStatue } from "../../features/onlineStatue/onlineStatueThunk";
 
 
 function TopNav() {
@@ -47,12 +47,13 @@ function TopNav() {
     
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            dispatch(updateOnlineStatue(profile?.[0]?.id));
-        }, 5000); 
-    
-        return () => clearInterval(interval);
-    }, [])
+            dispatch(updateOnlineStatue({
+                id: profile?.[0]?.id,
+                updates: {
+                    last_seen: new Date().toISOString()
+                }
+            }))
+    }, [dispatch,profile])
 
     const handleSearch = async (e) => {
         e.preventDefault();
