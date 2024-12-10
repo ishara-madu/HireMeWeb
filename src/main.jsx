@@ -33,8 +33,8 @@ ReactDOM.createRoot(root).render(
         <Route path="account-settings" element={<ComingSoon />} />
         <Route path="documentations" element={<ComingSoon />} />
         <Route path="comingsoon" element={<ComingSoon />} />
-
       </Routes>
     </BrowserRouter>
   </Provider>
 )
+

@@ -12,9 +12,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import profileImage from '../../assets/logo_black.png'
 import { fetchResult } from "../../features/search/searchThunk";
 import placeholder from '../../assets/placeholder.svg'
-import { clearSorting, filterLocation, setFilters } from "../../features/search/searchSlice";
+import { filterLocation, setFilters } from "../../features/search/searchSlice";
+import { useNetworkState } from "react-use";
+import { updateOnlineStatue } from "../../features/onlineStatue/onlineStatueThunk";
+
 
 function TopNav() {
+    const networkState = useNetworkState();
     const navigate = useNavigate();
     const path = useLocation();
     const queryParams = new URLSearchParams(path.search);
@@ -40,7 +44,15 @@ function TopNav() {
         result();
 
     }, [query]);
+    
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            dispatch(updateOnlineStatue(profile?.[0]?.id));
+        }, 5000); 
+    
+        return () => clearInterval(interval);
+    }, [])
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -94,9 +106,10 @@ function TopNav() {
                                     )
                                 }
                             </div>
-                            <div onMouseOver={() => { setShowProfile(true) }} onMouseLeave={() => { setShowProfile(false) }} className="flex w-10 h-10 justify-center items-center rounded-full overflow-hidden cursor-pointer">
-                                <LazyLoad height={40} once>
-                                    <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="profile image" className="h-full w-full object-contain" />
+                            <div onMouseOver={() => { setShowProfile(true) }} onMouseLeave={() => { setShowProfile(false) }} className="flex w-10 h-10 justify-center items-center rounded-full cursor-pointer">
+                                <LazyLoad height={40} once className="relative">
+                                    <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="profile image" className="h-10 w-10 object-cover rounded-full" />
+                                    <div className={`flex w-3 h-3 ${networkState.online ? 'bg-green-500' : 'bg-red-500'} left-0 top-0 rounded-full absolute`}></div>
                                 </LazyLoad>
                                 {
                                     showProfile && (
