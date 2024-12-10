@@ -436,8 +436,8 @@ function EditListings() {
                                             <div className="flex text-lg font-bold">What’s Your Work About?</div>
                                             <div className="flex text-sm opacity-80">This is where you share the name of your work. Keep it short and clear so people instantly know what it’s about!</div>
                                             <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.title[2] ? 'border-red-500' : ''}`}>
-                                                <input name={'title'} maxLength={11} placeholder="Give it a clear, catchy title..." onChange={(e) => { handleInputChange(e, 10) }} value={fields.title[0]} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
-                                                <div className="flex w-10 justify-center items-center opacity-70 text-sm">{10 - fields.title[1] || 0}</div>
+                                                <input name={'title'} maxLength={100} placeholder="Give it a clear, catchy title..." onChange={(e) => { handleInputChange(e, 100) }} value={fields.title[0]} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
+                                                <div className="flex w-10 justify-center items-center opacity-70 text-sm">{100 - fields.title[1] || 100}</div>
                                             </div>
                                             <div className="flex text-xs text-red-500">{fields.title[2] || ''}</div>
                                         </div>
@@ -450,13 +450,13 @@ function EditListings() {
                                                 Write a quick summary of your work here. Think of it as a snapshot that gives people a glimpse of what you’ve created or accomplished.
                                             </div>
                                             <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.short[2] ? 'border-red-500' : ''}`}>
-                                                <input name={'short'} maxLength={160}
+                                                <input name={'short'} maxLength={200}
                                                     placeholder="Summarize your work in a few sentences..."
-                                                    onChange={(e) => { handleInputChange(e, 10) }}
+                                                    onChange={(e) => { handleInputChange(e, 200) }}
                                                     value={fields.short[0] || ''}
                                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {10 - fields.short[1] || 0}
+                                                    {200 - fields.short[1] || 200}
                                                 </div>
                                             </div>
                                             <div className="flex text-xs text-red-500">
@@ -497,12 +497,12 @@ function EditListings() {
                                             ${fields[keypointField][2] ? 'border-red-500' : ''} items-center`}>
                                                             <input
                                                                 name={keypointField}
-                                                                maxLength={12}
+                                                                maxLength={100}
                                                                 value={fields[keypointField][0] || ''}
-                                                                onChange={(e) => handleInputChange(e, 10)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
+                                                                onChange={(e) => handleInputChange(e, 100)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
                                                                 placeholder="Share your unique value, special skills, or why someone should work with you..." />
                                                             <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                                {10 - fields[keypointField][1]}
+                                                                {100 - fields?.[keypointField]?.[1] || 0}
                                                             </div>
                                                             <div
                                                                 onClick={() => handleDelete(keypointField)}
@@ -525,13 +525,13 @@ function EditListings() {
                                             <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden ${fields.tagList[2] ? 'border-red-500' : ''} items-center`}>
                                                 <input
                                                     name={'tagList'}
-                                                    maxLength={13}
+                                                    maxLength={20}
                                                     value={fields.tagList[0]}
-                                                    onChange={(e) => { handleInputChange(e, 12) }}
+                                                    onChange={(e) => { handleInputChange(e, 20) }}
                                                     onKeyDown={(e) => handleChips(e, 12)} type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none"
                                                     placeholder="e.g., #JavaScript, #React, #Adobe, #Photoshop, #Git" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {12 - fields.tagList[1] || 0}
+                                                    {20 - fields.tagList[1] || 0}
                                                 </div>
                                             </div>
                                             <div className="flex text-xs text-red-500">
@@ -567,21 +567,21 @@ function EditListings() {
                                                 Choose a category that best fits your work. This helps others quickly understand what type of work you specialize in.
                                             </div>
                                             <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.category[2] ? 'border-red-500' : ''}`}>
-                                                <input ref={categoryRef} name={'category'} maxLength={101}
+                                                <input ref={categoryRef} name={'category'} maxLength={80}
                                                     placeholder="Select a category (e.g., Design, Writing, Development, Marketing)..."
-                                                    onChange={(e) => { handleInputChange(e, 100); setshowCategory(true) }}
+                                                    onChange={(e) => { handleInputChange(e, 80); setshowCategory(true) }}
                                                     onClick={(e) => { e.stopPropagation(); setshowCategory(true); setShowAvailability(false); setshowExperience(false); }}
                                                     value={fields.category[0] || ''}
                                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {100 - fields.category[1] || 0}
+                                                    {80 - fields.category[1] || 0}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col relative">
                                                 {
                                                     fields.category[2] &&
                                                     <div className="flex text-xs text-red-500 mb-1">
-                                                        {fields.category[2]}
+                                                        {fields?.category?.[2]}
                                                     </div>
                                                 }
                                                 {
@@ -591,7 +591,7 @@ function EditListings() {
                                                             {
                                                                 categorySuggesions.map((suggession, index) => (
                                                                     <div key={index} onClick={() => {
-                                                                        categoryRef.current.value = suggession; handleInputChange(categoryRef, 100);
+                                                                        categoryRef.current.value = suggession; handleInputChange(categoryRef, 80);
                                                                     }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
                                                                         <MdBusinessCenter size={17} />
                                                                         <div className="flex text-sm font-semibold">{suggession}</div>
@@ -612,14 +612,14 @@ function EditListings() {
                                                 Let others know when you’re available to work. Are you looking for full-time, part-time, freelance, or project-based opportunities?
                                             </div>
                                             <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.availability && fields.availability[2] ? 'border-red-500' : ''}`}>
-                                                <input ref={availbilityRef} name={'availability'} maxLength={21}
+                                                <input ref={availbilityRef} name={'availability'} maxLength={80}
                                                     placeholder="Select your availability (e.g., Full-Time, Part-Time, Freelance)..."
-                                                    onChange={(e) => { handleInputChange(e, 20); setShowAvailability(true) }}
+                                                    onChange={(e) => { handleInputChange(e, 80); setShowAvailability(true) }}
                                                     onClick={(e) => { e.stopPropagation(); setShowAvailability(true); setshowExperience(false); setshowCategory(false) }}
                                                     value={fields.availability ? fields.availability[0] : ''}
                                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {fields.availability ? 20 - fields.availability[1] : 0}
+                                                    {fields.availability ? 80 - fields.availability[1] : 0}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col relative">
@@ -636,7 +636,7 @@ function EditListings() {
                                                             {
                                                                 available.map((availabilityType, index) => (
                                                                     <div key={index} onClick={() => {
-                                                                        availbilityRef.current.value = availabilityType; handleInputChange(availbilityRef, 20);
+                                                                        availbilityRef.current.value = availabilityType; handleInputChange(availbilityRef, 80);
                                                                     }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
                                                                         <MdBusinessCenter size={17} />
                                                                         <div className="flex text-sm font-semibold">{availabilityType}</div>
@@ -657,14 +657,14 @@ function EditListings() {
                                                 Let others know how experienced you are in your field. Whether you’re just starting out or a seasoned professional, this helps set expectations.
                                             </div>
                                             <div className={`flex h-12 w-full border border-zinc-400 rounded-sm overflow-hidden items-center ${fields.experienceLevel[2] ? 'border-red-500' : ''}`}>
-                                                <input ref={experienceRef} name={'experienceLevel'} maxLength={21}
+                                                <input ref={experienceRef} name={'experienceLevel'} maxLength={80}
                                                     placeholder="Select your experience level (e.g., Beginner, Intermediate, Expert)..."
-                                                    onChange={(e) => { handleInputChange(e, 20); setshowExperience(true) }}
+                                                    onChange={(e) => { handleInputChange(e, 80); setshowExperience(true) }}
                                                     onClick={(e) => { e.stopPropagation(); setshowExperience(true); setShowAvailability(false); setshowCategory(false) }}
                                                     value={fields.experienceLevel[0] || ''}
                                                     type="text" className="flex flex-1 h-full bg-transparent pl-5 font-light outline-none" />
                                                 <div className="flex w-10 justify-center items-center opacity-70 text-sm">
-                                                    {20 - fields.experienceLevel[1] || 0}
+                                                    {80 - fields.experienceLevel[1] || 0}
                                                 </div>
                                             </div>
                                             <div className="flex flex-col relative">
@@ -681,7 +681,7 @@ function EditListings() {
                                                             {
                                                                 experienceSuggesions.map((suggession, index) => (
                                                                     <div key={index} onClick={() => {
-                                                                        experienceRef.current.value = suggession; handleInputChange(experienceRef, 20);
+                                                                        experienceRef.current.value = suggession; handleInputChange(experienceRef, 80);
                                                                     }} className="flex h-12 px-2 border-b border-zinc-300 gap-x-3 w-full items-center opacity-70 hover:bg-zinc-300 cursor-pointer">
                                                                         <FaBusinessTime size={17} />
                                                                         <div className="flex text-sm font-semibold">{suggession}</div>

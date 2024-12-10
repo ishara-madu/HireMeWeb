@@ -18,7 +18,7 @@ function Profile({ profile }) {
                 <div className="flex w-full h-auto py-5 gap-x-3 items-center border-b border-[#c5c5c5]">
                     <div className="flex items-center">
                         <LazyLoad height={56} once>
-                            <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="" className="w-14 h-14 rounded-full object-contain" />
+                            <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="" className="w-14 h-14 rounded-full object-cover" />
                         </LazyLoad>
                     </div>
                     <div className="flex flex-col">
@@ -27,10 +27,10 @@ function Profile({ profile }) {
                     </div>
                 </div>
                 <div className="flex w-full flex-col py-3 border-b border-[#c5c5c5]">
-                    <div className="flex h-10 items-center justify-between">
-                        <Link to={'/favorites'} className="text-sm opacity-80">Favorite</Link>
+                    <Link to={'/favorites'} className="flex h-10 items-center justify-between">
+                        <div className="text-sm opacity-80">Favorite</div>
                         <div className={`flex w-6 justify-center items-center h-6 text-sm ${(numberofFavorites() > 0) || (numberofFavorites() === "0") ? 'bg-green-500':'opacity-0'} font-semibold text-[#ebebeb] rounded-full`}>{numberofFavorites()}</div>
-                    </div>
+                    </Link>
                     <Link to={'/edit-profile'} className="flex items-center text-sm h-10 opacity-80">Edit profile</Link>
                     <Link to={'/account-settings'} className="flex text-sm h-10 items-center opacity-80">Account settings</Link>
                     <Link to={'/show-listings'} className="flex text-sm h-10 items-center opacity-80">Worker dashboard</Link>
