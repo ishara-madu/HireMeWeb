@@ -34,34 +34,26 @@ function FixedContent({ data }) {
                         <CiLocationOn size={15} />
                         {data?.users?.locationName}
                     </div>
-                    <div className="flex gap-x-2 font-semibold items-center">
-                        <BiCategory size={15} />
-                        <div className="flex underline text-purple-500">
-                            Java,&nbsp;
-                            <div className="flex  nderline text-purple-500">
-                                Programming
-                            </div>
+                    <div className="flex gap-x-2 font-semibold items-start w-full">
+                        <BiCategory size={15} className="mt-1"/>
+                        <div className="flex underline text-green-600 w-full">
+                            {data?.category}
                         </div>
                     </div>
                     <div className="flex items-center gap-x-2 text-base font-bold">
                         <MdOutlineWorkspacePremium />
-                        Full time
+                        {data?.options?.availability}
                     </div>
                     <div className="flex items-center gap-x-2 text-base">
                         <FaBusinessTime />
                         <div className="flex gap-x-1">
                             experience
-                            <div className="flex font-bold">{data?.users?.userQuality?.years}+ years</div>
+                            <div className="flex font-bold">{data?.options?.experienceLevel}</div>
                         </div>
                     </div>
-                    <ul className="flex flex-col opacity-60 gap-y-2 text-xs ml-1 w-full">
-                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data?.users?.userQuality?.first}</li>
-                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data?.users?.userQuality?.second}</li>
-                        <li className="flex gap-x-2"><div className="flex"><MdBusinessCenter size={16}/></div>{data?.users?.userQuality?.third}</li>
-                    </ul>
                 </div>
                 <div className='flex gap-x-3 my-4'>
-                    <a href={`tel:${data?.users?.contact?.phone}}`} onClick={() => { navigator.clipboard.writeText(data?.users?.contact?.phone).then(alert(`Mobile number ${data.users.contact.phone} copy to clipboard`)) }} className='flex h-12 w-52 bg-purple-500 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
+                    <a href={`tel:${data?.users?.contact?.phone}}`} onClick={() => { navigator.clipboard.writeText(data?.users?.contact?.phone).then(alert(`Mobile number ${data.users.contact.phone} copy to clipboard`)) }} className='flex h-12 w-52 bg-green-600 justify-center items-center rounded-sm text-base font-bold text-[#ebebeb]'>Mobile</a>
                     <div onClick={() => {
                         handleFavorites(data?.id)
                     }} className='p-[10px] border border-black hover:bg-[#e0e1e1] rounded-full'>

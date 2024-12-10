@@ -13,16 +13,16 @@ function Description({data}) {
                     <div className="ql-editor">{parse(data?.description?.long)}</div>
                     {
                         showAllDescription ?
-                            <div onClick={() => setShowAllDescription(prev => !prev)} className="flex items-end h-20 absolute bg-gradient-to-b from-transparent to-[#ebebeb] w-full bottom-0 text-[rgba(147,51,234,1)] text-sm font-bold">
+                            <div onClick={() => setShowAllDescription(prev => !prev)} className="flex items-end h-20 absolute bg-gradient-to-b from-transparent to-[#ebebeb] w-full bottom-0 text-green-500 text-sm font-bold">
                                 <div className="flex items-center gap-x-4">
                                     show more
-                                    <div className={`flex`}><FaChevronDown color="rgb(147 51 234)" size={12} /></div>
+                                    <div className={`flex`}><FaChevronDown size={12} /></div>
                                 </div>
                             </div> :
-                            <div onClick={() => setShowAllDescription(prev => !prev)} className="flex items-center text-[rgba(147,51,234,1)] text-sm font-bold">
+                            <div onClick={() => setShowAllDescription(prev => !prev)} className="flex items-center text-green-500 text-sm font-bold">
                                 <div className="flex items-center gap-x-4">
                                     show less
-                                    <div className={`flex rotate-180`}><FaChevronDown color="rgb(147 51 234)" size={12} /></div>
+                                    <div className={`flex rotate-180`}><FaChevronDown size={12} /></div>
                                 </div>
                             </div>
                     }

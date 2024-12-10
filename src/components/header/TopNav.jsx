@@ -13,8 +13,8 @@ import profileImage from '../../assets/logo_black.png'
 import { fetchResult } from "../../features/search/searchThunk";
 import placeholder from '../../assets/placeholder.svg'
 import { filterLocation, setFilters } from "../../features/search/searchSlice";
-import { useNetworkState } from "react-use";
-import { fetchOnlineStatue, updateOnlineStatue } from "../../features/onlineStatue/onlineStatueThunk";
+import { useInterval, useNetworkState } from "react-use";
+import { updateOnlineStatue } from "../../features/onlineStatue/onlineStatueThunk";
 
 
 function TopNav() {
@@ -44,16 +44,23 @@ function TopNav() {
         result();
 
     }, [query]);
-    
+
 
     useEffect(() => {
+
+        if (networkState.online) {
             dispatch(updateOnlineStatue({
                 id: profile?.[0]?.id,
                 updates: {
                     last_seen: new Date().toISOString()
                 }
             }))
-    }, [dispatch,profile])
+        }
+        
+    }, [dispatch, profile])
+
+
+    
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -110,7 +117,7 @@ function TopNav() {
                             <div onMouseOver={() => { setShowProfile(true) }} onMouseLeave={() => { setShowProfile(false) }} className="flex w-10 h-10 justify-center items-center rounded-full cursor-pointer">
                                 <LazyLoad height={40} once className="relative">
                                     <img src={JSON.parse(profile?.image)?.publicUrl || placeholder} alt="profile image" className="h-10 w-10 object-cover rounded-full" />
-                                    <div className={`flex w-3 h-3 ${networkState.online ? 'bg-green-500' : 'bg-red-500'} left-0 top-0 rounded-full absolute`}></div>
+                                    <div title="online statue" className={`flex w-3 h-3 ${networkState.online ? 'bg-green-500' : 'bg-red-500'} left-0 top-0 rounded-full absolute`}></div>
                                 </LazyLoad>
                                 {
                                     showProfile && (
