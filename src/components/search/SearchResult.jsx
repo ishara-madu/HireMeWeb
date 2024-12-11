@@ -33,6 +33,7 @@ function SearchResult() {
 
     const handleListClick = (data) => {
         dispatch(setFilters({ id: data }));
+        sessionStorage.setItem("listingFilter", JSON.stringify({ id: data }));
         navigate(`/listing`)
         window.scrollTo({
             top: 0,

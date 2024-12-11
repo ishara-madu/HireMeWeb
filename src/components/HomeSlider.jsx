@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { homeSlideData } from "../features/homeSlide/homeSlideThunk";
 import { useEffect } from "react";
 import LazyLoad from "react-lazyload";
+import ContentLoader from "react-content-loader";
 
 function HomeSlider() {
     const dispatch = useDispatch();
 
-    const images = useSelector((state) => state.homeSlider.images);
+    const { images, loading } = useSelector((state) => state.homeSlider);
 
     useEffect(() => {
         dispatch(homeSlideData());
@@ -51,20 +52,42 @@ function HomeSlider() {
 
 
     return (
-        <div className="h-full w-[95%] z-0 my-0 mx-auto relative">
-            <Slider {...settings}>
-                {images?.map((image, index) => (
-                        <LazyLoad key={index} once placeholder={<div>Loading...</div>} className="flex relative">
-                            <img
-                                src={image?.image}
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                alt="Slide"
-                                className="w-full h-full object-cover rounded-md"
-                            />
-                        </LazyLoad>
-                ))}
-            </Slider>
-        </div>
+        <>
+            {
+                (!loading && images?.length > 0) ?
+                    <div className="h-full w-[95%] z-0 my-0 mx-auto relative">
+                        <Slider {...settings}>
+                            {images?.map((image, index) => (
+                                <LazyLoad key={index} once placeholder={<div>Loading...</div>} className="flex relative">
+                                    <img
+                                        src={image?.image}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                        alt="Slide"
+                                        className="w-full h-full object-cover rounded-md"
+                                    />
+                                </LazyLoad>
+                            ))}
+                        </Slider>
+                    </div>
+                    :
+                    <div className="w-[80%]">
+                        <ContentLoader
+                            viewBox="0 0 350 100%"
+                            height={350}
+                            width={"100%"}
+                            backgroundColor="#f3f3f3"
+                            foregroundColor="#ecebeb"
+                            className='flex relative items-center'
+                        >
+                            <rect x="0" y="20" rx="4" ry="4" width="256" height="256" />
+                            <rect x="300" y="50" rx="4" ry="4" width="800" height="40" />
+                            <rect x="300" y="130" rx="4" ry="4" width="800" height="40" />
+                            <rect x="300" y="210" rx="4" ry="4" width="800" height="40" />
+                        </ContentLoader>
+                    </div>
+            }
+        </>
+
     );
 };
 

@@ -35,12 +35,12 @@ function Home() {
                 </div>
 
             }
-            {
+            {/* {
                 loading && 
                 <div className="fixed flex justify-center items-center h-lvh w-full flex-col bg-[#1b1b1b51] z-[999999]">
                     <LoadingSpinner/>
                 </div>
-            }
+            } */}
             {
                 !error &&
                 <div onClick={() => (setShowLocation(false))} className="flex w-full flex-col bg-[#ebebeb]">

@@ -6,6 +6,7 @@ const homeSlideSlice = createSlice(
         initialState: {
             images: [],
             error: null,
+            loading: false,
         },
         reducers: {},
         extraReducers: (builder) => {
