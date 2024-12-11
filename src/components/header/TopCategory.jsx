@@ -16,15 +16,22 @@ function TopCategory() {
     useEffect(() => {
         dispatch(categoryData());
     }, [dispatch]);
+
+    const parts = (text, category) => {
+        const parts = text.split(",");
+        return category ? parts[0].trim() : parts[1].trim();
+
+    }
+
     const uniqueCategory = [];
     const seenNames = new Set();
     category.forEach((user) => {
-        if (!seenNames.has(user.category)) {
-            seenNames.add(user.category);
+        if (!seenNames.has(parts(user.category, true))) {
+            seenNames.add(parts(user.category, true));
             uniqueCategory.push(user);
         }
     });
-    const lastTenCategory = uniqueCategory.slice(-10);
+    const lastCategory = uniqueCategory.slice(-20);
 
     const handleMouseOver = (name) => {
         setSubCategory(true);
@@ -34,25 +41,18 @@ function TopCategory() {
         setSubCategory(false);
         setActiveCategory('');
     };
-    console.log(lastTenCategory);
-
-    const parts = (text, category) => {
-        const parts = text.split(",");
-        return category ? parts[0].trim() : parts[1].trim();
-
-    }
 
     return (
         <div className="h-auto ">
             <div className="flex w-full h-12 bg-[#ebebeb] justify-center items-center shadow-lg shadow-[#bcbcbc]">
-                <div className="flex h-full w-11/12 flex-row justify-center items-center">
+                <div className="flex h-full w-11/12 flex-row justify-start overflow-x-scroll text-nowrap items-center">
                     {
-                        lastTenCategory.map(
+                        lastCategory.map(
                             (item, id) => (
-                                <div key={id} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative">{parts(item.category,true)}
-                                    {/* {(subcategory && (activeCategory == item)) &&
+                                <div key={id} onMouseOver={() => handleMouseOver(parts(item.category, true))} onMouseOut={() => handleMouseOut()} className="flex flex-col text-sm h-full items-center px-5 cursor-pointer justify-center relative">{parts(item.category, true)}
+                                    {(subcategory && (activeCategory == parts(item.category, true))) &&
                                         <div className="absolute bottom-0" style={{ width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '8px solid #373737' }}></div>
-                                    } */}
+                                    }
                                 </div>
                             )
                         )
@@ -60,28 +60,24 @@ function TopCategory() {
                 </div>
             </div>
 
-            {/* {
+            {
                 subcategory && (
                     <div className="flex absolute w-full h-12 bg-[#373737] justify-center items-center z-50">
-                        <div onMouseOver={() => { handleMouseOver(activeCategory) }} onMouseLeave={handleMouseOut} className="flex overflow-x-scroll h-full w-11/12 flex-row justify-center items-center">
+                        <div onMouseOver={() => { handleMouseOver(activeCategory) }} onMouseLeave={handleMouseOut} className="flex overflow-x-scroll h-full w-11/12 flex-row justify-start text-nowrap gap-x-10 items-center">
                             {
                                 category
-                                    .filter((item) => item.name === activeCategory)
+                                    .filter((item) => parts(item.category, true) == activeCategory)
+                                    .slice(-20)
                                     .map(
                                         (item, id) => (
-                                            <div className="flex h-full w-full flex-row gap-x-10 justify-start text-nowrap items-center" key={id}>{
-                                                item.subCategories.slice(-10).map((item, id) => (
-                                                    <div key={id} onClick={handleSearch} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{item.name}</div>
-                                                ))
-                                            }
-                                            </div>
+                                            <div key={id} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{parts(item.category, false)}</div>
                                         )
                                     )
                             }
                         </div>
                     </div>
                 )
-            } */}
+            }
 
         </div>
     )
