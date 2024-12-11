@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryData } from "../../features/category/categoryThunk";
+import { useNavigate } from "react-router-dom";
+import { fetchProfile, updateProfile } from "../../features/profile/profileThunk";
 
 
 function TopCategory() {
+    const navigate = useNavigate()
     const [subcategory, setSubCategory] = useState(false);
     const [activeCategory, setActiveCategory] = useState(''); // Track the active category
 
@@ -11,10 +14,12 @@ function TopCategory() {
 
     const category = useSelector((state) => state.category.items);
 
+    const profile = useSelector((state) => state.profile.data);
 
 
     useEffect(() => {
         dispatch(categoryData());
+        dispatch(fetchProfile());
     }, [dispatch]);
 
     const parts = (text, category) => {
@@ -42,6 +47,20 @@ function TopCategory() {
         setActiveCategory('');
     };
 
+    const handleSearch = async (val) => {
+        if (val.trim()) {
+            navigate(`/search?query=${encodeURIComponent(val)}`);
+        }
+        const oldvalues = profile?.[0]?.searchHistory?.history || '';
+        await dispatch(updateProfile(
+            {
+                searchHistory: {
+                    history: [...oldvalues, val]
+                }
+            }
+        ));
+        await dispatch(fetchProfile());
+    };
     return (
         <div className="h-auto ">
             <div className="flex w-full h-12 bg-[#ebebeb] justify-center items-center shadow-lg shadow-[#bcbcbc]">
@@ -70,7 +89,7 @@ function TopCategory() {
                                     .slice(-20)
                                     .map(
                                         (item, id) => (
-                                            <div key={id} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{parts(item.category, false)}</div>
+                                            <div key={id} onClick={()=>{handleSearch(item.category)}} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{parts(item.category, false)}</div>
                                         )
                                     )
                             }

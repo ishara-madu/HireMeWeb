@@ -64,18 +64,18 @@ function TopNav() {
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        if (searchText.trim()) {
+            navigate(`/search?query=${encodeURIComponent(searchText)}`);
+        }
         const oldvalues = profile?.[0]?.searchHistory?.history || '';
-        dispatch(updateProfile(
+        await dispatch(updateProfile(
             {
                 searchHistory: {
                     history: [...oldvalues, searchText]
                 }
             }
         ));
-        dispatch(fetchProfile());
-        if (searchText.trim()) {
-            navigate(`/search?query=${encodeURIComponent(searchText)}`);
-        }
+        await dispatch(fetchProfile());
     };
     return (
         <div id="nav" className="flex w-full h-20 border-b border-[#c5c5c5] shadow-lg shadow-[#bcbcbc] justify-center items-center bg-[#ebebeb]">
