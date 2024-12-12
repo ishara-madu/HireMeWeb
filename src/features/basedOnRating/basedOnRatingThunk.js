@@ -20,7 +20,7 @@ export const fetchBasedOnRating = createAsyncThunk(
             if (history) {
                 query = query
                     .or(
-                        history?.map(val => `description ->> long.ilike.%${val}%,description ->> short.ilike.%${val}%,description ->> keypoints.ilike.%${val}%,title.ilike.%${val}%,tags ->> tagList.ilike.%${val}%`)
+                        history?.map(val => `description ->> long.ilike.%${val}%,description ->> short.ilike.%${val}%,description ->> keypoints.ilike.%${val}%,title.ilike.%${val}%,tags ->> tagList.ilike.%${val}%,category.ilike.%${val}%,options ->> availability.ilike.%${val}%,options ->> experienceLevel.ilike.%${val}%`)
                     )
             }
             const { data: matchData, error } = await query;

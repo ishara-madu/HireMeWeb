@@ -47,7 +47,7 @@ const searchSlice = createSlice(
             },
             filterLocation: (state, action) => {
                 const userLocation = action.payload;
-
+                
                 const usersWithDistance = [...state.results]?.map((list) => {
 
                     return {

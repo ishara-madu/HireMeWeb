@@ -12,20 +12,36 @@ const basedOnSearchResultSlice = createSlice({
     reducers: {
         filterLocation: (state, action) => {
             const userLocation = action.payload;
+            const val = userLocation.word;
+            const lowerVal = val.toLowerCase();
 
-            const usersWithDistance = [...state.results]?.map((list) => {
+            const filteredData = [...state.data]?.filter(item =>
+                (
+                    item.title?.toLowerCase().includes(lowerVal) ||
+                    item.description?.long?.toLowerCase().includes(lowerVal) ||
+                    item.description?.short?.toLowerCase().includes(lowerVal) ||
+                    item.description?.keypoints?.some(point => point.toLowerCase().includes(lowerVal)) || // Handles arrays
+                    item.tags?.tagList?.some(tag => tag.toLowerCase().includes(lowerVal)) || // Handles arrays
+                    item.category?.toLowerCase().includes(lowerVal) ||
+                    item.options?.availability?.toLowerCase().includes(lowerVal) ||
+                    item.options?.experienceLevel?.toLowerCase().includes(lowerVal)
+                )
+            );
+            
+            const usersWithDistance = [...filteredData]?.map((list) => {
 
                 return {
                     ...list,
                     distance: getDistance(
-                        { latitude: userLocation.lat, longitude: userLocation.lng },
+                        { latitude: userLocation?.lat, longitude: userLocation?.lng },
                         { latitude: list.users.latitude, longitude: list.users.longitude }
                     ),
                 };
             });
 
             const filteredLocation = usersWithDistance.sort((a, b) => (a.distance || 0) - (b.distance || 0));
-            state.results = filteredLocation;
+
+            state.data = filteredLocation;
         },
     },
     extraReducers: (builder) => {
@@ -45,4 +61,5 @@ const basedOnSearchResultSlice = createSlice({
     },
 })
 
+export const { filterLocation } = basedOnSearchResultSlice.actions;
 export default basedOnSearchResultSlice.reducer;

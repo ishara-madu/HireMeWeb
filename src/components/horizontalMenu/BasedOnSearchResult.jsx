@@ -9,7 +9,7 @@ import { CiBookmarkCheck } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { setFilters } from '../../features/listing/listingSlice';
 import placeholder from '../../assets/placeholder.svg'
-import { fetchBasedOnSearchResult } from '../../features/basedOnSearchResult/basedOnSearchResultThunk';
+import { filterLocation } from '../../features/basedOnSearchResult/basedOnSearchResultSlice';
 
 function BasedOnSearchResult(props) {
     const [mouseOver, setMouseOver] = useState(null);
@@ -17,13 +17,9 @@ function BasedOnSearchResult(props) {
     const [fevId, setFavId] = useState([]);
     const navigate = useNavigate();
 
-    const { data: basedOnRating, loading, error } = useSelector((state) => state.basedOnSearchResult);
+    const { data, loading, error } = useSelector((state) => state.basedOnSearchResult);
 
-
-    useEffect(() => {
-        // eslint-disable-next-line react/prop-types
-        dispatch(fetchBasedOnSearchResult());
-    }, [dispatch]);
+    const basedOnRating = data[props.key];
 
     // eslint-disable-next-line react/prop-types
     const StarIcons = ({ value, size }) => {
@@ -49,7 +45,7 @@ function BasedOnSearchResult(props) {
             fev.push(favId);
             localStorage.setItem("favorites", JSON.stringify(fev));
         } else {
-            setFavId([""]);        const index = fev.indexOf(favId);
+            setFavId([""]); const index = fev.indexOf(favId);
             fev.splice(index, 1);
             localStorage.setItem("favorites", JSON.stringify(fev));
         }
