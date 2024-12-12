@@ -54,15 +54,19 @@ function HorizontalMenus() {
             }
             {
                 secondValue &&
-                <BasedOnSearchResult val={secondValue} title={`Featured courses in `} numb={1} />
+                <BasedOnSearchResult val={secondValue} title={`New and noteworthy in`} numb={1} />
             }
             {
                 thirdValue &&
-                <BasedOnSearchResult val={thirdValue} title={`Featured courses in `} numb={2} />
+                <BasedOnSearchResult val={thirdValue} title={`Top courses in`} numb={2} />
             }
             {
                 fourthValue &&
                 <BasedOnSearchResult val={fourthValue} title={`Featured courses in `} numb={3} />
+            }
+            {
+                fifthValue &&
+                <BasedOnSearchResult val={fifthValue} title={`Because you searched`} numb={4} />
             }
 
 

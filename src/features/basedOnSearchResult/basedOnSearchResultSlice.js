@@ -16,24 +16,21 @@ const basedOnSearchResultSlice = createSlice({
             const val = userLocation.word;
             const lowerVal = val?.toLowerCase();
 
-
-let filteredData = [];
-
-state.data?.forEach(item => {
-    if (
-        (item.title?.toLowerCase().indexOf(lowerVal) !== -1) ||
-        (item.description?.long?.toLowerCase().indexOf(lowerVal) !== -1) ||
-        (item.description?.short?.toLowerCase().indexOf(lowerVal) !== -1) ||
-        item.description?.keypoints?.some(point => point.toLowerCase().indexOf(lowerVal) !== -1) || // Handles arrays
-        item.tags?.tagList?.some(tag => tag.toLowerCase().indexOf(lowerVal) !== -1) || // Handles arrays
-        (item.category?.toLowerCase().indexOf(lowerVal) !== -1) ||
-        (item.options?.availability?.toLowerCase().indexOf(lowerVal) !== -1) ||
-        (item.options?.experienceLevel?.toLowerCase().indexOf(lowerVal) !== -1)
-    ) {
-        filteredData.push(item); // Push the item to the filteredData array if it matches
-    }
-});
-
+            const searchConditions = [
+                item => item.title?.toLowerCase().includes(lowerVal),
+                item => item.description?.long?.toLowerCase().includes(lowerVal),
+                item => item.description?.short?.toLowerCase().includes(lowerVal),
+                item => item.description?.keypoints?.some(point => point.toLowerCase().includes(lowerVal)),
+                item => item.tags?.tagList?.some(tag => tag.toLowerCase().includes(lowerVal)),
+                item => item.category?.toLowerCase().includes(lowerVal),
+                item => item.options?.availability?.toLowerCase().includes(lowerVal),
+                item => item.options?.experienceLevel?.toLowerCase().includes(lowerVal)
+            ];
+            
+            const filteredData = state.data.filter(item => 
+                searchConditions.some(condition => condition(item))
+            );
+            
             
             const usersWithDistance = [...filteredData]?.map((list) => {
 
