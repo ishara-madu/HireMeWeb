@@ -91,7 +91,7 @@ function SearchContent() {
                                 }} className="flex text-green-600 text-sm font-bold items-center cursor-pointer">Clear Filters</div>
                             }
                         </div>
-                        <div className="flex text-sm opacity-60 font-semibold">{results?.length.toLocaleString()} results</div>
+                        <div className="flex text-sm opacity-60 font-semibold">{results?.length.toLocaleString() || 0} results</div>
                     </div>
                 </div>
             </div>
