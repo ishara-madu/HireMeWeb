@@ -56,11 +56,11 @@ function TopNav() {
                 }
             }))
         }
-        
+
     }, [dispatch, profile])
 
 
-    
+
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -68,10 +68,13 @@ function TopNav() {
             navigate(`/search?query=${encodeURIComponent(searchText)}`);
         }
         const oldvalues = profile?.[0]?.searchHistory?.history || '';
+        const updatedValues = oldvalues.includes(searchText)
+            ? oldvalues
+            : [...(oldvalues.length >= 10 ? oldvalues.slice(1) : oldvalues), searchText];
         await dispatch(updateProfile(
             {
                 searchHistory: {
-                    history: [...oldvalues, searchText]
+                    history: updatedValues
                 }
             }
         ));

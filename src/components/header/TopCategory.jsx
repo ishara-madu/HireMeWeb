@@ -52,10 +52,13 @@ function TopCategory() {
             navigate(`/search?query=${encodeURIComponent(val)}`);
         }
         const oldvalues = profile?.[0]?.searchHistory?.history || '';
+        const updatedValues = oldvalues.includes(val)
+            ? oldvalues
+            : [...(oldvalues.length >= 10 ? oldvalues.slice(1) : oldvalues), val];
         await dispatch(updateProfile(
             {
                 searchHistory: {
-                    history: [...oldvalues, val]
+                    history: updatedValues
                 }
             }
         ));
@@ -89,7 +92,7 @@ function TopCategory() {
                                     .slice(-20)
                                     .map(
                                         (item, id) => (
-                                            <div key={id} onClick={()=>{handleSearch(item.category)}} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{parts(item.category, false)}</div>
+                                            <div key={id} onClick={() => { handleSearch(item.category) }} className="flex text-sm cursor-pointer text-white hover:text-[#bad5f6]">{parts(item.category, false)}</div>
                                         )
                                     )
                             }
