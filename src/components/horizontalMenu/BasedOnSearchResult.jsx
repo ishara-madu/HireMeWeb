@@ -17,10 +17,14 @@ function BasedOnSearchResult(props) {
     const [fevId, setFavId] = useState([]);
     const navigate = useNavigate();
 
-    const { data, loading, error } = useSelector((state) => state.basedOnSearchResult);
+    const { filters, loading, error } = useSelector((state) => state.basedOnSearchResult);
 
-    const basedOnRating = data[props.key];
-
+    
+    const basedOnRating = filters?.[props.numb]?.[0];
+    // console.log(filters);
+    
+    
+    
     // eslint-disable-next-line react/prop-types
     const StarIcons = ({ value, size }) => {
         const stars = [];
@@ -66,7 +70,7 @@ function BasedOnSearchResult(props) {
     return (
         <div className="flex w-full h-auto justify-center items-center mt-8">
             {
-                basedOnRating.length > 0 &&
+                basedOnRating?.length > 0 &&
                 <div className="flex w-11/12 h-full flex-col justify-center overflow-hidden">
                     <div className="flex text-2xl font-bold mb-5">{props.title} <div className="flex text-green-600 underline">&nbsp;{props.val}</div></div>
                     <div className="flex w-full overflow-x-scroll justify-start">

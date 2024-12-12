@@ -6,6 +6,7 @@ const basedOnSearchResultSlice = createSlice({
     name: 'basedOnSearchResult',
     initialState: {
         data: [],
+        filters: {},
         error: null,
         loading: true
     },
@@ -13,20 +14,26 @@ const basedOnSearchResultSlice = createSlice({
         filterLocation: (state, action) => {
             const userLocation = action.payload;
             const val = userLocation.word;
-            const lowerVal = val.toLowerCase();
+            const lowerVal = val?.toLowerCase();
 
-            const filteredData = [...state.data]?.filter(item =>
-                (
-                    item.title?.toLowerCase().includes(lowerVal) ||
-                    item.description?.long?.toLowerCase().includes(lowerVal) ||
-                    item.description?.short?.toLowerCase().includes(lowerVal) ||
-                    item.description?.keypoints?.some(point => point.toLowerCase().includes(lowerVal)) || // Handles arrays
-                    item.tags?.tagList?.some(tag => tag.toLowerCase().includes(lowerVal)) || // Handles arrays
-                    item.category?.toLowerCase().includes(lowerVal) ||
-                    item.options?.availability?.toLowerCase().includes(lowerVal) ||
-                    item.options?.experienceLevel?.toLowerCase().includes(lowerVal)
-                )
-            );
+
+let filteredData = [];
+
+state.data?.forEach(item => {
+    if (
+        (item.title?.toLowerCase().indexOf(lowerVal) !== -1) ||
+        (item.description?.long?.toLowerCase().indexOf(lowerVal) !== -1) ||
+        (item.description?.short?.toLowerCase().indexOf(lowerVal) !== -1) ||
+        item.description?.keypoints?.some(point => point.toLowerCase().indexOf(lowerVal) !== -1) || // Handles arrays
+        item.tags?.tagList?.some(tag => tag.toLowerCase().indexOf(lowerVal) !== -1) || // Handles arrays
+        (item.category?.toLowerCase().indexOf(lowerVal) !== -1) ||
+        (item.options?.availability?.toLowerCase().indexOf(lowerVal) !== -1) ||
+        (item.options?.experienceLevel?.toLowerCase().indexOf(lowerVal) !== -1)
+    ) {
+        filteredData.push(item); // Push the item to the filteredData array if it matches
+    }
+});
+
             
             const usersWithDistance = [...filteredData]?.map((list) => {
 
@@ -41,7 +48,9 @@ const basedOnSearchResultSlice = createSlice({
 
             const filteredLocation = usersWithDistance.sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
-            state.data = filteredLocation;
+            state.filters ={...state.filters,[userLocation.key]:[filteredLocation]};
+            console.log(val);
+            
         },
     },
     extraReducers: (builder) => {

@@ -18,11 +18,29 @@ function HorizontalMenus() {
 
     const history = JSON.parse(sessionStorage.getItem("history")) || [];
     const firstValue = history[0] ?? null;
+    const secondValue = history[1] ?? null;
+    const thirdValue = history[2]?? null;
+    const fourthValue = history[3]?? null;
+    const fifthValue = history[4]?? null;
+    const sixthValue = history[5]?? null;
+    const seventhValue = history[6]?? null;
+    const eighthValue = history[7]?? null;
+    const ninthValue = history[8]?? null;
+    const tenthValue = history[9]?? null;
 
     useEffect(() => {
         const val = async () => {
             await dispatch(fetchBasedOnSearchResult());
-            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude,word:firstValue,key:0 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: firstValue, key: 0 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: secondValue, key: 1 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: thirdValue, key: 2 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: fourthValue, key: 3 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: fifthValue, key: 4 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: sixthValue, key: 5 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: seventhValue, key: 6 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: eighthValue, key: 7 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: ninthValue, key: 8 }));
+            await dispatch(filterLocation({ lat: profile?.[0]?.latitude, lng: profile?.[0]?.longitude, word: tenthValue, key: 9 }));
         }
         val();
     }, [profile])
@@ -32,9 +50,22 @@ function HorizontalMenus() {
             <BasedOnRatings />
             {
                 firstValue &&
-                <BasedOnSearchResult val={firstValue} title={`Featured courses in `} key={0}/>
+                <BasedOnSearchResult val={firstValue} title={`Featured courses in `} numb={0} />
             }
-            
+            {
+                secondValue &&
+                <BasedOnSearchResult val={secondValue} title={`Featured courses in `} numb={1} />
+            }
+            {
+                thirdValue &&
+                <BasedOnSearchResult val={thirdValue} title={`Featured courses in `} numb={2} />
+            }
+            {
+                fourthValue &&
+                <BasedOnSearchResult val={fourthValue} title={`Featured courses in `} numb={3} />
+            }
+
+
         </div>
     )
 }
