@@ -8,17 +8,20 @@ const history = JSON.parse(sessionStorage.getItem("history")) || [""];
 export const fetchBasedOnRating = createAsyncThunk(
     'users/basedOnRating',
     async (_, thunkAPI) => {
+        
         try {
-            const {data:userLocation} = await supabase.from('users').select('latitude,longitude').eq('id', getCookie('uid'));
+            const { data: userLocation } = await supabase.from('users').select('latitude,longitude').eq('id', getCookie('uid'));
 
             let query = supabase.from('listings')
                 .select('*,users(*)')
                 .eq('submission', true)
                 .order('rating->>perc', { ascending: false })
+
             if (history) {
-                query = query.or(
-                    history?.map(val => `description ->> long.ilike.%${val}%,description ->> short.ilike.%${val}%,description ->> keypoints.ilike.%${val}%,title.ilike.%${val}%,tags ->> tagList.ilike.%${val}%`)
-                )
+                query = query
+                    .or(
+                        history?.map(val => `description ->> long.ilike.%${val}%,description ->> short.ilike.%${val}%,description ->> keypoints.ilike.%${val}%,title.ilike.%${val}%,tags ->> tagList.ilike.%${val}%`)
+                    )
             }
             const { data: matchData, error } = await query;
 

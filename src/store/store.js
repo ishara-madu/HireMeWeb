@@ -4,6 +4,7 @@ import categoryReducer from '../features/category/categorySlices';
 import profileReducer from '../features/profile/profileSlice';
 import homeSliderReducer from '../features/homeSlide/homeSlideSlice';
 import basedOnRatingReducer from '../features/basedOnRating/basedOnRatingSlice'
+import basedOnSearchResultReducer from '../features/basedOnSearchResult/basedOnSearchResultSlice'
 import favoritesReducer from '../features/favorites/favoritesSlice'
 import searchReducer from '../features/search/searchSlice'
 import listingReducer from '../features/listing/listingSlice'
@@ -16,6 +17,7 @@ export const store = configureStore({
         homeSlider: homeSliderReducer,
         profile:profileReducer,
         basedOnRating:basedOnRatingReducer,
+        basedOnSearchResult:basedOnSearchResultReducer,
         favorites: favoritesReducer,
         search:searchReducer,
         listings:listingReducer,
