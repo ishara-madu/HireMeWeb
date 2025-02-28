@@ -14,6 +14,7 @@ import AccountSettings from "./screens/AccountSettings.jsx";
 import Documentations from "./screens/Documentations.jsx";
 import EditListings from "./screens/EditListings.jsx";
 import ComingSoon from "./screens/ComingSoon.jsx";
+import Auth from "./screens/Auth.jsx";
 
 
 const root = document.getElementById("root");
@@ -23,6 +24,7 @@ ReactDOM.createRoot(root).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="auth" element={<Auth />} />
         <Route path="search" element={<Search />} />
         <Route path="listing" element={<Listing />} />
         <Route path="show-listings" element={<WorkerListing />} />

@@ -9,9 +9,13 @@ import EditLocation from "../components/popups/EditLocation";
 import Footer from '../components/footer/Footer'
 import placeholder from '../assets/placeholder.svg'
 import LoadingSpinner from "../components/LoadingSpinner";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+
 
 function Home() {
-    document.cookie = "uid=9e0c9fae-bd7d-4b59-8a92-801d1d18f053; Max-Age=" + 7 * 24 * 60 * 60 + "; Secure; SameSite=Strict";
+    const navigate = useNavigate();
+    // Cookies.set('uid', '9e0c9fae-bd7d-4b59-8a92-801d1d18f053', { expires: 7 });
     const [showLocation, setShowLocation] = useState(false);
     const dispatch = useDispatch();
 
@@ -22,6 +26,13 @@ function Home() {
     }, [dispatch]);
 
 
+    useEffect(() => {
+        if (
+            !Cookies.get("uid")
+        ) {
+            navigate("auth")
+        }
+    }, [])
 
     const handleSubmit = (bool) => {
         setShowLocation(bool);
