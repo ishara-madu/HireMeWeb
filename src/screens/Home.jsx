@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
     const navigate = useNavigate();
-    // Cookies.set('uid', '9e0c9fae-bd7d-4b59-8a92-801d1d18f053', { expires: 7 });
+    // Cookies.set('uid', '08d4f45c-d25f-45ea-a2b7-8765ac430cf6', { expires: 7 });
     const [showLocation, setShowLocation] = useState(false);
     const dispatch = useDispatch();
 
@@ -30,7 +30,7 @@ function Home() {
         if (
             !Cookies.get("uid")
         ) {
-            navigate("auth")
+            navigate("signin")
         }
     }, [])
 

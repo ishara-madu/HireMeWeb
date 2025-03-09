@@ -48,7 +48,7 @@ function EditLocation({ showPupup }) {
                 <div className="absolute left-3">
                     <CiLocationOn size={20} color="#aeadad" />
                 </div>
-                <input onKeyDown={(e) => { handleSubmit(e) }} onChange={(e) => (setInput(e.target.value))} type="text" placeholder="Enter your location" value={input} className="w-full h-12 pl-10 pr-5 text-sm border border-gray-300 rounded-md focus:outline-none" />
+                <input onKeyDown={(e) => { handleSubmit(e) }} onChange={(e) => (setInput(e.target.value))} type="text" placeholder="Enter your location" value={input} className="w-full h-12 pl-10 pr-5 text-sm border border-gray-300 rounded-md focus:outline-none"/>
             </div>
             {
                 errorMassage &&
